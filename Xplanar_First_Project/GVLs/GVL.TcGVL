@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <GVL Name="GVL" Id="{5a08de02-bacf-4a48-82e0-7a7eaa7abd16}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL CONSTANT
+	NUM_OF_MOVERS :UINT := 5;
+	NUM_OF_TRACKS : UINT := 3;
+END_VAR
+VAR_GLOBAL
+	planar_movers	: ARRAY [1..NUM_OF_MOVERS] OF MC_PlanarMover;
+	planar_environment : MC_PlanarEnvironment;
+	planar_group	: MC_PlanarGroup;
+	planar_tracks	: ARRAY [1..NUM_OF_TRACKS] OF MC_PlanarTrack;	
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

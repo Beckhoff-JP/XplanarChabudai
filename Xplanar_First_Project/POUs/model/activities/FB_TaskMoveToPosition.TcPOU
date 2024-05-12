@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_TaskMoveToPosition" Id="{2ec2db54-2fd0-4ec5-8d5f-0acb3a1d1c71}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_TaskMoveToPosition IMPLEMENTS InterfaceFuture
+VAR_OUTPUT
+END_VAR
+VAR
+	_v				: MC_LREAL;
+	_a				: MC_LREAL;
+	_d				: MC_LREAL;
+	_j				: MC_LREAL;
+	_pos_x 			: LREAL;
+	_pos_y 			: LREAL;
+	_pos_c			: LREAL;
+	_dynamics		: DynamicConstraint_PathXY;
+	_position 		: PositionXYC;
+	_error_id		: UDINT;
+	_fbMover		: POINTER TO MC_PlanarMover;
+	_cmdFB			: MC_PlanarFeedback;
+	_prohibit 		: BOOL;
+	_abort_executor : FB_Executor;
+	_state 			:UINT;
+	_abort_state	:UINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="abort" Id="{ae2a45bb-2c60-4ac4-9b8e-2c704438498e}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD abort : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_cmdFB.Update();
+_state := 0;
+CASE _abort_state OF
+	0:
+		IF _cmdFB.Active THEN
+			_dynamics.SetValuesVADJ(2000,20000,200000,200000);
+			_abort_state := 1;
+		ELSE
+			abort := TRUE;
+		END_IF
+	1:
+		//停止
+		_fbMover^.Halt(_cmdFB,_dynamics);
+		_abort_state := 2;
+	2:
+		//停止完了フラグ待ち
+		IF _cmdFB.Done THEN
+			abort := TRUE;
+			_error_id := 0;
+		END_IF
+		IF _cmdFB.Error THEN
+			abort := TRUE;
+			_error_id := _cmdFB.ErrorId;
+		END_IF
+END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="execute" Id="{5269bf3b-d3fe-4a29-9d10-efacd53a1e73}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD execute : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_cmdFB.Update();
+_abort_state := 0;
+CASE _state OF
+	0:
+		//直線運動
+		IF NOT _cmdFB.Active AND NOT _cmdFB.Busy THEN
+			_fbMover^.MoveToPosition(_cmdFB,_position,_dynamics,0);
+			_state := 1;
+		END_IF
+	1:
+		//直線運動の完了フラグ待ち
+		IF _cmdFB.Done THEN
+			execute := TRUE;
+			_error_id := 0;
+		END_IF
+		IF _cmdFB.Error THEN
+			execute := TRUE;
+			_error_id := _cmdFB.ErrorId;
+		END_IF
+END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{3e437feb-7866-4f29-975c-f0a4665337d4}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	fbMover : REFERENCE TO MC_PlanarMover;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_fbMover := ADR(fbMover);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="init" Id="{a571328b-641b-403a-992b-bae876238a59}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD init : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF _prohibit THEN
+	_error_id := 16#80000000;
+	init := TRUE;
+ELSIF _v = 0 OR _a = 0 OR _d = 0 THEN
+	_error_id := 1;
+	init := TRUE;
+ELSE
+	_dynamics.SetValuesVADJ(_v, _a, _d, _j);
+	_position.SetValuesXYC(_pos_x, _pos_y, _pos_c);
+	_abort_executor.init();
+	_error_id := 0;
+	_state := 0;
+	_abort_state := 0;
+	init := TRUE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="nErrorID" Id="{a5a03649-4296-4991-9d72-d5144728d1a2}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY nErrorID : UDINT
+]]></Declaration>
+      <Get Name="Get" Id="{445d43c2-7e42-451b-9bd7-8204f23f0250}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[nErrorID := _error_id;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="quit" Id="{fda1d651-d6bf-4840-8b98-1c5c46b6f2b3}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD quit : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[quit := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="set_dynamics" Id="{f5e62bd7-bab2-4251-a23a-77e2c16f1e6b}">
+      <Declaration><![CDATA[METHOD set_dynamics : BOOL
+VAR_INPUT
+	v: MC_LREAL;
+	a: MC_LREAL;
+	d: MC_LREAL;
+	j: MC_LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_v := v;
+_a := a;
+_d := d;
+_j := j;
+set_dynamics := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="set_target_position" Id="{476622d5-869b-4d7f-9c13-ce8ef2b420a8}">
+      <Declaration><![CDATA[METHOD set_target_position : BOOL
+VAR_INPUT
+	x: LREAL;
+	y: LREAL;
+	c: LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_pos_x := x;
+_pos_y := y;
+_pos_c := c;
+
+set_target_position := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_TaskMoveToPosition">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TaskMoveToPosition.abort">
+      <LineId Id="74" Count="0" />
+      <LineId Id="94" Count="0" />
+      <LineId Id="75" Count="0" />
+      <LineId Id="96" Count="0" />
+      <LineId Id="102" Count="0" />
+      <LineId Id="95" Count="0" />
+      <LineId Id="97" Count="0" />
+      <LineId Id="104" Count="1" />
+      <LineId Id="103" Count="0" />
+      <LineId Id="76" Count="2" />
+      <LineId Id="106" Count="0" />
+      <LineId Id="82" Count="10" />
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TaskMoveToPosition.execute">
+      <LineId Id="53" Count="1" />
+      <LineId Id="32" Count="4" />
+      <LineId Id="38" Count="12" />
+      <LineId Id="18" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TaskMoveToPosition.FB_init">
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TaskMoveToPosition.init">
+      <LineId Id="18" Count="0" />
+      <LineId Id="20" Count="1" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="15" Count="1" />
+      <LineId Id="12" Count="2" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="30" Count="1" />
+      <LineId Id="10" Count="1" />
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TaskMoveToPosition.nErrorID.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TaskMoveToPosition.quit">
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TaskMoveToPosition.set_dynamics">
+      <LineId Id="11" Count="0" />
+      <LineId Id="13" Count="2" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TaskMoveToPosition.set_target_position">
+      <LineId Id="5" Count="0" />
+      <LineId Id="10" Count="2" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

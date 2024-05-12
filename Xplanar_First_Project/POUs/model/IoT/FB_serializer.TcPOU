@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_serializer" Id="{3882d52d-38c6-4913-93dc-840aaa8feded}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_serializer
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+  fbJson  : FB_JsonSaxWriter;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="serialize" Id="{74ef5bf3-cc3a-45e7-9e61-1ecdc904127b}">
+      <Declaration><![CDATA[METHOD serialize : STRING(255)
+VAR_INPUT
+  datetime: STRING;
+  device_name: STRING;
+  diag_data_body: POINTER TO sdo_xplanar_aps_diag;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbJson.StartObject();       // ‘{‘ の出力
+fbJson.AddKey('datetime');
+fbJson.AddString(datetime);
+fbJson.AddKey('device_name');
+fbJson.AddString(device_name);
+fbJson.AddKey('temperature');		//キー temperature: の出力
+fbJson.AddUdint(diag_data_body^.temperature_center); // 温度出力
+fbJson.AddKey('fan_rpm');		//キー temperature: の出力
+fbJson.AddUdint(diag_data_body^.fan_rpm); // FAN回転数出力
+fbJson.EndObject();			// ‘}’ の出力
+serialize := fbJson.GetDocument();	// 文字列へ出力
+fbJson.ResetDocument();		// SAXバッファクリア]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_serializer">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_serializer.serialize">
+      <LineId Id="11" Count="10" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

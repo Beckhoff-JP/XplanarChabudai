@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="IoT" Id="{a18040ea-08a5-44c3-a275-8f9a987457b9}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM IoT
+VAR CONSTANT
+	EC_MASTER_NETID : T_AmsNetId := '192.168.80.1.4.1';
+END_VAR
+VAR
+	sdo_controller : FB_CoeSdoAccess(sNetId := EC_MASTER_NETID);
+	planar_tiles_diag_data: ARRAY[1..2] OF sdo_xplanar_aps_diag;
+	sessions: ARRAY [1..2] OF CoeSdoCommand;
+	read_cycle_timer: TON;
+	fbMqttPublish : FB_mqtt_publish;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+
+// Get diganosis data from SDO
+sdo_controller();
+fbMqttPublish();
+
+// Get diagnostics data every 0.5s
+read_cycle_timer(IN := NOT read_cycle_timer.Q, PT := T#500MS);
+
+IF read_cycle_timer.Q THEN
+	sdo_controller.query(
+					nSlaveAddr := 1001,
+					bCompleteAccess := TRUE, 
+					nIndex := 16#FA00, 
+					nSubIndex := 0,
+					pDstBuf := ADR(planar_tiles_diag_data[1]),
+					cbBufLen := SIZEOF(planar_tiles_diag_data[1]),
+					event_handler := fbMqttPublish
+					);
+	sdo_controller.query(
+					nSlaveAddr := 1003,
+					bCompleteAccess := TRUE, 
+					nIndex := 16#FA00, 
+					nSubIndex := 0,
+					pDstBuf := ADR(planar_tiles_diag_data[2]),
+					cbBufLen := SIZEOF(planar_tiles_diag_data[2]),
+					event_handler := fbMqttPublish
+					);
+END_IF
+]]></ST>
+    </Implementation>
+    <LineIds Name="IoT">
+      <LineId Id="403" Count="0" />
+      <LineId Id="398" Count="0" />
+      <LineId Id="227" Count="0" />
+      <LineId Id="229" Count="0" />
+      <LineId Id="380" Count="0" />
+      <LineId Id="230" Count="5" />
+      <LineId Id="319" Count="5" />
+      <LineId Id="361" Count="0" />
+      <LineId Id="360" Count="0" />
+      <LineId Id="326" Count="6" />
+      <LineId Id="365" Count="0" />
+      <LineId Id="364" Count="0" />
+      <LineId Id="237" Count="0" />
+      <LineId Id="28" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="ST_OperationPanel" Id="{63276b87-f635-46fd-b38e-028b77e30390}">
+    <Declaration><![CDATA[TYPE ST_OperationPanel :
+STRUCT
+	bStart 						: BOOL;
+	bEnable 					: BOOL;
+	bDisable 					: BOOL;
+	bReset 						: BOOL;
+	bStop						: BOOL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

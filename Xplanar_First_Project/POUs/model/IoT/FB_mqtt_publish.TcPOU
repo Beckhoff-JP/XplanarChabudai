@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_mqtt_publish" Id="{1aff89c1-b24e-4329-a407-cdf41e6202bf}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_mqtt_publish IMPLEMENTS  ITF_CoeSdoEventHandler
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	// published message
+	fbMqttClient : FB_IotMqttClient;
+	fbMessageQueue : FB_IotMqttMessageQueue;
+	bSetParameter : BOOL := TRUE;
+	bConnect : BOOL := TRUE;
+	hrErrorOccurred : HRESULT; // contains the latest occurred error
+	
+	fbSerializer :FB_Serializer;
+	
+	sTopicPub : STRING(255) := 'devices/unit230/messages/events/';
+	sPayloadPub : STRING(255);
+	
+	// for making publish event
+	publish_cycle_timer :TON;
+	datetime_string: STRING(39);
+	
+	publish_command: BOOL;
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+// Connect MQTT broker and publish
+
+IF bSetParameter THEN
+	bSetParameter := FALSE;
+	//fbMqttClient.stTLS.sCA := 'c:\TwinCAT\3.1\Config\Certificates\BaltimoreCyberTrust.crt'; // CA certificate 
+	//fbMqttClient.stTLS.sAzureSas := 'HostName=IndustrialOPNFair2024-IoTHub.azure-devices.net;DeviceId=unit230;SharedAccessSignature=SharedAccessSignature sr=IndustrialOPNFair2024-IoTHub.azure-devices.net%2Fdevices%2Funit230&sig=GxT9x70t1Q1per9XXu4Az%2FJhK1jBZt14KJ%2B7LG4NB%2Fw%3D&se=1712921181'; // Device SAS Token
+	fbMqttClient.sClientId := 'unit230';
+	fbMqttClient.sHostName := '192.168.1.20';
+	fbMqttClient.nHostPort := 1883;
+	fbMqttClient.ipMessageQueue := fbMessageQueue;
+END_IF
+
+fbMqttClient.Execute(bConnect);
+IF fbMqttClient.bError THEN
+  // add your error logging here
+  hrErrorOccurred := fbMqttClient.hrErrorCode;
+END_IF
+
+
+publish_cycle_timer(IN := NOT publish_command, PT := T#10S);
+
+]]></ST>
+    </Implementation>
+    <Method Name="sdo_data_received" Id="{598e3abe-0bfd-47c5-95e4-1fd355927e50}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD sdo_data_received : BOOL
+VAR_INPUT
+	command	: REFERENCE TO bajp_diagtool.CoeSdoCommand;
+END_VAR
+VAR
+	diag_data_body: POINTER TO sdo_xplanar_aps_diag;
+	tile_number : UINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+diag_data_body := command.pDstBuf;
+CASE command.nSlaveAddr OF
+	1001:
+		tile_number := 1;
+	1003:
+		tile_number := 2;
+END_CASE
+
+IF publish_command AND fbMqttClient.bConnected THEN
+	datetime_string := SYSTEMTIME_TO_ISO8601(
+		systemTime := command.datetime,
+		nBias := 0,
+		bUTC := TRUE,
+		nPrecision := 3
+	);
+	
+	sPayloadPub := fbSerializer.serialize(
+	  datetime := datetime_string,
+	  device_name := CONCAT('xplanar_tile_', UINT_TO_STRING(tile_number)),
+	  diag_data_body := diag_data_body
+	);
+	fbMqttClient.Publish(	sTopic:= sTopicPub, 
+				pPayload:= ADR(sPayloadPub), nPayloadSize:= LEN2(ADR(sPayloadPub)), 
+				eQoS:= TcIotMqttQos.AtMostOnceDelivery, bRetain:= FALSE, bQueue:= FALSE );
+    IF fbMqttClient.bError THEN
+      // add your error logging here
+      hrErrorOccurred := fbMqttClient.hrErrorCode;
+    END_IF
+	publish_command := FALSE;
+END_IF
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_mqtt_publish">
+      <LineId Id="33" Count="6" />
+      <LineId Id="77" Count="2" />
+      <LineId Id="40" Count="11" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_mqtt_publish.sdo_data_received">
+      <LineId Id="8" Count="0" />
+      <LineId Id="59" Count="0" />
+      <LineId Id="58" Count="0" />
+      <LineId Id="60" Count="0" />
+      <LineId Id="62" Count="2" />
+      <LineId Id="61" Count="0" />
+      <LineId Id="27" Count="1" />
+      <LineId Id="31" Count="14" />
+      <LineId Id="47" Count="3" />
+      <LineId Id="73" Count="0" />
+      <LineId Id="52" Count="1" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
