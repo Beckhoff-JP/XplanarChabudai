@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="sdo_xplanar_aps_diag" Id="{a6c4dd7b-08e7-4a72-b917-708731f7cd48}">
+    <Declaration><![CDATA[{attribute 'TcAnalytics'}
+{attribute 'pack_mode' := '4'}
+TYPE sdo_xplanar_aps_diag :
+STRUCT
+  identity: USINT;
+  dc_link_voltage: UDINT;
+  power_supply_current: UDINT;
+  temperature_north: UINT;
+  temperature_east: UINT;
+  temperature_south: UINT;
+  temperature_west: UINT;
+  temperature_center: UINT;
+  temperature_power: UINT;
+  fan_rpm: UINT;
+  fan_duty_cycle: USINT;
+  supply_voltage_us: UDINT;
+  auxiliary_voltage: UDINT;
+  acceleration_x: UDINT;
+  acceleration_y: UDINT;
+  acceleration_z: UDINT;
+  time_to_shutdown: UDINT;
+  fb_fw_rev: UDINT;
+END_STRUCT
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

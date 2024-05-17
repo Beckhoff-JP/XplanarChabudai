@@ -6348,7 +6348,7 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">""</v>
+                      <v n="Value">"MAIN.current_action"</v>
                     </o>
                     <o>
                       <v n="Id">2597686782L</v>
@@ -6356,11 +6356,11 @@
                     </o>
                     <o>
                       <v n="Id">3774423699L</v>
-                      <v n="Value">"MAIN.current_action"</v>
+                      <v n="Value">""</v>
                     </o>
                     <o>
                       <v n="Id">2114174855L</v>
-                      <v n="Value">"'ActionMode'"</v>
+                      <v n="Value">""</v>
                     </o>
                     <o>
                       <v n="Id">2073431371L</v>

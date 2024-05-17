@@ -3954,6 +3954,7 @@
 			<Licenses>
 				<Target BkhfOrder="ForDemo">
 					<ManualSelect>{4989A799-AEEA-4FEE-88EF-666B99EEFB45}</ManualSelect>
+					<ManualSelect>{02AC2825-C3C7-4D15-AAF6-4EB45EFAA2D0}</ManualSelect>
 				</Target>
 			</Licenses>
 			<Tasks>
@@ -10743,7 +10744,7 @@
 		</Motion>
 		<Plc>
 			<Project GUID="{6733759D-5D54-40D4-ADD5-4AFC48FD82DA}" Name="Xplanar_First_Project" PrjFilePath="Xplanar_First_Project\Xplanar_First_Project.plcproj" TmcFilePath="Xplanar_First_Project\Xplanar_First_Project.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="Xplanar_First_Project\Xplanar_First_Project.tmc" TmcHash="{29E0B021-0D8F-62DB-A24A-A6518232F66B}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="Xplanar_First_Project\Xplanar_First_Project.tmc" TmcHash="{082E5818-9831-E151-1FE4-D02E5AAABAD8}">
 					<Name>Xplanar_First_Project Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
@@ -10871,6 +10872,910 @@
 			</Project>
 			<PlcAuxTask Affinity="#x00000004"/>
 		</Plc>
+		<Analytics>
+			<Name>ANALYTICS</Name>
+			<ImageId>281</ImageId>
+			<Symbols>
+				<Symbol>InputsFromNC3.NC3ToHW</Symbol>
+				<Symbol>OutputsToNC3.HWToNC3</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.StatusWord</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 0X0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 0X1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 0X2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 0Y0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 0Y1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 0Y2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 1X0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 1X1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 1X2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 1Y0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 1Y1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 1Y2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 2X0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 2X1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 2X2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 2Y0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 2Y1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 2Y2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 3X0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 3X1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 3X2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 3Y0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 3Y1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current D 3Y2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 0X0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 0X1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 0X2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 0Y0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 0Y1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 0Y2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 1X0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 1X1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 1X2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 1Y0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 1Y1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 1Y2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 2X0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 2X1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 2X2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 2Y0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 2Y1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 2Y2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 3X0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 3X1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 3X2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 3Y0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 3Y1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Inputs.Current Q 3Y2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Diagdata.DC Link Voltage</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Diagdata.Power supply current</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Comm Inputs.CommStatusWord</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Comm Inputs.Data 1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Comm Inputs.Data 2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Comm Inputs.Data 3</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Comm Inputs.Data 4</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.StatusWord</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 0X0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 0X1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 0X2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 0Y0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 0Y1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 0Y2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 1X0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 1X1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 1X2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 1Y0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 1Y1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 1Y2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 2X0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 2X1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 2X2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 2Y0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 2Y1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 2Y2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 3X0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 3X1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 3X2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 3Y0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 3Y1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current D 3Y2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 0X0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 0X1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 0X2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 0Y0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 0Y1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 0Y2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 1X0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 1X1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 1X2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 1Y0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 1Y1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 1Y2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 2X0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 2X1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 2X2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 2Y0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 2Y1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 2Y2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 3X0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 3X1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 3X2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 3Y0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 3Y1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Inputs.Current Q 3Y2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Diagdata.DC Link Voltage</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Diagdata.Power supply current</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Comm Inputs.CommStatusWord</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Comm Inputs.Data 1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Comm Inputs.Data 2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Comm Inputs.Data 3</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Comm Inputs.Data 4</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.Status</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.A0 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.A0 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.A0 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.A2 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.A2 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.A2 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.A4 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.A4 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.A4 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.A6 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.A6 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.A6 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.A8 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.A8 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.A8 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.B1 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.B1 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.B1 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.B3 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.B3 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.B3 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.B5 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.B5 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.B5 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.B7 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.B7 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.B7 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.B9 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.B9 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.B9 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.C0 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.C0 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.C0 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.C2 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.C2 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.C2 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.C4 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.C4 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.C4 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.C6 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.C6 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.C6 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.C8 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.C8 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.C8 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.D1 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.D1 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.D1 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.D3 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.D3 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.D3 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.D5 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.D5 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.D5 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.D7 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.D7 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.D7 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.D9 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.D9 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.D9 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.E0 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.E0 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.E0 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.E2 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.E2 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.E2 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.E4 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.E4 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.E4 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.E6 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.E6 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.E6 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.E8 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.E8 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.E8 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.F1 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.F1 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.F1 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.F3 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.F3 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.F3 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.F5 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.F5 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.F5 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.F7 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.F7 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.F7 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.F9 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.F9 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.F9 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.G0 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.G0 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.G0 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.G2 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.G2 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.G2 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.G4 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.G4 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.G4 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.G6 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.G6 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.G6 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.G8 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.G8 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.G8 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.H1 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.H1 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.H1 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.H3 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.H3 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.H3 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.H5 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.H5 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.H5 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.H7 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.H7 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.H7 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.H9 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.H9 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.H9 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.I0 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.I0 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.I0 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.I2 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.I2 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.I2 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.I4 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.I4 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.I4 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.I6 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.I6 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.I6 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.I8 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.I8 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.I8 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.J1 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.J1 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.J1 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.J3 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.J3 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.J3 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.J5 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.J5 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.J5 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.J7 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.J7 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.J7 Z-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.J9 X-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.J9 Y-Field</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).FB Inputs.J9 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.Status</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.A0 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.A0 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.A0 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.A2 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.A2 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.A2 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.A4 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.A4 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.A4 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.A6 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.A6 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.A6 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.A8 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.A8 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.A8 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.B1 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.B1 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.B1 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.B3 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.B3 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.B3 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.B5 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.B5 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.B5 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.B7 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.B7 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.B7 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.B9 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.B9 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.B9 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.C0 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.C0 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.C0 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.C2 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.C2 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.C2 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.C4 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.C4 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.C4 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.C6 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.C6 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.C6 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.C8 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.C8 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.C8 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.D1 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.D1 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.D1 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.D3 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.D3 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.D3 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.D5 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.D5 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.D5 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.D7 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.D7 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.D7 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.D9 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.D9 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.D9 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.E0 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.E0 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.E0 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.E2 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.E2 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.E2 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.E4 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.E4 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.E4 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.E6 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.E6 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.E6 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.E8 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.E8 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.E8 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.F1 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.F1 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.F1 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.F3 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.F3 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.F3 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.F5 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.F5 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.F5 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.F7 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.F7 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.F7 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.F9 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.F9 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.F9 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.G0 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.G0 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.G0 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.G2 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.G2 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.G2 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.G4 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.G4 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.G4 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.G6 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.G6 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.G6 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.G8 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.G8 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.G8 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.H1 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.H1 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.H1 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.H3 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.H3 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.H3 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.H5 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.H5 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.H5 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.H7 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.H7 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.H7 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.H9 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.H9 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.H9 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.I0 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.I0 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.I0 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.I2 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.I2 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.I2 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.I4 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.I4 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.I4 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.I6 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.I6 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.I6 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.I8 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.I8 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.I8 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.J1 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.J1 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.J1 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.J3 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.J3 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.J3 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.J5 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.J5 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.J5 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.J7 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.J7 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.J7 Z-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.J9 X-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.J9 Y-Field</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).FB Inputs.J9 Z-Field</Symbol>
+				<Symbol>Inputs.Frm0State</Symbol>
+				<Symbol>Inputs.Frm0WcState</Symbol>
+				<Symbol>Term 1 (APS4322-7000).WcState.WcState</Symbol>
+				<Symbol>Term 3 (APS4322-7000).WcState.WcState</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).WcState.WcState</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).WcState.WcState</Symbol>
+				<Symbol>Inputs.Frm0InputToggle</Symbol>
+				<Symbol>Term 1 (APS4322-7000).WcState.InputToggle</Symbol>
+				<Symbol>Term 3 (APS4322-7000).WcState.InputToggle</Symbol>
+				<Symbol>Term 3 (APS4322-7000).Term 4 (APS4322-5000).WcState.InputToggle</Symbol>
+				<Symbol>Term 1 (APS4322-7000).Term 2 (APS4322-5000).WcState.InputToggle</Symbol>
+				<Symbol>Inputs.SlaveCount</Symbol>
+				<Symbol>Inputs.DevState</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.ControlWord</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 0X0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 0X1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 0X2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 0Y0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 0Y1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 0Y2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 1X0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 1X1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 1X2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 1Y0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 1Y1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 1Y2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 2X0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 2X1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 2X2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 2Y0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 2Y1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 2Y2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 3X0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 3X1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 3X2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 3Y0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 3Y1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current D 3Y2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 0X0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 0X1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 0X2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 0Y0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 0Y1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 0Y2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 1X0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 1X1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 1X2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 1Y0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 1Y1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 1Y2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 2X0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 2X1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 2X2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 2Y0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 2Y1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 2Y2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 3X0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 3X1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 3X2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 3Y0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 3Y1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.Current Q 3Y2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 0X0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 0X1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 0X2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 0Y0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 0Y1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 0Y2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 1X0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 1X1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 1X2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 1Y0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 1Y1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 1Y2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 2X0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 2X1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 2X2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 2Y0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 2Y1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 2Y2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 3X0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 3X1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 3X2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 3Y0</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 3Y1</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Outputs.PhiE 3Y2</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Comm Outputs.CommControlWord</Symbol>
+				<Symbol>Term 1 (APS4322-7000).APS Comm Outputs.Data 1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.ControlWord</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 0X0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 0X1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 0X2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 0Y0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 0Y1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 0Y2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 1X0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 1X1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 1X2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 1Y0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 1Y1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 1Y2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 2X0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 2X1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 2X2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 2Y0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 2Y1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 2Y2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 3X0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 3X1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 3X2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 3Y0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 3Y1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current D 3Y2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 0X0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 0X1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 0X2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 0Y0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 0Y1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 0Y2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 1X0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 1X1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 1X2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 1Y0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 1Y1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 1Y2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 2X0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 2X1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 2X2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 2Y0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 2Y1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 2Y2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 3X0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 3X1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 3X2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 3Y0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 3Y1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.Current Q 3Y2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 0X0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 0X1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 0X2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 0Y0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 0Y1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 0Y2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 1X0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 1X1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 1X2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 1Y0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 1Y1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 1Y2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 2X0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 2X1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 2X2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 2Y0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 2Y1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 2Y2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 3X0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 3X1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 3X2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 3Y0</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 3Y1</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Outputs.PhiE 3Y2</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Comm Outputs.CommControlWord</Symbol>
+				<Symbol>Term 3 (APS4322-7000).APS Comm Outputs.Data 1</Symbol>
+				<Symbol>Outputs.Frm0Ctrl</Symbol>
+				<Symbol>Outputs.Frm0WcCtrl</Symbol>
+				<Symbol>Outputs.DevCtrl</Symbol>
+				<Symbol>PlcTask Inputs.MAIN.fbMover.MCTOPLC</Symbol>
+				<Symbol>PlcTask Inputs.GVL.planar_movers[1].MCTOPLC</Symbol>
+				<Symbol>PlcTask Inputs.GVL.planar_movers[2].MCTOPLC</Symbol>
+				<Symbol>PlcTask Inputs.GVL.planar_movers[3].MCTOPLC</Symbol>
+				<Symbol>PlcTask Inputs.GVL.planar_movers[4].MCTOPLC</Symbol>
+				<Symbol>PlcTask Inputs.GVL.planar_movers[5].MCTOPLC</Symbol>
+				<Symbol>PlcTask Inputs.GVL.planar_environment.MCTOPLC_STD</Symbol>
+				<Symbol>PlcTask Inputs.GVL.planar_group.MCTOPLC_STD</Symbol>
+				<Symbol>PlcTask Inputs.GVL.planar_tracks[1].MCTOPLC_STD</Symbol>
+				<Symbol>PlcTask Inputs.GVL.planar_tracks[2].MCTOPLC_STD</Symbol>
+				<Symbol>PlcTask Inputs.GVL.planar_tracks[3].MCTOPLC_STD</Symbol>
+				<Symbol>PlcTask Outputs.MAIN.fbMover.PLCTOMC</Symbol>
+				<Symbol>PlcTask Outputs.GVL.planar_movers[1].PLCTOMC</Symbol>
+				<Symbol>PlcTask Outputs.GVL.planar_movers[2].PLCTOMC</Symbol>
+				<Symbol>PlcTask Outputs.GVL.planar_movers[3].PLCTOMC</Symbol>
+				<Symbol>PlcTask Outputs.GVL.planar_movers[4].PLCTOMC</Symbol>
+				<Symbol>PlcTask Outputs.GVL.planar_movers[5].PLCTOMC</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbHomeATasks._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbHomeBTasks._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbHomeZTasks._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbHomeCTasks._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbHomeToPositionTasks._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_home_sequence._executors._executors[1]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_home_sequence._executors._executors[2]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_home_sequence._executors._executors[3]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_home_sequence._executors._executors[4]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_home_sequence._executors._executors[5]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_home_sequence._executors._executors[6]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_home_sequence._executors._executors[7]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_home_sequence._executors._executors[8]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_home_sequence._executors._executors[9]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_home_sequence._executors._executors[10]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_home_sequence._executors._executors[11]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_home_sequence._executors._executors[12]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_home_sequence._executors._executors[13]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_home_sequence._executors._executors[14]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_home_sequence._executors._executors[15]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_home_sequence._executors._executors[16]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_home_sequence._executors._executors[17]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_home_sequence._executors._executors[18]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_home_sequence._executors._executors[19]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_home_sequence._executors._executors[20]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_home_job._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveToPositionTasks.fbMoveToPositionTasks[1]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveToPositionTasks.fbMoveToPositionTasks[2]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveToPositionTasks.fbMoveToPositionTasks[3]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveToPositionTasks.fbMoveToPositionTasks[4]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveToPositionTasks.fbMoveToPositionTasks[5]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveZTask_init._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbJob._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveCTasks.fbMoveCTasks[1]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveCTasks.fbMoveCTasks[2]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveZTasks.fbMoveZTasks[1]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveZTasks.fbMoveZTasks[2]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveATasks.fbMoveATasks[1]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveATasks.fbMoveATasks[2]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveATasks.fbMoveATasks[3]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveBTasks.fbMoveBTasks[1]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveBTasks.fbMoveBTasks[2]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveBTasks.fbMoveBTasks[3]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveAB_ATasks.fbMoveAB_ATasks[1]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveAB_ATasks.fbMoveAB_ATasks[2]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveAB_ATasks.fbMoveAB_ATasks[3]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveAB_BTasks.fbMoveAB_BTasks[1]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveAB_BTasks.fbMoveAB_BTasks[2]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveAB_BTasks.fbMoveAB_BTasks[3]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_positioning_job._executors._executors[1]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_positioning_job._executors._executors[2]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_positioning_job._executors._executors[3]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_positioning_job._executors._executors[4]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_positioning_job._executors._executors[5]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_positioning_job._executors._executors[6]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_positioning_job._executors._executors[7]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_positioning_job._executors._executors[8]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_positioning_job._executors._executors[9]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_positioning_job._executors._executors[10]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_positioning_job._executors._executors[11]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_positioning_job._executors._executors[12]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_positioning_job._executors._executors[13]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_positioning_job._executors._executors[14]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_positioning_job._executors._executors[15]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_positioning_job._executors._executors[16]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_positioning_job._executors._executors[17]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_positioning_job._executors._executors[18]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_positioning_job._executors._executors[19]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_positioning_job._executors._executors[20]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_rotation_job._executors._executors[1]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_rotation_job._executors._executors[2]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_rotation_job._executors._executors[3]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_rotation_job._executors._executors[4]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_rotation_job._executors._executors[5]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_rotation_job._executors._executors[6]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_rotation_job._executors._executors[7]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_rotation_job._executors._executors[8]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_rotation_job._executors._executors[9]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_rotation_job._executors._executors[10]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_rotation_job._executors._executors[11]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_rotation_job._executors._executors[12]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_rotation_job._executors._executors[13]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_rotation_job._executors._executors[14]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_rotation_job._executors._executors[15]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_rotation_job._executors._executors[16]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_rotation_job._executors._executors[17]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_rotation_job._executors._executors[18]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_rotation_job._executors._executors[19]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_rotation_job._executors._executors[20]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_vertical_repeat_jobs._executors._executors[1]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_vertical_repeat_jobs._executors._executors[2]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_vertical_repeat_jobs._executors._executors[3]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_vertical_repeat_jobs._executors._executors[4]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_vertical_repeat_jobs._executors._executors[5]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_vertical_repeat_jobs._executors._executors[6]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_vertical_repeat_jobs._executors._executors[7]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_vertical_repeat_jobs._executors._executors[8]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_vertical_repeat_jobs._executors._executors[9]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_vertical_repeat_jobs._executors._executors[10]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_vertical_repeat_jobs._executors._executors[11]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_vertical_repeat_jobs._executors._executors[12]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_vertical_repeat_jobs._executors._executors[13]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_vertical_repeat_jobs._executors._executors[14]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_vertical_repeat_jobs._executors._executors[15]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_vertical_repeat_jobs._executors._executors[16]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_vertical_repeat_jobs._executors._executors[17]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_vertical_repeat_jobs._executors._executors[18]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_vertical_repeat_jobs._executors._executors[19]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_vertical_repeat_jobs._executors._executors[20]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_A_repeat_jobs._executors._executors[1]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_A_repeat_jobs._executors._executors[2]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_A_repeat_jobs._executors._executors[3]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_A_repeat_jobs._executors._executors[4]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_A_repeat_jobs._executors._executors[5]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_A_repeat_jobs._executors._executors[6]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_A_repeat_jobs._executors._executors[7]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_A_repeat_jobs._executors._executors[8]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_A_repeat_jobs._executors._executors[9]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_A_repeat_jobs._executors._executors[10]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_A_repeat_jobs._executors._executors[11]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_A_repeat_jobs._executors._executors[12]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_A_repeat_jobs._executors._executors[13]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_A_repeat_jobs._executors._executors[14]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_A_repeat_jobs._executors._executors[15]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_A_repeat_jobs._executors._executors[16]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_A_repeat_jobs._executors._executors[17]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_A_repeat_jobs._executors._executors[18]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_A_repeat_jobs._executors._executors[19]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_A_repeat_jobs._executors._executors[20]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_B_repeat_jobs._executors._executors[1]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_B_repeat_jobs._executors._executors[2]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_B_repeat_jobs._executors._executors[3]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_B_repeat_jobs._executors._executors[4]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_B_repeat_jobs._executors._executors[5]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_B_repeat_jobs._executors._executors[6]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_B_repeat_jobs._executors._executors[7]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_B_repeat_jobs._executors._executors[8]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_B_repeat_jobs._executors._executors[9]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_B_repeat_jobs._executors._executors[10]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_B_repeat_jobs._executors._executors[11]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_B_repeat_jobs._executors._executors[12]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_B_repeat_jobs._executors._executors[13]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_B_repeat_jobs._executors._executors[14]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_B_repeat_jobs._executors._executors[15]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_B_repeat_jobs._executors._executors[16]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_B_repeat_jobs._executors._executors[17]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_B_repeat_jobs._executors._executors[18]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_B_repeat_jobs._executors._executors[19]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_B_repeat_jobs._executors._executors[20]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_AB_cycle_jobs._executors._executors[1]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_AB_cycle_jobs._executors._executors[2]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_AB_cycle_jobs._executors._executors[3]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_AB_cycle_jobs._executors._executors[4]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_AB_cycle_jobs._executors._executors[5]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_AB_cycle_jobs._executors._executors[6]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_AB_cycle_jobs._executors._executors[7]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_AB_cycle_jobs._executors._executors[8]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_AB_cycle_jobs._executors._executors[9]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_AB_cycle_jobs._executors._executors[10]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_AB_cycle_jobs._executors._executors[11]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_AB_cycle_jobs._executors._executors[12]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_AB_cycle_jobs._executors._executors[13]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_AB_cycle_jobs._executors._executors[14]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_AB_cycle_jobs._executors._executors[15]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_AB_cycle_jobs._executors._executors[16]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_AB_cycle_jobs._executors._executors[17]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_AB_cycle_jobs._executors._executors[18]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_AB_cycle_jobs._executors._executors[19]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_tilt_AB_cycle_jobs._executors._executors[20]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_main_job._executors._executors[1]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_main_job._executors._executors[2]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_main_job._executors._executors[3]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_main_job._executors._executors[4]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_main_job._executors._executors[5]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_main_job._executors._executors[6]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_main_job._executors._executors[7]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_main_job._executors._executors[8]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_main_job._executors._executors[9]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_main_job._executors._executors[10]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_main_job._executors._executors[11]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_main_job._executors._executors[12]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_main_job._executors._executors[13]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_main_job._executors._executors[14]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_main_job._executors._executors[15]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_main_job._executors._executors[16]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_main_job._executors._executors[17]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_main_job._executors._executors[18]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_main_job._executors._executors[19]._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fb_main_job._executors._executors[20]._state</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].identity</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].dc_link_voltage</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].power_supply_current</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].temperature_north</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].temperature_east</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].temperature_south</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].temperature_west</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].temperature_center</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].temperature_power</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].fan_rpm</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].fan_duty_cycle</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].supply_voltage_us</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].auxiliary_voltage</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].acceleration_x</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].acceleration_y</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].acceleration_z</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].time_to_shutdown</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].fb_fw_rev</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].identity</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].dc_link_voltage</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].power_supply_current</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].temperature_north</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].temperature_east</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].temperature_south</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].temperature_west</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].temperature_center</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].temperature_power</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].fan_rpm</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].fan_duty_cycle</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].supply_voltage_us</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].auxiliary_voltage</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].acceleration_x</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].acceleration_y</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].acceleration_z</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].time_to_shutdown</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].fb_fw_rev</Symbol>
+			</Symbols>
+			<AddiStreamDescription>
+				<Address></Address>
+				<Longitude></Longitude>
+				<Latitude></Latitude>
+			</AddiStreamDescription>
+			<SystemAlias></SystemAlias>
+			<DataLogger GUID="{B91F0052-7519-EA3B-0408-F4EF6DE277DA}">
+				<Name>Data Logger 1</Name>
+				<Name>Data Logger 1</Name>
+				<ParameterValues>
+					<Value>
+						<Name>Data Format</Name>
+						<EnumText>ANALYTICS_FORMAT_FILE</EnumText>
+					</Value>
+					<Value>
+						<Name>Data Compression</Name>
+						<EnumText>ANALYTICS_COMPRESSION_RL</EnumText>
+					</Value>
+					<Value>
+						<Name>Max. Compression Compare Width</Name>
+						<EnumText>ANALYTICS_COMP_WIDTH_8</EnumText>
+					</Value>
+					<Value>
+						<Name>MQTT Host Name</Name>
+						<String>127.0.0.1</String>
+					</Value>
+					<Value>
+						<Name>MQTT Tcp Port</Name>
+						<Value>1883</Value>
+					</Value>
+					<Value>
+						<Name>MQTT Main Topic</Name>
+						<String>DefaultMainTopic</String>
+					</Value>
+					<Value>
+						<Name>MQTT Client ID</Name>
+						<String></String>
+					</Value>
+					<Value>
+						<Name>MQTT User Name</Name>
+						<String></String>
+					</Value>
+					<Value>
+						<Name>MQTT Password</Name>
+						<String></String>
+					</Value>
+				</ParameterValues>
+				<Stream Caller="#x03040020" Adi="#x03040020" Id="#x02040002" CntAds="#x00000020" CntFile="#x00000271" CntRing="#x00000002" SamplingDivider="1" DeviceStream="true">
+					<Name>Device 3 (EtherCAT).Image</Name>
+					<DisplayName>DeviceStream1</DisplayName>
+					<FileDir>%TC_BOOTPRJPATH%</FileDir>
+				</Stream>
+				<Stream Caller="#x08502001" Adi="#x08502000" Id="#x02040003" CntAds="#x00000020" CntFile="#x00000064" CntRing="#x00000014" SamplingDivider="1">
+					<Name>Xplanar_First_Project.Xplanar_First_Project Instance.PlcTask</Name>
+					<DisplayName>PlcStream1</DisplayName>
+					<LoggerObject Enabled="true">
+						<AreaName>PlcTask Internal</AreaName>
+						<SymName>MAIN.fbJob._state</SymName>
+						<HierName>PlcTask Internal.MAIN.fbJob._state</HierName>
+					</LoggerObject>
+					<LoggerObject Enabled="true">
+						<AreaName>PlcTask Internal</AreaName>
+						<SymName>IoT.planar_tiles_diag_data</SymName>
+						<HierName>PlcTask Internal.IoT.planar_tiles_diag_data</HierName>
+					</LoggerObject>
+					<FileDir>%TC_BOOTPRJPATH%</FileDir>
+				</Stream>
+				<Stream Caller="#x02010020" Adi="#x01010060" Id="#x02040001" CntAds="#x00000020" CntFile="#x00000271" CntRing="#x00000002" SamplingDivider="1">
+					<Name>TcCOM Objects.XPlanar.Mover4220_1</Name>
+					<DisplayName>TcComStream1</DisplayName>
+					<FileDir>%TC_BOOTPRJPATH%</FileDir>
+				</Stream>
+			</DataLogger>
+		</Analytics>
 		<Io>
 			<Device Id="3" DevType="111" DevFlags="#x0003" AmsPort="28675" AmsNetId="192.168.80.1.4.1" RemoteName="Device 3 (EtherCAT)" InfoImageId="3">
 				<Name>Device 3 (EtherCAT)</Name>

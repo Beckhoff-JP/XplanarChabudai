@@ -23,11 +23,11 @@ VAR
 	fbHomeZTasks				: FB_TaskMoveZ(fbMover := fbMover);
 	fbHomeCTasks				: FB_TaskMoveC(fbMover := fbMover);
 	fbHomeToPositionTasks		: FB_TaskMoveToPosition(fbMover := fbMover);
-	fb_home_sequence			: bajp_jobmgmt.FB_SerialJobContainer;
+	fb_home_sequence			: bajp_jobmgmt.FB_QueueJobContainer;
 	fb_home_job					: bajp_jobmgmt.FB_Executor;
 	
 	// Demo Pattern
-	fbMoveToPositionTasks		: ARRAY [1..6] OF FB_TaskMoveToPosition(fbMover := fbMover);
+	fbMoveToPositionTasks		: ARRAY [1..5] OF FB_TaskMoveToPosition(fbMover := fbMover);
 	fbMoveCTasks				: ARRAY [1..2] OF FB_TaskMoveC(fbMover := fbMover);
 	fbMoveZTasks				: ARRAY [1..2] OF FB_TaskMoveZ(fbMover := fbMover);
 	fbMoveATasks				: ARRAY [1..3] OF FB_TaskMoveA_tilt(fbMover := fbMover);
@@ -36,16 +36,17 @@ VAR
 	fbMoveAB_BTasks				: ARRAY [1..3] OF FB_TaskMoveB_tilt(fbMover := fbMover);
 	fbMoveZTask_init			: FB_TaskMoveZ(fbMover := fbMover);
 	
-	fb_positioning_job			: bajp_jobmgmt.FB_SerialJobContainer;
-	fb_rotation_job				: bajp_jobmgmt.FB_SerialJobContainer;
-	fb_vertical_repeat_jobs		: bajp_jobmgmt.FB_SerialJobContainer;
-	fb_tilt_A_repeat_jobs		: bajp_jobmgmt.FB_SerialJobContainer;
-	fb_tilt_B_repeat_jobs		: bajp_jobmgmt.FB_SerialJobContainer;
-	fb_tilt_AB_cycle_jobs		: bajp_jobmgmt.FB_SerialJobContainer;
-	fb_main_job					: bajp_jobmgmt.FB_SerialJobContainer;
+	fb_positioning_job			: bajp_jobmgmt.FB_QueueJobContainer;
+	fb_rotation_job				: bajp_jobmgmt.FB_QueueJobContainer;
+	fb_vertical_repeat_jobs		: bajp_jobmgmt.FB_QueueJobContainer;
+	fb_tilt_A_repeat_jobs		: bajp_jobmgmt.FB_QueueJobContainer;
+	fb_tilt_B_repeat_jobs		: bajp_jobmgmt.FB_QueueJobContainer;
+	fb_tilt_AB_cycle_jobs		: bajp_jobmgmt.FB_QueueJobContainer;
+	fb_main_job					: bajp_jobmgmt.FB_QueueJobContainer;
+	//fb_queue_job				: bajp_jobmgmt.FB_QueueJobContainer;
 	fbJob						: bajp_jobmgmt.FB_Executor;
 	i: UINT;
-	current_action : UINT;
+	current_action : STRING;
 	
 	//試運転用パラメーター      
 	(*          			
@@ -98,11 +99,8 @@ VAR
 	ipXpmsa						: I_XPlanarMoverScopeAdr;
 	                			
 	nStateInitXpu				: INT;
-	TileInfo					: ARRAY [0..1] OF TileInfoType;
 	bInit						: BOOL := FALSE;
-	PumpTimer					: TON;
-	ReleaseTime					: TIME := T#10S;
-	                			
+
 	LampTimer					: TON;
 	ServoON						: BOOL;
 	Error						: BOOL;
@@ -134,36 +132,13 @@ IF NOT bInit THEN
 				END_IF
 				
 			2://Job生成
-				MakeJob_Home();
-				MakeJob_DemoPattern();
+				//MakeJob_Home();
+				//MakeJob_DemoPattern();
 				bInit := TRUE;
 		END_CASE
 	RETURN;
 END_IF
 
-//Xplanar各タイルの温度情報の取得
-//FB_ECCoeSdoReadを使ったライブラリTwinCATDiagnosisToolsにてCoEアクセスするので、こちらはコメントアウト
-(*
-IF fbENviroment.XpuTcIo(1).TileCoE(1,1).DiagData.Update() THEN
-	TileInfo[0].Center 	:= fbENviroment.XpuTcIo(1).TileCoE(1,1).DiagData.TemperatureCenter;
-	TileInfo[0].East 	:= fbENviroment.XpuTcIo(1).TileCoE(1,1).DiagData.TemperatureEast;
-	TileInfo[0].North 	:= fbENviroment.XpuTcIo(1).TileCoE(1,1).DiagData.TemperatureNorth;
-	TileInfo[0].South 	:= fbENviroment.XpuTcIo(1).TileCoE(1,1).DiagData.TemperatureSouth;
-	TileInfo[0].West 	:= fbENviroment.XpuTcIo(1).TileCoE(1,1).DiagData.TemperatureWest;
-	TileInfo[0].FanRPM	:= fbENviroment.XpuTcIo(1).TileCoE(1,1).DiagData.FanRpm;
-	
-END_IF;
-
-IF fbENviroment.XpuTcIo(1).TileCoE(1,2).DiagData.Update() THEN
-	TileInfo[1].Center 	:= fbENviroment.XpuTcIo(1).TileCoE(1,2).DiagData.TemperatureCenter;
-	TileInfo[1].East 	:= fbENviroment.XpuTcIo(1).TileCoE(1,2).DiagData.TemperatureEast;
-	TileInfo[1].North 	:= fbENviroment.XpuTcIo(1).TileCoE(1,2).DiagData.TemperatureNorth;
-	TileInfo[1].South 	:= fbENviroment.XpuTcIo(1).TileCoE(1,2).DiagData.TemperatureSouth;
-	TileInfo[1].West 	:= fbENviroment.XpuTcIo(1).TileCoE(1,2).DiagData.TemperatureWest;
-	TileInfo[1].FanRPM	:= fbENviroment.XpuTcIo(1).TileCoE(1,2).DiagData.FanRpm;
-	
-END_IF;
-*)
 
 fbMover.Update();
 cmdFB.Update();
@@ -179,11 +154,15 @@ END_IF
 
 //サーボオフ
 IF bDisable THEN
+	nCase := 5;
 	fbMover.Disable(cmdFB);
-	fb_home_job.init();
-	fbJob.init();
-	bDisable	:= FALSE;
-	nCase := 0;
+	IF fb_home_job.reset() THEN
+		fb_home_job.init();
+		IF fbJob.reset() THEN
+			fbJob.init();
+			bDisable	:= FALSE;
+		END_IF
+	END_IF
 END_IF
 
 
@@ -199,30 +178,38 @@ END_IF
 CASE nCase OF
 	0:
 		// avoid step
-		fb_home_job.init();
+
 	1:
+		// 原点復帰ジョブの作成
+		MakeJob_Home();
+		nCase := 2;
+	2:
+		// 原点復帰の実行
 		IF fb_home_job.current_state = bajp_jobmgmt.E_FutureExecutionState.wait_for_process AND fb_home_job.ready THEN
 			fb_home_job.start();
 		END_IF
 		IF fb_home_job.execute() AND fb_home_job.nErrorID = 0 THEN
-			fb_home_job.init();
-			nCase := 2;
+			nCase := 3;
 		END_IF
 		//停止動作
 		IF bStop THEN
-			fbJob.abort();	
+			fb_home_job.abort();	
 		END_IF
 		
 		IF bReset THEN
-			fbJob.start();
+			fb_home_job.start();
 		END_IF
-	2:
-		//action
+		current_action := fb_home_job.active_future_id;
+	3:
+		// デモモードのジョブ作成
+		MakeJob_DemoPattern();
+		nCase := 4;
+	4:
+		//デモモード実行
 		IF fbJob.current_state = bajp_jobmgmt.E_FutureExecutionState.wait_for_process AND fbJob.ready THEN
 			fbJob.start();
 		END_IF
 		IF fbJob.execute() AND fbJob.nErrorID = 0 THEN
-			fbJob.init();
 			nCase := 3;
 		END_IF
 		//停止動作
@@ -233,10 +220,11 @@ CASE nCase OF
 		IF bReset THEN
 			fbJob.start();
 		END_IF
-		
-	3:
-		nCase := 2;
-		
+		current_action := fbJob.active_future_id;
+	5:
+		IF stMoverState = MC_PLANAR_STATE.Disabled THEN
+			nCase := 0;
+		END_IF
 END_CASE
 
 IF bStop THEN
@@ -250,7 +238,7 @@ IF bReset THEN
 	bReset		:= FALSE;
 END_IF
 
-current_action := fbJob.active_task_id;
+
 
 IoT();]]></ST>
     </Implementation>
@@ -287,11 +275,11 @@ END_IF]]></ST>
 	fbMoveToPositionTasks[3].set_target_position(80,160,0);
 	fbMoveToPositionTasks[4].set_target_position(400,160,0);
 	fbMoveToPositionTasks[5].set_target_position(400,80,0);
-	fbMoveToPositionTasks[6].set_target_position(240,120,0);
-	FOR i := 1 TO 6 DO
+	FOR i := 1 TO 5 DO
 		fbMoveToPositionTasks[i].set_dynamics(Vel, Acc, Dcc, Jerk);
 		fb_positioning_job.add_future(fbMoveToPositionTasks[i]);
 	END_FOR
+	fb_positioning_job.add_future(fbMoveToPositionTasks[1]);
 
 	// 回転動作タスク追加
 
@@ -388,6 +376,7 @@ END_IF]]></ST>
 	fb_main_job.add_future(fbMoveZTask_init);
 
 	fbJob.future := fb_main_job;
+	fbJob.set_id('Step');
 
 END_IF]]></ST>
       </Implementation>
@@ -410,6 +399,7 @@ END_IF]]></ST>
 	fb_home_sequence.add_future(fbHomeZTasks);
 	fb_home_sequence.add_future(fbHomeCTasks);
 	fb_home_job.future := fb_home_sequence;
+	fb_home_job.set_id('Home StepID');
 END_IF]]></ST>
       </Implementation>
     </Action>
@@ -418,32 +408,50 @@ END_IF]]></ST>
       <LineId Id="4944" Count="0" />
       <LineId Id="4989" Count="0" />
       <LineId Id="4943" Count="0" />
-      <LineId Id="4193" Count="28" />
+      <LineId Id="4193" Count="3" />
+      <LineId Id="4220" Count="1" />
       <LineId Id="5113" Count="0" />
-      <LineId Id="4223" Count="12" />
-      <LineId Id="5114" Count="1" />
-      <LineId Id="4236" Count="2" />
+      <LineId Id="4223" Count="11" />
+      <LineId Id="5866" Count="0" />
+      <LineId Id="4235" Count="0" />
+      <LineId Id="5621" Count="0" />
+      <LineId Id="5627" Count="1" />
+      <LineId Id="5630" Count="0" />
+      <LineId Id="5632" Count="0" />
+      <LineId Id="5625" Count="0" />
+      <LineId Id="5631" Count="0" />
+      <LineId Id="4238" Count="0" />
       <LineId Id="4246" Count="1" />
       <LineId Id="4264" Count="5" />
       <LineId Id="4271" Count="4" />
       <LineId Id="4994" Count="0" />
-      <LineId Id="5111" Count="0" />
+      <LineId Id="5497" Count="0" />
+      <LineId Id="5496" Count="0" />
+      <LineId Id="5750" Count="0" />
+      <LineId Id="5489" Count="0" />
+      <LineId Id="5498" Count="0" />
       <LineId Id="4995" Count="0" />
+      <LineId Id="5751" Count="0" />
       <LineId Id="4992" Count="1" />
       <LineId Id="4991" Count="0" />
       <LineId Id="4983" Count="0" />
-      <LineId Id="4980" Count="1" />
+      <LineId Id="4981" Count="0" />
       <LineId Id="4978" Count="0" />
       <LineId Id="5237" Count="7" />
+      <LineId Id="5872" Count="0" />
       <LineId Id="4278" Count="0" />
-      <LineId Id="4305" Count="7" />
+      <LineId Id="5752" Count="0" />
+      <LineId Id="5502" Count="0" />
+      <LineId Id="5504" Count="0" />
+      <LineId Id="5500" Count="0" />
+      <LineId Id="4305" Count="4" />
+      <LineId Id="4311" Count="1" />
       <LineId Id="4961" Count="1" />
       <LineId Id="4964" Count="0" />
       <LineId Id="4960" Count="0" />
       <LineId Id="4965" Count="3" />
-      <LineId Id="4313" Count="0" />
-      <LineId Id="4958" Count="1" />
-      <LineId Id="4996" Count="0" />
+      <LineId Id="5871" Count="0" />
+      <LineId Id="5867" Count="3" />
       <LineId Id="4586" Count="0" />
       <LineId Id="5230" Count="2" />
       <LineId Id="5234" Count="0" />
@@ -475,7 +483,11 @@ END_IF]]></ST>
       <LineId Id="3" Count="0" />
     </LineIds>
     <LineIds Name="MAIN.MakeJob_DemoPattern">
-      <LineId Id="2" Count="108" />
+      <LineId Id="2" Count="7" />
+      <LineId Id="11" Count="3" />
+      <LineId Id="113" Count="0" />
+      <LineId Id="15" Count="95" />
+      <LineId Id="114" Count="0" />
       <LineId Id="112" Count="0" />
       <LineId Id="1" Count="0" />
     </LineIds>
@@ -491,7 +503,9 @@ END_IF]]></ST>
       <LineId Id="19" Count="0" />
       <LineId Id="18" Count="0" />
       <LineId Id="25" Count="0" />
-      <LineId Id="6" Count="1" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="7" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

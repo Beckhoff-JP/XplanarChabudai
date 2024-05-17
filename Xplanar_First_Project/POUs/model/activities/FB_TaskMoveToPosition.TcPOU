@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="FB_TaskMoveToPosition" Id="{2ec2db54-2fd0-4ec5-8d5f-0acb3a1d1c71}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_TaskMoveToPosition IMPLEMENTS InterfaceFuture
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_TaskMoveToPosition EXTENDS FB_AbstructFuture
 VAR_OUTPUT
 END_VAR
 VAR
@@ -140,7 +140,8 @@ END_VAR
 METHOD quit : BOOL
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[quit := TRUE;]]></ST>
+        <ST><![CDATA[init();
+quit := TRUE;]]></ST>
       </Implementation>
     </Method>
     <Method Name="set_dynamics" Id="{f5e62bd7-bab2-4251-a23a-77e2c16f1e6b}">
@@ -219,6 +220,7 @@ set_target_position := TRUE;]]></ST>
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_TaskMoveToPosition.quit">
+      <LineId Id="7" Count="0" />
       <LineId Id="4" Count="0" />
     </LineIds>
     <LineIds Name="FB_TaskMoveToPosition.set_dynamics">
