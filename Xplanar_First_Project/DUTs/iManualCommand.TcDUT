@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="iManualCommand" Id="{a6fa1aed-e745-4841-9759-c06c9b8d81df}">
+    <Declaration><![CDATA[TYPE iManualCommand :
+UNION
+	i_com: UINT;
+	com: ManualCommand;
+END_UNION
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

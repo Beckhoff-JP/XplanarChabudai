@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="ManualCommand" Id="{dc84d5cc-7671-4f04-bef9-e0e1eadf0ead}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE ManualCommand :
+(
+	move_pos_L1 := 0,
+	move_pos_L2,
+	move_pos_L3,
+	move_pos_c1,
+	move_pos_c2,
+	move_pos_c3,
+	move_pos_r1,
+	move_pos_r2,
+	move_pos_r3,
+	move_up,
+	move_down,
+	move_tilt_up_front,
+	move_tilt_up_rear,
+	move_tilt_up_right,
+	move_tilt_up_left,
+	move_tilt_horizontal,
+	move_roll_w,
+	move_roll_n,
+	move_roll_e,
+	move_roll_s
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

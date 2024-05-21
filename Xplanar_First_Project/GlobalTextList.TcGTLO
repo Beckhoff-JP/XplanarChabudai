@@ -36,6 +36,11 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"33"</v>
+              <v n="TextDefault">"Auto Start"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"223"</v>
               <v n="TextDefault">"Center: %"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -86,6 +91,11 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"535"</v>
+              <v n="TextDefault">"Initilalize"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"589"</v>
               <v n="TextDefault">"Left: %0.1f deg"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -93,6 +103,16 @@
             <o>
               <v n="TextID">"697"</v>
               <v n="TextDefault">"mA"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"869"</v>
+              <v n="TextDefault">"Manual mode"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"610"</v>
+              <v n="TextDefault">"Manual Mode"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>

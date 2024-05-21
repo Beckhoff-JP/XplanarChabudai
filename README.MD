@@ -66,4 +66,4 @@ Enableボタンを押すと、原点復帰動作を行い、A、B軸とも水平
 
 次の手順で、ジョブ実行フレームワークを用いた機能拡張が可能です。実装方法はこちらをご覧ください。
 
-(https://beckhoff-jp.github.io/TwinCATHowTo/plc_object_oriented_programming/sample_universal_activity.html#id5)[https://beckhoff-jp.github.io/TwinCATHowTo/plc_object_oriented_programming/sample_universal_activity.html#id5]
+[https://beckhoff-jp.github.io/TwinCATHowTo/plc_object_oriented_programming/sample_universal_activity.html#id5](https://beckhoff-jp.github.io/TwinCATHowTo/plc_object_oriented_programming/sample_universal_activity.html#id5)
