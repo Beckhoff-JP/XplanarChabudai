@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_JobReporter" Id="{6ddb0b70-fc20-473e-9f2a-690319fd5c5a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_JobReporter IMPLEMENTS InterfaceJobEventReporter
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+	event : JobEventReport;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="report" Id="{d2542430-59b7-4888-a551-078a3a508271}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD report : BOOL
+VAR_INPUT
+	old_state	: bajp_jobmgmt.E_FutureExecutionState;
+	new_state	: bajp_jobmgmt.E_FutureExecutionState;
+	record_time	: bajp_jobmgmt.T_FILETIME64;
+	executor	: REFERENCE TO bajp_jobmgmt.FB_Executor;
+END_VAR
+VAR_INST
+	fb_timezone_info : FB_GetTimeZoneInformation := (bExecute := TRUE);
+END_VAR
+VAR
+	text : T_MaxString;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[event.old_state := TO_STRING(old_state);
+event.new_state := TO_STRING(new_state);
+event.record_time := FILETIME64_TO_ISO8601(fileTime := record_time, nBias := DINT_TO_INT(fb_timezone_info.tzInfo.bias), bUTC := TRUE,nPrecision := 6);
+event.job_id := executor.id;
+event.task_name := executor.future.future_name;
+
+text := event.record_time;
+text := CONCAT(text, '	');
+text := CONCAT(text, event.new_state);
+text := CONCAT(text, '		');
+text := CONCAT(text, event.task_name);
+text := CONCAT(text, '		');
+text := CONCAT(text, event.job_id);
+
+ADSLOGSTR(msgCtrlMask := ADSLOG_MSGTYPE_LOG, msgFmtStr := text, strArg := '');
+report := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_JobReporter">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_JobReporter.report">
+      <LineId Id="10" Count="1" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="24" Count="1" />
+      <LineId Id="27" Count="2" />
+      <LineId Id="31" Count="1" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="16" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

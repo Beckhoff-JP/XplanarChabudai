@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="JobEventReport" Id="{f63ce04d-3b48-442a-a40e-bf999edda797}">
+    <Declaration><![CDATA[{attribute ‘pack_mode’ := ‘1’}
+TYPE JobEventReport :
+STRUCT
+	old_state	: STRING;
+	new_state	: STRING;
+	record_time	: STRING;
+	{attribute 'TcEncoding':='UTF-8'}
+	job_id		: STRING;
+	{attribute 'TcEncoding':='UTF-8'}
+	task_name	: STRING;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

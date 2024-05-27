@@ -10744,7 +10744,7 @@
 		</Motion>
 		<Plc>
 			<Project GUID="{6733759D-5D54-40D4-ADD5-4AFC48FD82DA}" Name="Xplanar_First_Project" PrjFilePath="Xplanar_First_Project\Xplanar_First_Project.plcproj" TmcFilePath="Xplanar_First_Project\Xplanar_First_Project.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="Xplanar_First_Project\Xplanar_First_Project.tmc" TmcHash="{9D76C866-CEE0-16EE-A293-92CAC7C784D1}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="Xplanar_First_Project\Xplanar_First_Project.tmc" TmcHash="{75E48B53-658B-A2D1-571F-93BA759BC90D}">
 					<Name>Xplanar_First_Project Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
@@ -10780,11 +10780,6 @@
 							<Type GUID="{1500FFCE-0727-F0FF-6AEB-C3B7FBED5C6B}" Namespace="Tc3_Mc3PlanarMotion">CDT_MCTOPLC_PLANAR_MOVER</Type>
 						</Var>
 						<Var>
-							<Name>GVL.planar_environment.MCTOPLC_STD</Name>
-							<Comment><![CDATA[ Environment data that is transferred from the Planar Environment to this function block. ]]></Comment>
-							<Type GUID="{79107B5F-AFEC-4E5A-AF95-460E7D782CE1}" Namespace="MC">CDT_MCTOPLC_PLANAR_ENVIRONMENT</Type>
-						</Var>
-						<Var>
 							<Name>GVL.planar_group.MCTOPLC_STD</Name>
 							<Comment><![CDATA[ Group data that is transferred from the Planar Group to this function block. ]]></Comment>
 							<Type GUID="{E06D295F-3D94-4B18-B587-C89D73DA41F4}" Namespace="MC">CDT_MCTOPLC_GROUP_PLANAR</Type>
@@ -10804,16 +10799,16 @@
 							<Comment><![CDATA[ Track data that is transferred from the Planar Track to this function block. ]]></Comment>
 							<Type GUID="{5769ADF0-D6E6-40D9-B474-790A2A7F1D1F}" Namespace="MC">CDT_MCTOPLC_PLANAR_TRACK</Type>
 						</Var>
+						<Var>
+							<Name>GVL.planar_environment.MCTOPLC_STD</Name>
+							<Comment><![CDATA[ Environment data that is transferred from the Planar Environment to this function block. ]]></Comment>
+							<Type GUID="{79107B5F-AFEC-4E5A-AF95-460E7D782CE1}" Namespace="MC">CDT_MCTOPLC_PLANAR_ENVIRONMENT</Type>
+						</Var>
 					</Vars>
 					<Vars VarGrpType="2" AreaNo="1">
 						<Name>PlcTask Outputs</Name>
 						<Var>
 							<Name>MAIN.fbMover.PLCTOMC</Name>
-							<Comment><![CDATA[ Mover data that is transferred from the Planar Mover to this function block. ]]></Comment>
-							<Type GUID="{8CF7E034-6BBC-291C-E83F-2D2297581DBB}" Namespace="Tc3_Mc3PlanarMotion">CDT_PLCTOMC_PLANAR_MOVER</Type>
-						</Var>
-						<Var>
-							<Name>GVL.planar_movers[1].PLCTOMC</Name>
 							<Comment><![CDATA[ Mover data that is transferred from the Planar Mover to this function block. ]]></Comment>
 							<Type GUID="{8CF7E034-6BBC-291C-E83F-2D2297581DBB}" Namespace="Tc3_Mc3PlanarMotion">CDT_PLCTOMC_PLANAR_MOVER</Type>
 						</Var>
@@ -10834,6 +10829,11 @@
 						</Var>
 						<Var>
 							<Name>GVL.planar_movers[5].PLCTOMC</Name>
+							<Comment><![CDATA[ Mover data that is transferred from the Planar Mover to this function block. ]]></Comment>
+							<Type GUID="{8CF7E034-6BBC-291C-E83F-2D2297581DBB}" Namespace="Tc3_Mc3PlanarMotion">CDT_PLCTOMC_PLANAR_MOVER</Type>
+						</Var>
+						<Var>
+							<Name>GVL.planar_movers[1].PLCTOMC</Name>
 							<Comment><![CDATA[ Mover data that is transferred from the Planar Mover to this function block. ]]></Comment>
 							<Type GUID="{8CF7E034-6BBC-291C-E83F-2D2297581DBB}" Namespace="Tc3_Mc3PlanarMotion">CDT_PLCTOMC_PLANAR_MOVER</Type>
 						</Var>

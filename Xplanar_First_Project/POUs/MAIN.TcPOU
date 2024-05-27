@@ -48,8 +48,10 @@ VAR
 	fb_manu_job					: bajp_jobmgmt.FB_QueueJobContainer;
 	fbJob						: bajp_jobmgmt.FB_Executor;
 	i: UINT;
-	current_action : STRING;
+	current_action : T_Maxstring;
 	manual_command: iManualCommand;
+	//ads_reporter : FB_ADSLOG_reporter;
+	ads_reporter : FB_JobReporter;
 	
 	//試運転用パラメーター      
 	(*          			
@@ -153,6 +155,8 @@ fbMover.Update();
 cmdFB.Update();
 ACT_Lamp_Ctrl();
 stMoverState 					:= fbMover.MCTOPLC.STD.State;
+fb_home_job.job_event_reporter := ads_reporter;
+fbjob.job_event_reporter := ads_reporter;
 
 //サーボオン
 IF bEnable THEN
@@ -195,7 +199,7 @@ IF stMoverState = MC_PLANAR_STATE.Enabled THEN
 			IF fbJob.reset() THEN
 				IF manu_mode THEN
 					MakeTasks();
-					fb_manu_job.id := 'Manual';
+					fb_manu_job.future_name := 'Manual';
 					fbJob.future := fb_manu_job;
 					nManupilationState := 2;
 				ELSE
@@ -298,7 +302,7 @@ CASE nCase OF
 		END_IF
 	2: // 原点復帰ジョブの組み立て。1サイクルだけ実行しなければならない。
 		MakeJob_Home();
-		fb_home_sequence.id := 'Initiliaze';
+		fb_home_sequence.future_name := 'Initiliaze';
 		fb_home_sequence.add_future(fbHomeATasks);
 		fb_home_sequence.add_future(fbHomeBTasks);
 		fb_home_sequence.add_future(fbHomeZTasks);
@@ -338,7 +342,7 @@ CASE nCase OF
 			// よって、2度手間だがリセットのためにジョブモデル構築し、もう一度ジョブモデルを構築しなおす必要がある。
 			// どの状態で終了したかわからない原点復帰ではこの処理が必要。
 			MakeJob_DemoPattern();
-			fb_demo_job.id := 'Demo';
+			fb_demo_job.future_name := 'Demo Action';
 			fb_demo_job.add_future(fb_positioning_job);
 			fb_demo_job.add_future(fb_rotation_job);
 			fb_demo_job.add_future(fb_vertical_repeat_jobs);
@@ -444,10 +448,14 @@ FOR i := 1 TO 5 DO
 END_FOR
 fb_positioning_job.add_future(fbMoveToPositionTasks[1]);
 
+fb_positioning_job.future_name := '<POSITIONING>';
+
 // 回転動作タスク追加
 FOR i := 1 TO  2 DO
 	fb_rotation_job.add_future(fbMoveCTasks[i]);
 END_FOR
+
+fb_rotation_job.future_name := '<ROTATION>';
 
 // 上下動作タスク追加
 FOR i := 1 TO 9 DO
@@ -456,6 +464,8 @@ FOR i := 1 TO 9 DO
 END_FOR
 
 fb_vertical_repeat_jobs.add_future(fbMoveZTasks[1]);
+
+fb_vertical_repeat_jobs.future_name := '<ELEVATION>';
 
 // 傾きA動作タスク追加
 FOR i := 1 TO 10 DO
@@ -467,6 +477,8 @@ FOR i := 1 TO 10 DO
 	END_IF
 END_FOR
 
+fb_tilt_A_repeat_jobs.future_name := '<TILT F/B>';
+
 // 傾きB動作タスク追加
 FOR i := 1 TO 10 DO
 	fb_tilt_B_repeat_jobs.add_future(fbMoveBTasks[1]);
@@ -476,6 +488,8 @@ FOR i := 1 TO 10 DO
 		fb_tilt_B_repeat_jobs.add_future(fbMoveBTasks[2]);
 	END_IF
 END_FOR
+
+fb_tilt_B_repeat_jobs.future_name := '<TILT L/R>';
 
 // AB両方の傾き
 FOR i := 1 TO 4 DO
@@ -487,6 +501,8 @@ END_FOR
 fb_tilt_AB_cycle_jobs.add_future(fbMoveAB_ATasks[3]);
 fb_tilt_AB_cycle_jobs.add_future(fbMoveAB_BTasks[3]);
 
+fb_tilt_AB_cycle_jobs.future_name := '<TILT F/B/L/R>';
+
 MakeJob_DemoPattern := TRUE;
 ]]></ST>
       </Implementation>
@@ -496,12 +512,20 @@ MakeJob_DemoPattern := TRUE;
         <ST><![CDATA[IF fb_home_job.init() THEN
 	fbHomeATasks.set_target_position(0);
 	fbHomeATasks.set_dynamics(Vel, Acc, Dcc, Jerk);
+	{attribute 'TcEncoding' := 'UTF-8'}
+	fbHomeATasks.future_name := 'HOME-Tilt-A';
 	fbHomeBTasks.set_target_position(0);
 	fbHomeBTasks.set_dynamics(Vel, Acc, Dcc, Jerk);
+	{attribute 'TcEncoding' := 'UTF-8'}
+	fbHomeBTasks.future_name := 'HOME-Tilt-B';
 	fbHomeZTasks.set_target_position(INIT_HEIGHT);
 	fbHomeZTasks.set_dynamics(Vel, Acc, Dcc, Jerk);
+	{attribute 'TcEncoding' := 'UTF-8'}
+	fbHomeZTasks.future_name := 'HOME-Z';
 	fbHomeCTasks.set_target_position(0);
 	fbHomeCTasks.set_dynamics(Coord_Mcs_C1,Ang_Vel,Ang_Acc,Ang_Dcc,Ang_Jerk);
+	{attribute 'TcEncoding' := 'UTF-8'}
+	fbHomeCTasks.future_name := 'HOME-C';
 	//fbHomeToPositionTasks.set_target_position(240,120,0);
 	//fbHomeToPositionTasks.set_dynamics(Vel, Acc, Dcc, Jerk);
 END_IF]]></ST>
@@ -516,24 +540,52 @@ END_VAR
         <ST><![CDATA[
 // 直線動作タスク追加
 fbMoveToPositionTasks[1].set_target_position(240,120,0);
+{attribute 'TcEncoding' := 'UTF-8'}
+fbMoveToPositionTasks[1].future_name := 'MOVE B2';
 fbMoveToPositionTasks[2].set_target_position(80,80,0);
+{attribute 'TcEncoding' := 'UTF-8'}
+fbMoveToPositionTasks[2].future_name := 'MOVE A3';
 fbMoveToPositionTasks[3].set_target_position(80,160,0);
+{attribute 'TcEncoding' := 'UTF-8'}
+fbMoveToPositionTasks[3].future_name := 'MOVE A1';
 fbMoveToPositionTasks[4].set_target_position(400,160,0);
+{attribute 'TcEncoding' := 'UTF-8'}
+fbMoveToPositionTasks[4].future_name := 'MOVE C1';
 fbMoveToPositionTasks[5].set_target_position(400,80,0);
+{attribute 'TcEncoding' := 'UTF-8'}
+fbMoveToPositionTasks[5].future_name := 'MOVE C3';
 fbMoveToPositionTasks[6].set_target_position(80,120,0);
+{attribute 'TcEncoding' := 'UTF-8'}
+fbMoveToPositionTasks[6].future_name := 'MOVE A2';
 fbMoveToPositionTasks[7].set_target_position(240,80,0);
+{attribute 'TcEncoding' := 'UTF-8'}
+fbMoveToPositionTasks[7].future_name := 'MOVE B3';
 fbMoveToPositionTasks[8].set_target_position(240,160,0);
+{attribute 'TcEncoding' := 'UTF-8'}
+fbMoveToPositionTasks[8].future_name := 'MOVE B1';
 fbMoveToPositionTasks[9].set_target_position(400,120,0);
+{attribute 'TcEncoding' := 'UTF-8'}
+fbMoveToPositionTasks[9].future_name := 'MOVE C2';
 FOR i := 1 TO 9 DO
 	fbMoveToPositionTasks[i].set_dynamics(Vel, Acc, Dcc, Jerk);
 END_FOR
 
 // 回転動作タスク追加
 fbMoveCTasks[1].set_target_position(0.0);
+{attribute 'TcEncoding' := 'UTF-8'}
+fbMoveCTasks[1].future_name := 'ROLL 0.0 deg';
 fbMoveCTasks[2].set_target_position(360.0);
+{attribute 'TcEncoding' := 'UTF-8'}
+fbMoveCTasks[2].future_name := 'ROLL 360.0 deg';
 fbMoveCTasks[3].set_target_position(90.0);
+{attribute 'TcEncoding' := 'UTF-8'}
+fbMoveCTasks[3].future_name := 'ROLL 90.0 deg';
 fbMoveCTasks[4].set_target_position(180.0);
+{attribute 'TcEncoding' := 'UTF-8'}
+fbMoveCTasks[4].future_name := 'ROLL 180.0 deg';
 fbMoveCTasks[5].set_target_position(270.0);
+{attribute 'TcEncoding' := 'UTF-8'}
+fbMoveCTasks[5].future_name := 'ROLL 270.0 deg';
 FOR i := 1 TO  5 DO
 	fbMoveCTasks[i].set_dynamics(Coord_Mcs_C1,Ang_Vel,Ang_Acc,Ang_Dcc,Ang_Jerk);
 END_FOR
@@ -541,48 +593,70 @@ END_FOR
 // 上下動作タスク追加
 fbMoveZTasks[1].set_target_position(Z_High);
 fbMoveZTasks[1].set_dynamics(Vel, Acc, Dcc, Jerk);
+{attribute 'TcEncoding' := 'UTF-8'}
+fbMoveZTasks[1].future_name := 'ELEV. UP';
 fbMoveZTasks[2].set_target_position(Z_Low);
 fbMoveZTasks[2].set_dynamics(Vel, Acc, Dcc, Jerk);
+{attribute 'TcEncoding' := 'UTF-8'}
+fbMoveZTasks[2].future_name := 'ELEV. DOWN';
 
 // 傾きA動作タスク追加
 fbMoveATasks[1].set_target_position(Tilt);
 fbMoveATasks[1].set_dynamics(Vel, Acc, Dcc, Jerk);
+{attribute 'TcEncoding' := 'UTF-8'}
+fbMoveATasks[1].future_name := 'Tilt forwards';
 fbMoveATasks[2].set_target_position(-Tilt);
 fbMoveATasks[2].set_dynamics(Vel, Acc, Dcc, Jerk);
+{attribute 'TcEncoding' := 'UTF-8'}
+fbMoveATasks[2].future_name := 'Tilt backwards';
 fbMoveATasks[3].set_target_position(0);
 fbMoveATasks[3].set_dynamics(Vel, Acc, Dcc, Jerk);
+{attribute 'TcEncoding' := 'UTF-8'}
+fbMoveATasks[3].future_name := 'F/B tilt holizontal';
 
 // 傾きB動作タスク追加
 fbMoveBTasks[1].set_target_position(Tilt);
 fbMoveBTasks[1].set_dynamics(Vel, Acc, Dcc, Jerk);
+fbMoveBTasks[1].future_name := 'Tilt right';
 fbMoveBTasks[2].set_target_position(0 - Tilt);
 fbMoveBTasks[2].set_dynamics(Vel, Acc, Dcc, Jerk);
+fbMoveBTasks[2].future_name := 'Tilt left';
 fbMoveBTasks[3].set_target_position(0);
 fbMoveBTasks[3].set_dynamics(Vel, Acc, Dcc, Jerk);
+fbMoveBTasks[3].future_name := 'L/R tilt horizontal';
+
 
 // AB両方の傾き
 fbMoveAB_ATasks[1].set_target_position(Rotaion_Ang);
 fbMoveAB_ATasks[1].set_dynamics(Vel, Acc, Dcc, Jerk);
+fbMoveAB_ATasks[1].future_name := 'Tilt backwards';
 fbMoveAB_ATasks[2].set_target_position(-Rotaion_Ang);
 fbMoveAB_ATasks[2].set_dynamics(Vel, Acc, Dcc, Jerk);
+fbMoveAB_ATasks[2].future_name := 'Tilt forwards';
 fbMoveAB_ATasks[3].set_target_position(0);
 fbMoveAB_ATasks[3].set_dynamics(Vel, Acc, Dcc, Jerk);
+fbMoveAB_ATasks[3].future_name := 'Tilt F/B Holizontal';
 fbMoveAB_BTasks[1].set_target_position(Rotaion_Ang);
 fbMoveAB_BTasks[1].set_dynamics(Vel, Acc, Dcc, Jerk);
+fbMoveAB_BTasks[1].future_name := 'Tilt right';
 fbMoveAB_BTasks[2].set_target_position(-Rotaion_Ang);
 fbMoveAB_BTasks[2].set_dynamics(Vel, Acc, Dcc, Jerk);
+fbMoveAB_BTasks[2].future_name := 'Tilt left';
 fbMoveAB_BTasks[3].set_target_position(0);
 fbMoveAB_BTasks[3].set_dynamics(Vel, Acc, Dcc, Jerk);
+fbMoveAB_BTasks[3].future_name := 'Tilt L/R Holizontal';
 
 // 初期状態高さへ戻る
 fbMoveZTask_init.set_target_position(INIT_HEIGHT);
 fbMoveZTask_init.set_dynamics(Vel, Acc, Dcc, Jerk);
-
+fbMoveZTask_init.future_name := 'Height initial position.';
 ]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="MAIN">
-      <LineId Id="7038" Count="45" />
+      <LineId Id="7038" Count="25" />
+      <LineId Id="7526" Count="1" />
+      <LineId Id="7064" Count="19" />
       <LineId Id="7085" Count="0" />
       <LineId Id="7387" Count="0" />
       <LineId Id="7086" Count="8" />
@@ -686,13 +760,28 @@ fbMoveZTask_init.set_dynamics(Vel, Acc, Dcc, Jerk);
     <LineIds Name="MAIN.MakeJob_DemoPattern">
       <LineId Id="116" Count="1" />
       <LineId Id="123" Count="0" />
-      <LineId Id="125" Count="4" />
+      <LineId Id="125" Count="2" />
+      <LineId Id="218" Count="0" />
+      <LineId Id="217" Count="0" />
+      <LineId Id="128" Count="1" />
       <LineId Id="133" Count="0" />
-      <LineId Id="135" Count="3" />
-      <LineId Id="144" Count="7" />
-      <LineId Id="159" Count="9" />
-      <LineId Id="176" Count="9" />
+      <LineId Id="135" Count="1" />
+      <LineId Id="220" Count="0" />
+      <LineId Id="219" Count="0" />
+      <LineId Id="137" Count="1" />
+      <LineId Id="144" Count="5" />
+      <LineId Id="221" Count="1" />
+      <LineId Id="150" Count="1" />
+      <LineId Id="159" Count="7" />
+      <LineId Id="224" Count="0" />
+      <LineId Id="223" Count="0" />
+      <LineId Id="167" Count="1" />
+      <LineId Id="176" Count="7" />
+      <LineId Id="226" Count="0" />
+      <LineId Id="225" Count="0" />
+      <LineId Id="184" Count="1" />
       <LineId Id="200" Count="7" />
+      <LineId Id="227" Count="1" />
       <LineId Id="212" Count="1" />
       <LineId Id="5" Count="0" />
     </LineIds>
@@ -700,19 +789,100 @@ fbMoveZTask_init.set_dynamics(Vel, Acc, Dcc, Jerk);
       <LineId Id="5" Count="0" />
       <LineId Id="3" Count="0" />
       <LineId Id="1" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="17" Count="0" />
       <LineId Id="10" Count="0" />
       <LineId Id="9" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="18" Count="0" />
       <LineId Id="12" Count="0" />
       <LineId Id="11" Count="0" />
-      <LineId Id="13" Count="3" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="13" Count="1" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="15" Count="1" />
       <LineId Id="7" Count="0" />
     </LineIds>
     <LineIds Name="MAIN.MakeTasks">
-      <LineId Id="174" Count="6" />
-      <LineId Id="234" Count="3" />
-      <LineId Id="181" Count="6" />
-      <LineId Id="238" Count="2" />
-      <LineId Id="188" Count="42" />
+      <LineId Id="174" Count="2" />
+      <LineId Id="269" Count="0" />
+      <LineId Id="244" Count="0" />
+      <LineId Id="177" Count="0" />
+      <LineId Id="245" Count="0" />
+      <LineId Id="270" Count="0" />
+      <LineId Id="178" Count="0" />
+      <LineId Id="247" Count="0" />
+      <LineId Id="271" Count="0" />
+      <LineId Id="179" Count="0" />
+      <LineId Id="248" Count="0" />
+      <LineId Id="272" Count="0" />
+      <LineId Id="180" Count="0" />
+      <LineId Id="249" Count="0" />
+      <LineId Id="273" Count="0" />
+      <LineId Id="234" Count="0" />
+      <LineId Id="250" Count="0" />
+      <LineId Id="274" Count="0" />
+      <LineId Id="235" Count="0" />
+      <LineId Id="251" Count="0" />
+      <LineId Id="276" Count="0" />
+      <LineId Id="275" Count="0" />
+      <LineId Id="252" Count="0" />
+      <LineId Id="277" Count="0" />
+      <LineId Id="237" Count="0" />
+      <LineId Id="253" Count="0" />
+      <LineId Id="278" Count="0" />
+      <LineId Id="181" Count="5" />
+      <LineId Id="254" Count="0" />
+      <LineId Id="279" Count="0" />
+      <LineId Id="187" Count="0" />
+      <LineId Id="255" Count="0" />
+      <LineId Id="280" Count="0" />
+      <LineId Id="238" Count="0" />
+      <LineId Id="256" Count="0" />
+      <LineId Id="281" Count="0" />
+      <LineId Id="239" Count="0" />
+      <LineId Id="257" Count="0" />
+      <LineId Id="282" Count="0" />
+      <LineId Id="240" Count="0" />
+      <LineId Id="258" Count="0" />
+      <LineId Id="283" Count="0" />
+      <LineId Id="188" Count="6" />
+      <LineId Id="264" Count="0" />
+      <LineId Id="259" Count="0" />
+      <LineId Id="195" Count="1" />
+      <LineId Id="265" Count="0" />
+      <LineId Id="260" Count="0" />
+      <LineId Id="197" Count="3" />
+      <LineId Id="266" Count="0" />
+      <LineId Id="261" Count="0" />
+      <LineId Id="201" Count="1" />
+      <LineId Id="267" Count="0" />
+      <LineId Id="262" Count="0" />
+      <LineId Id="203" Count="1" />
+      <LineId Id="268" Count="0" />
+      <LineId Id="263" Count="0" />
+      <LineId Id="205" Count="3" />
+      <LineId Id="284" Count="0" />
+      <LineId Id="209" Count="1" />
+      <LineId Id="285" Count="0" />
+      <LineId Id="211" Count="1" />
+      <LineId Id="287" Count="0" />
+      <LineId Id="286" Count="0" />
+      <LineId Id="213" Count="3" />
+      <LineId Id="288" Count="0" />
+      <LineId Id="217" Count="1" />
+      <LineId Id="289" Count="0" />
+      <LineId Id="219" Count="1" />
+      <LineId Id="290" Count="0" />
+      <LineId Id="221" Count="1" />
+      <LineId Id="292" Count="0" />
+      <LineId Id="223" Count="1" />
+      <LineId Id="293" Count="0" />
+      <LineId Id="225" Count="1" />
+      <LineId Id="291" Count="0" />
+      <LineId Id="227" Count="3" />
       <LineId Id="112" Count="0" />
       <LineId Id="5" Count="0" />
     </LineIds>
