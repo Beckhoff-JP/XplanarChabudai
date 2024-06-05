@@ -6,6 +6,8 @@ VAR_INPUT
 END_VAR
 VAR_OUTPUT
 	event : JobEventReport;
+	executing : JobEventReport;
+	scope_task_triggers: ARRAY [0..10] OF BOOL;
 END_VAR
 VAR
 END_VAR
@@ -13,6 +15,34 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="_record_scope" Id="{da5a3ea4-84d4-4601-b7d3-3a0ce75af056}">
+      <Declaration><![CDATA[METHOD _record_scope : BOOL
+VAR_INPUT
+	event : JobEventReport;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+IF event.task_name = 'Tilt forwards' THEN
+		IF event.new_state = 'process' THEN
+			scope_task_triggers[0] := TRUE;
+		ELSIF event.new_state = 'quit' THEN
+			scope_task_triggers[0] := FALSE;
+		END_IF
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="_record_sqldb" Id="{42f60782-a7a6-47a0-ab99-3c440f4711af}">
+      <Declaration><![CDATA[METHOD _record_sqldb : BOOL
+VAR_INPUT
+	event : JobEventReport;
+END_VAR
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="report" Id="{d2542430-59b7-4888-a551-078a3a508271}">
       <Declaration><![CDATA[{warning 'add method implementation '}
 METHOD report : BOOL
@@ -35,31 +65,55 @@ event.record_time := FILETIME64_TO_ISO8601(fileTime := record_time, nBias := DIN
 event.job_id := executor.id;
 event.task_name := executor.future.future_name;
 
-text := event.record_time;
-text := CONCAT(text, '	');
-text := CONCAT(text, event.new_state);
-text := CONCAT(text, '		');
-text := CONCAT(text, event.task_name);
-text := CONCAT(text, '		');
-text := CONCAT(text, event.job_id);
+// _record_scope(event);
+_record_sqldb(event);
 
-ADSLOGSTR(msgCtrlMask := ADSLOG_MSGTYPE_LOG, msgFmtStr := text, strArg := '');
+IF new_state = E_FutureExecutionState.process THEN
+	executing := event;
+END_IF
+
+IF old_state = E_FutureExecutionState.process OR new_state = E_FutureExecutionState.process THEN
+	text := event.record_time;
+	text := CONCAT(text, '	');
+	text := CONCAT(text, event.new_state);
+	text := CONCAT(text, '		');
+	text := CONCAT(text, event.task_name);
+	text := CONCAT(text, '		');
+	text := CONCAT(text, event.job_id);
+	
+	ADSLOGSTR(msgCtrlMask := ADSLOG_MSGTYPE_LOG, msgFmtStr := text, strArg := '');	
+END_IF
+
 report := TRUE;]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="FB_JobReporter">
       <LineId Id="9" Count="0" />
     </LineIds>
+    <LineIds Name="FB_JobReporter._record_scope">
+      <LineId Id="16" Count="0" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="11" Count="1" />
+      <LineId Id="14" Count="1" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="10" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_JobReporter._record_sqldb">
+      <LineId Id="5" Count="0" />
+    </LineIds>
     <LineIds Name="FB_JobReporter.report">
       <LineId Id="10" Count="1" />
       <LineId Id="15" Count="0" />
       <LineId Id="17" Count="0" />
       <LineId Id="12" Count="0" />
-      <LineId Id="33" Count="0" />
-      <LineId Id="24" Count="1" />
-      <LineId Id="27" Count="2" />
-      <LineId Id="31" Count="1" />
-      <LineId Id="26" Count="0" />
+      <LineId Id="47" Count="1" />
+      <LineId Id="61" Count="0" />
+      <LineId Id="76" Count="0" />
+      <LineId Id="75" Count="0" />
+      <LineId Id="77" Count="1" />
+      <LineId Id="49" Count="1" />
+      <LineId Id="53" Count="7" />
+      <LineId Id="51" Count="1" />
       <LineId Id="21" Count="0" />
       <LineId Id="16" Count="0" />
     </LineIds>

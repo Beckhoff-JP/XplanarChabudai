@@ -247,21 +247,31 @@ IF stMoverState = MC_PLANAR_STATE.Enabled THEN
 					ManualCommand.move_roll_s:
 						fb_manu_job.add_future(fbMoveCTasks[4]);
 					ManualCommand.move_tilt_up_front:
+						fb_manu_job.add_future(fbMoveZTasks[1]);
 						fb_manu_job.add_future(fbMoveATasks[1]);					
 					ManualCommand.move_tilt_up_left:
+						fb_manu_job.add_future(fbMoveZTasks[1]);
 						fb_manu_job.add_future(fbMoveATasks[2]);					
 					ManualCommand.move_tilt_up_rear:
+						fb_manu_job.add_future(fbMoveZTasks[1]);
 						fb_manu_job.add_future(fbMoveBTasks[1]);					
 					ManualCommand.move_tilt_up_right:
+						fb_manu_job.add_future(fbMoveZTasks[1]);
 						fb_manu_job.add_future(fbMoveBTasks[2]);
 					ManualCommand.move_tilt_horizontal:
 						fb_manu_job.add_future(fbMoveATasks[3]);
 						fb_manu_job.add_future(fbMoveBTasks[3]);
+						fb_manu_job.add_future(fbMoveZTasks[2]);
 					ManualCommand.move_up:
 						fb_manu_job.add_future(fbMoveZTasks[1]);
 					ManualCommand.move_down:					
 						fb_manu_job.add_future(fbMoveZTasks[2]);
 				END_CASE
+			END_IF
+			IF NOT manual_command_event AND manual_command_event_mem THEN
+				fb_manu_job.add_future(fbMoveATasks[3]);
+				fb_manu_job.add_future(fbMoveBTasks[3]);
+				fb_manu_job.add_future(fbMoveZTasks[2]);
 			END_IF
 			manual_command_event_mem := manual_command_event;
 			//実行
@@ -695,15 +705,25 @@ fbMoveZTask_init.future_name := 'Height initial position.';
       <LineId Id="7343" Count="0" />
       <LineId Id="7347" Count="0" />
       <LineId Id="7298" Count="0" />
+      <LineId Id="7662" Count="0" />
       <LineId Id="7337" Count="0" />
       <LineId Id="7300" Count="0" />
+      <LineId Id="7660" Count="0" />
       <LineId Id="7338" Count="0" />
-      <LineId Id="7302" Count="2" />
+      <LineId Id="7302" Count="0" />
+      <LineId Id="7657" Count="0" />
+      <LineId Id="7659" Count="0" />
+      <LineId Id="7304" Count="0" />
+      <LineId Id="7655" Count="0" />
       <LineId Id="7339" Count="0" />
       <LineId Id="7333" Count="0" />
       <LineId Id="7335" Count="1" />
+      <LineId Id="7654" Count="0" />
       <LineId Id="7306" Count="4" />
       <LineId Id="7272" Count="0" />
+      <LineId Id="7663" Count="0" />
+      <LineId Id="7666" Count="1" />
+      <LineId Id="7664" Count="1" />
       <LineId Id="7362" Count="0" />
       <LineId Id="7146" Count="15" />
       <LineId Id="7321" Count="2" />

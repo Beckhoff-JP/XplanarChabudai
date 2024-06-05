@@ -14,6 +14,9 @@ VAR
 	sessions: ARRAY [1..2] OF CoeSdoCommand;
 	read_cycle_timer: TON;
 	fbMqttPublish : FB_mqtt_publish;
+	
+	slave_state : FB_EcGetSlaveState;
+	state : ST_EcSlaveStateBits;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -41,6 +44,15 @@ IF fbENviroment.XpuTcIo(1).TileCoE(1,2).DiagData.Update() THEN
 END_IF;
 *)
 
+slave_state(
+	sNetId:='192.168.80.1.4.1',
+	nSlaveAddr := 1001,
+	bExecute := NOT slave_state.bBusy
+);
+
+IF NOT slave_state.bBusy THEN
+	state := F_ConvSlaveStateToBits(slave_state.state);	
+END_IF
 
 // Get diganosis data from SDO
 sdo_controller();
@@ -73,7 +85,15 @@ END_IF
     </Implementation>
     <LineIds Name="IoT">
       <LineId Id="415" Count="22" />
+      <LineId Id="455" Count="0" />
+      <LineId Id="454" Count="0" />
+      <LineId Id="456" Count="0" />
+      <LineId Id="458" Count="1" />
+      <LineId Id="457" Count="0" />
+      <LineId Id="463" Count="0" />
       <LineId Id="403" Count="0" />
+      <LineId Id="466" Count="0" />
+      <LineId Id="465" Count="0" />
       <LineId Id="398" Count="0" />
       <LineId Id="227" Count="0" />
       <LineId Id="229" Count="0" />

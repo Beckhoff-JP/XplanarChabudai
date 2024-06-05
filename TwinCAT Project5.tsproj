@@ -3954,7 +3954,7 @@
 			<Licenses>
 				<Target BkhfOrder="ForDemo">
 					<ManualSelect>{4989A799-AEEA-4FEE-88EF-666B99EEFB45}</ManualSelect>
-					<ManualSelect>{02AC2825-C3C7-4D15-AAF6-4EB45EFAA2D0}</ManualSelect>
+					<ManualSelect>{92583661-35AE-45CE-BD4F-C35BFE16F07E}</ManualSelect>
 				</Target>
 			</Licenses>
 			<Tasks>
@@ -10744,7 +10744,7 @@
 		</Motion>
 		<Plc>
 			<Project GUID="{6733759D-5D54-40D4-ADD5-4AFC48FD82DA}" Name="Xplanar_First_Project" PrjFilePath="Xplanar_First_Project\Xplanar_First_Project.plcproj" TmcFilePath="Xplanar_First_Project\Xplanar_First_Project.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="Xplanar_First_Project\Xplanar_First_Project.tmc" TmcHash="{75E48B53-658B-A2D1-571F-93BA759BC90D}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="Xplanar_First_Project\Xplanar_First_Project.tmc" TmcHash="{64F5A7F6-F0C6-4AA9-316F-2AA826AB5B07}">
 					<Name>Xplanar_First_Project Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
@@ -10780,6 +10780,11 @@
 							<Type GUID="{1500FFCE-0727-F0FF-6AEB-C3B7FBED5C6B}" Namespace="Tc3_Mc3PlanarMotion">CDT_MCTOPLC_PLANAR_MOVER</Type>
 						</Var>
 						<Var>
+							<Name>GVL.planar_environment.MCTOPLC_STD</Name>
+							<Comment><![CDATA[ Environment data that is transferred from the Planar Environment to this function block. ]]></Comment>
+							<Type GUID="{79107B5F-AFEC-4E5A-AF95-460E7D782CE1}" Namespace="MC">CDT_MCTOPLC_PLANAR_ENVIRONMENT</Type>
+						</Var>
+						<Var>
 							<Name>GVL.planar_group.MCTOPLC_STD</Name>
 							<Comment><![CDATA[ Group data that is transferred from the Planar Group to this function block. ]]></Comment>
 							<Type GUID="{E06D295F-3D94-4B18-B587-C89D73DA41F4}" Namespace="MC">CDT_MCTOPLC_GROUP_PLANAR</Type>
@@ -10799,16 +10804,16 @@
 							<Comment><![CDATA[ Track data that is transferred from the Planar Track to this function block. ]]></Comment>
 							<Type GUID="{5769ADF0-D6E6-40D9-B474-790A2A7F1D1F}" Namespace="MC">CDT_MCTOPLC_PLANAR_TRACK</Type>
 						</Var>
-						<Var>
-							<Name>GVL.planar_environment.MCTOPLC_STD</Name>
-							<Comment><![CDATA[ Environment data that is transferred from the Planar Environment to this function block. ]]></Comment>
-							<Type GUID="{79107B5F-AFEC-4E5A-AF95-460E7D782CE1}" Namespace="MC">CDT_MCTOPLC_PLANAR_ENVIRONMENT</Type>
-						</Var>
 					</Vars>
 					<Vars VarGrpType="2" AreaNo="1">
 						<Name>PlcTask Outputs</Name>
 						<Var>
 							<Name>MAIN.fbMover.PLCTOMC</Name>
+							<Comment><![CDATA[ Mover data that is transferred from the Planar Mover to this function block. ]]></Comment>
+							<Type GUID="{8CF7E034-6BBC-291C-E83F-2D2297581DBB}" Namespace="Tc3_Mc3PlanarMotion">CDT_PLCTOMC_PLANAR_MOVER</Type>
+						</Var>
+						<Var>
+							<Name>GVL.planar_movers[1].PLCTOMC</Name>
 							<Comment><![CDATA[ Mover data that is transferred from the Planar Mover to this function block. ]]></Comment>
 							<Type GUID="{8CF7E034-6BBC-291C-E83F-2D2297581DBB}" Namespace="Tc3_Mc3PlanarMotion">CDT_PLCTOMC_PLANAR_MOVER</Type>
 						</Var>
@@ -10829,11 +10834,6 @@
 						</Var>
 						<Var>
 							<Name>GVL.planar_movers[5].PLCTOMC</Name>
-							<Comment><![CDATA[ Mover data that is transferred from the Planar Mover to this function block. ]]></Comment>
-							<Type GUID="{8CF7E034-6BBC-291C-E83F-2D2297581DBB}" Namespace="Tc3_Mc3PlanarMotion">CDT_PLCTOMC_PLANAR_MOVER</Type>
-						</Var>
-						<Var>
-							<Name>GVL.planar_movers[1].PLCTOMC</Name>
 							<Comment><![CDATA[ Mover data that is transferred from the Planar Mover to this function block. ]]></Comment>
 							<Type GUID="{8CF7E034-6BBC-291C-E83F-2D2297581DBB}" Namespace="Tc3_Mc3PlanarMotion">CDT_PLCTOMC_PLANAR_MOVER</Type>
 						</Var>
@@ -11506,10 +11506,15 @@
 				<Symbol>PlcTask Internal.MAIN.fbMoveToPositionTasks.fbMoveToPositionTasks[3]._abort_executor._state</Symbol>
 				<Symbol>PlcTask Internal.MAIN.fbMoveToPositionTasks.fbMoveToPositionTasks[4]._abort_executor._state</Symbol>
 				<Symbol>PlcTask Internal.MAIN.fbMoveToPositionTasks.fbMoveToPositionTasks[5]._abort_executor._state</Symbol>
-				<Symbol>PlcTask Internal.MAIN.fbMoveZTask_init._abort_executor._state</Symbol>
-				<Symbol>PlcTask Internal.MAIN.fbJob._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveToPositionTasks.fbMoveToPositionTasks[6]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveToPositionTasks.fbMoveToPositionTasks[7]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveToPositionTasks.fbMoveToPositionTasks[8]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveToPositionTasks.fbMoveToPositionTasks[9]._abort_executor._state</Symbol>
 				<Symbol>PlcTask Internal.MAIN.fbMoveCTasks.fbMoveCTasks[1]._abort_executor._state</Symbol>
 				<Symbol>PlcTask Internal.MAIN.fbMoveCTasks.fbMoveCTasks[2]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveCTasks.fbMoveCTasks[3]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveCTasks.fbMoveCTasks[4]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveCTasks.fbMoveCTasks[5]._abort_executor._state</Symbol>
 				<Symbol>PlcTask Internal.MAIN.fbMoveZTasks.fbMoveZTasks[1]._abort_executor._state</Symbol>
 				<Symbol>PlcTask Internal.MAIN.fbMoveZTasks.fbMoveZTasks[2]._abort_executor._state</Symbol>
 				<Symbol>PlcTask Internal.MAIN.fbMoveATasks.fbMoveATasks[1]._abort_executor._state</Symbol>
@@ -11524,6 +11529,7 @@
 				<Symbol>PlcTask Internal.MAIN.fbMoveAB_BTasks.fbMoveAB_BTasks[1]._abort_executor._state</Symbol>
 				<Symbol>PlcTask Internal.MAIN.fbMoveAB_BTasks.fbMoveAB_BTasks[2]._abort_executor._state</Symbol>
 				<Symbol>PlcTask Internal.MAIN.fbMoveAB_BTasks.fbMoveAB_BTasks[3]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbMoveZTask_init._abort_executor._state</Symbol>
 				<Symbol>PlcTask Internal.MAIN.fb_positioning_job._executors._executors[1]._state</Symbol>
 				<Symbol>PlcTask Internal.MAIN.fb_positioning_job._executors._executors[2]._state</Symbol>
 				<Symbol>PlcTask Internal.MAIN.fb_positioning_job._executors._executors[3]._state</Symbol>
@@ -11644,43 +11650,6 @@
 				<Symbol>PlcTask Internal.MAIN.fb_tilt_AB_cycle_jobs._executors._executors[18]._state</Symbol>
 				<Symbol>PlcTask Internal.MAIN.fb_tilt_AB_cycle_jobs._executors._executors[19]._state</Symbol>
 				<Symbol>PlcTask Internal.MAIN.fb_tilt_AB_cycle_jobs._executors._executors[20]._state</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].identity</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].dc_link_voltage</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].power_supply_current</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].temperature_north</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].temperature_east</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].temperature_south</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].temperature_west</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].temperature_center</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].temperature_power</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].fan_rpm</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].fan_duty_cycle</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].supply_voltage_us</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].auxiliary_voltage</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].acceleration_x</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].acceleration_y</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].acceleration_z</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].time_to_shutdown</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].fb_fw_rev</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].identity</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].dc_link_voltage</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].power_supply_current</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].temperature_north</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].temperature_east</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].temperature_south</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].temperature_west</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].temperature_center</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].temperature_power</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].fan_rpm</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].fan_duty_cycle</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].supply_voltage_us</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].auxiliary_voltage</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].acceleration_x</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].acceleration_y</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].acceleration_z</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].time_to_shutdown</Symbol>
-				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].fb_fw_rev</Symbol>
 				<Symbol>PlcTask Internal.MAIN.fb_demo_job._executors._executors[1]._state</Symbol>
 				<Symbol>PlcTask Internal.MAIN.fb_demo_job._executors._executors[2]._state</Symbol>
 				<Symbol>PlcTask Internal.MAIN.fb_demo_job._executors._executors[3]._state</Symbol>
@@ -11721,13 +11690,44 @@
 				<Symbol>PlcTask Internal.MAIN.fb_manu_job._executors._executors[18]._state</Symbol>
 				<Symbol>PlcTask Internal.MAIN.fb_manu_job._executors._executors[19]._state</Symbol>
 				<Symbol>PlcTask Internal.MAIN.fb_manu_job._executors._executors[20]._state</Symbol>
-				<Symbol>PlcTask Internal.MAIN.fbMoveCTasks.fbMoveCTasks[3]._abort_executor._state</Symbol>
-				<Symbol>PlcTask Internal.MAIN.fbMoveCTasks.fbMoveCTasks[4]._abort_executor._state</Symbol>
-				<Symbol>PlcTask Internal.MAIN.fbMoveCTasks.fbMoveCTasks[5]._abort_executor._state</Symbol>
-				<Symbol>PlcTask Internal.MAIN.fbMoveToPositionTasks.fbMoveToPositionTasks[6]._abort_executor._state</Symbol>
-				<Symbol>PlcTask Internal.MAIN.fbMoveToPositionTasks.fbMoveToPositionTasks[7]._abort_executor._state</Symbol>
-				<Symbol>PlcTask Internal.MAIN.fbMoveToPositionTasks.fbMoveToPositionTasks[8]._abort_executor._state</Symbol>
-				<Symbol>PlcTask Internal.MAIN.fbMoveToPositionTasks.fbMoveToPositionTasks[9]._abort_executor._state</Symbol>
+				<Symbol>PlcTask Internal.MAIN.fbJob._state</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].identity</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].dc_link_voltage</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].power_supply_current</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].temperature_north</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].temperature_east</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].temperature_south</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].temperature_west</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].temperature_center</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].temperature_power</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].fan_rpm</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].fan_duty_cycle</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].supply_voltage_us</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].auxiliary_voltage</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].acceleration_x</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].acceleration_y</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].acceleration_z</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].time_to_shutdown</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[1].fb_fw_rev</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].identity</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].dc_link_voltage</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].power_supply_current</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].temperature_north</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].temperature_east</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].temperature_south</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].temperature_west</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].temperature_center</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].temperature_power</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].fan_rpm</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].fan_duty_cycle</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].supply_voltage_us</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].auxiliary_voltage</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].acceleration_x</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].acceleration_y</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].acceleration_z</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].time_to_shutdown</Symbol>
+				<Symbol>PlcTask Internal.IoT.planar_tiles_diag_data.planar_tiles_diag_data[2].fb_fw_rev</Symbol>
 			</Symbols>
 			<AddiStreamDescription>
 				<Address></Address>
@@ -11776,24 +11776,14 @@
 						<String></String>
 					</Value>
 				</ParameterValues>
-				<Stream Caller="#x03040020" Adi="#x03040020" Id="#x02040002" CntAds="#x00000020" CntFile="#x00000271" CntRing="#x00000002" SamplingDivider="1" DeviceStream="true">
+				<Stream Caller="#x03040020" Adi="#x03040020" Id="#x02040002" CntAds="#x00000020" CntFile="#x00000271" CntRing="#x00000002" SamplingDivider="1">
 					<Name>Device 3 (EtherCAT).Image</Name>
 					<DisplayName>DeviceStream1</DisplayName>
 					<FileDir>%TC_BOOTPRJPATH%</FileDir>
 				</Stream>
-				<Stream Caller="#x08502001" Adi="#x08502000" Id="#x02040003" CntAds="#x00000020" CntFile="#x00000064" CntRing="#x00000014" SamplingDivider="1">
+				<Stream Caller="#x08502001" Adi="#x08502000" Id="#x02040004" CntAds="#x00000020" CntFile="#x00000010" CntRing="#x00000002" SamplingDivider="1">
 					<Name>Xplanar_First_Project.Xplanar_First_Project Instance.PlcTask</Name>
 					<DisplayName>PlcStream1</DisplayName>
-					<LoggerObject Enabled="true">
-						<AreaName>PlcTask Internal</AreaName>
-						<SymName>MAIN.fbJob._state</SymName>
-						<HierName>PlcTask Internal.MAIN.fbJob._state</HierName>
-					</LoggerObject>
-					<LoggerObject Enabled="true">
-						<AreaName>PlcTask Internal</AreaName>
-						<SymName>IoT.planar_tiles_diag_data</SymName>
-						<HierName>PlcTask Internal.IoT.planar_tiles_diag_data</HierName>
-					</LoggerObject>
 					<FileDir>%TC_BOOTPRJPATH%</FileDir>
 				</Stream>
 				<Stream Caller="#x02010020" Adi="#x01010060" Id="#x02040001" CntAds="#x00000020" CntFile="#x00000271" CntRing="#x00000002" SamplingDivider="1">
