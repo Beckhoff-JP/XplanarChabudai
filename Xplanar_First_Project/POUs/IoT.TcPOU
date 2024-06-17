@@ -10,7 +10,7 @@ VAR
 	//TileInfo					: ARRAY [0..1] OF TileInfoType;
 
 	sdo_controller : FB_CoeSdoAccess(sNetId := EC_MASTER_NETID);
-	planar_tiles_diag_data: ARRAY[1..2] OF sdo_xplanar_aps_diag;
+	planar_tiles_diag_data : ARRAY[1..2] OF sdo_xplanar_aps_diag;
 	sessions: ARRAY [1..2] OF CoeSdoCommand;
 	read_cycle_timer: TON;
 	fbMqttPublish : FB_mqtt_publish;

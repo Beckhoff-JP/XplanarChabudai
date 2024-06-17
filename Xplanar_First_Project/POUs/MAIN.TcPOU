@@ -120,6 +120,13 @@ VAR
 	manual_command_event: BOOL;
 	manual_command_event_mem: BOOL;
 	manupilator_buttons: ARRAY [0..49] OF BOOL;
+	manual_executor : REFERENCE TO FB_Executor;
+	head : BOOL; tail: BOOL; order_num: UINT;
+	Recipe_Display				: ARRAY [1..bajp_jobmgmt.ParamFuturesLib.MAX_TASK_NUM] OF T_MaxString;
+	manual_start : BOOL;
+
+	machine_mode: UINT;
+	
 END_VAR
 
 VAR CONSTANT
@@ -249,15 +256,15 @@ IF stMoverState = MC_PLANAR_STATE.Enabled THEN
 					ManualCommand.move_tilt_up_front:
 						fb_manu_job.add_future(fbMoveZTasks[1]);
 						fb_manu_job.add_future(fbMoveATasks[1]);					
-					ManualCommand.move_tilt_up_left:
-						fb_manu_job.add_future(fbMoveZTasks[1]);
-						fb_manu_job.add_future(fbMoveATasks[2]);					
 					ManualCommand.move_tilt_up_rear:
 						fb_manu_job.add_future(fbMoveZTasks[1]);
-						fb_manu_job.add_future(fbMoveBTasks[1]);					
+						fb_manu_job.add_future(fbMoveATasks[2]);					
 					ManualCommand.move_tilt_up_right:
 						fb_manu_job.add_future(fbMoveZTasks[1]);
-						fb_manu_job.add_future(fbMoveBTasks[2]);
+						fb_manu_job.add_future(fbMoveBTasks[1]);
+					ManualCommand.move_tilt_up_left:
+						fb_manu_job.add_future(fbMoveZTasks[1]);
+						fb_manu_job.add_future(fbMoveBTasks[2]);					
 					ManualCommand.move_tilt_horizontal:
 						fb_manu_job.add_future(fbMoveATasks[3]);
 						fb_manu_job.add_future(fbMoveBTasks[3]);
@@ -268,12 +275,32 @@ IF stMoverState = MC_PLANAR_STATE.Enabled THEN
 						fb_manu_job.add_future(fbMoveZTasks[2]);
 				END_CASE
 			END_IF
-			IF NOT manual_command_event AND manual_command_event_mem THEN
-				fb_manu_job.add_future(fbMoveATasks[3]);
-				fb_manu_job.add_future(fbMoveBTasks[3]);
-				fb_manu_job.add_future(fbMoveZTasks[2]);
-			END_IF
+			//IF NOT manual_command_event AND manual_command_event_mem THEN
+			//	fb_manu_job.add_future(fbMoveATasks[3]);
+			//	fb_manu_job.add_future(fbMoveBTasks[3]);
+			//	fb_manu_job.add_future(fbMoveZTasks[2]);
+			//END_IF
 			manual_command_event_mem := manual_command_event;
+			
+			i := 1;
+			head := FALSE;
+			tail := FALSE;
+			WHILE NOT tail DO
+				manual_executor REF= fb_manu_job._future_generator(head, tail, order_num);
+				IF manual_executor.future <> 0 AND order_num > 0 THEN
+					Recipe_Display[i] := manual_executor.future.future_name;
+					i := i + 1;
+				END_IF
+			END_WHILE
+			WHILE i <= bajp_jobmgmt.ParamFuturesLib.MAX_TASK_NUM DO
+				Recipe_Display[i] := '';
+				i := i + 1;
+			END_WHILE
+			
+			IF manual_start THEN
+				nManupilationState := 3;
+			END_IF
+		3:
 			//実行
 			IF fbJob.current_state = bajp_jobmgmt.E_FutureExecutionState.wait_for_process AND fbJob.ready THEN
 				fbJob.start();
@@ -290,6 +317,11 @@ IF stMoverState = MC_PLANAR_STATE.Enabled THEN
 				fbJob.start();
 			END_IF
 			current_action := fbJob.active_future_id;
+			
+			IF fbJob.current_state = bajp_jobmgmt.E_FutureExecutionState.finish THEN
+				nManupilationState := 2;				
+			END_IF
+			
 			IF NOT manu_mode THEN
 				nManupilationState := 1;
 			END_IF
@@ -408,6 +440,16 @@ CASE nDemoSequenceState OF
 		END_IF
 		current_action := fbJob.active_future_id;
 END_CASE
+
+
+IF nDemoSequenceState > 0 THEN
+	machine_mode := 6;
+ELSIF nManupilationState > 0 THEN
+	machine_mode := 7;
+ELSIF nCase <= 5 THEN
+	machine_mode := nCase;	
+END_IF
+
 
 IF bStop THEN
 	bStop		:= FALSE;
@@ -707,15 +749,10 @@ fbMoveZTask_init.future_name := 'Height initial position.';
       <LineId Id="7298" Count="0" />
       <LineId Id="7662" Count="0" />
       <LineId Id="7337" Count="0" />
+      <LineId Id="8131" Count="5" />
       <LineId Id="7300" Count="0" />
       <LineId Id="7660" Count="0" />
       <LineId Id="7338" Count="0" />
-      <LineId Id="7302" Count="0" />
-      <LineId Id="7657" Count="0" />
-      <LineId Id="7659" Count="0" />
-      <LineId Id="7304" Count="0" />
-      <LineId Id="7655" Count="0" />
-      <LineId Id="7339" Count="0" />
       <LineId Id="7333" Count="0" />
       <LineId Id="7335" Count="1" />
       <LineId Id="7654" Count="0" />
@@ -725,7 +762,27 @@ fbMoveZTask_init.future_name := 'Height initial position.';
       <LineId Id="7666" Count="1" />
       <LineId Id="7664" Count="1" />
       <LineId Id="7362" Count="0" />
+      <LineId Id="7797" Count="0" />
+      <LineId Id="7956" Count="0" />
+      <LineId Id="7973" Count="1" />
+      <LineId Id="7951" Count="0" />
+      <LineId Id="7953" Count="0" />
+      <LineId Id="7968" Count="0" />
+      <LineId Id="7971" Count="1" />
+      <LineId Id="7970" Count="0" />
+      <LineId Id="7954" Count="0" />
+      <LineId Id="7962" Count="0" />
+      <LineId Id="7965" Count="0" />
+      <LineId Id="7967" Count="0" />
+      <LineId Id="7964" Count="0" />
+      <LineId Id="7966" Count="0" />
+      <LineId Id="7940" Count="2" />
+      <LineId Id="7799" Count="0" />
       <LineId Id="7146" Count="15" />
+      <LineId Id="7943" Count="1" />
+      <LineId Id="7948" Count="0" />
+      <LineId Id="7947" Count="0" />
+      <LineId Id="7945" Count="0" />
       <LineId Id="7321" Count="2" />
       <LineId Id="7162" Count="0" />
       <LineId Id="7164" Count="8" />
@@ -753,9 +810,17 @@ fbMoveZTask_init.future_name := 'Height initial position.';
       <LineId Id="7366" Count="0" />
       <LineId Id="7374" Count="0" />
       <LineId Id="7365" Count="0" />
-      <LineId Id="7213" Count="22" />
+      <LineId Id="7213" Count="5" />
+      <LineId Id="8109" Count="0" />
+      <LineId Id="7220" Count="15" />
       <LineId Id="7328" Count="0" />
-      <LineId Id="7236" Count="33" />
+      <LineId Id="7236" Count="21" />
+      <LineId Id="8117" Count="2" />
+      <LineId Id="8126" Count="1" />
+      <LineId Id="8129" Count="0" />
+      <LineId Id="8121" Count="2" />
+      <LineId Id="8116" Count="0" />
+      <LineId Id="7258" Count="11" />
       <LineId Id="3507" Count="0" />
     </LineIds>
     <LineIds Name="MAIN.ACT_Lamp_Ctrl">

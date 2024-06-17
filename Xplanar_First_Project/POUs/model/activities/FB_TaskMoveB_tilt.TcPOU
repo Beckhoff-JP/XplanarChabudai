@@ -16,7 +16,7 @@ VAR
 	_cmdFB			: MC_PlanarFeedback;
 	_prohibit 		: BOOL;
 	_abort_executor : FB_Executor;
-	_state 			:UINT;
+	_state_num 			:UINT;
 	_abort_state	:UINT;
 END_VAR
 ]]></Declaration>
@@ -32,7 +32,7 @@ VAR_INST
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[_cmdFB.Update();
-_state :=0;
+_state_num :=0;
 CASE _abort_state OF
 	0:
 		IF _cmdFB.Active THEN
@@ -81,12 +81,12 @@ METHOD execute : BOOL
       <Implementation>
         <ST><![CDATA[_cmdFB.Update();
 _abort_state := 0;
-CASE _state OF
+CASE _state_num OF
 	0:
 		//直線運動
 		IF NOT _cmdFB.Active AND NOT _cmdFB.Busy THEN
 			_fbMover^.MoveB(_cmdFB,_position,_dynamics);
-			_state := 1;
+			_state_num := 1;
 		END_IF
 	1:
 		//直線運動の完了フラグ待ち
@@ -129,7 +129,7 @@ ELSE
 	_dynamics.SetValuesVADJ(_v, _a, _d, _j);
 	_abort_executor.init();
 	_error_id := 0;
-	_state := 0;
+	_state_num := 0;
 	_abort_state := 0;
 	init := TRUE;
 END_IF

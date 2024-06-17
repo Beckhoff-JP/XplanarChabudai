@@ -8,6 +8,7 @@ VAR_OUTPUT
 	event : JobEventReport;
 	executing : JobEventReport;
 	scope_task_triggers: ARRAY [0..10] OF BOOL;
+	log_view: ARRAY [0..3, 0..19] OF T_MaxString;
 END_VAR
 VAR
 END_VAR
@@ -73,6 +74,8 @@ IF new_state = E_FutureExecutionState.process THEN
 END_IF
 
 IF old_state = E_FutureExecutionState.process OR new_state = E_FutureExecutionState.process THEN
+
+	// Report to ADS Log
 	text := event.record_time;
 	text := CONCAT(text, '	');
 	text := CONCAT(text, event.new_state);
@@ -80,8 +83,23 @@ IF old_state = E_FutureExecutionState.process OR new_state = E_FutureExecutionSt
 	text := CONCAT(text, event.task_name);
 	text := CONCAT(text, '		');
 	text := CONCAT(text, event.job_id);
-	
 	ADSLOGSTR(msgCtrlMask := ADSLOG_MSGTYPE_LOG, msgFmtStr := text, strArg := '');	
+
+	
+	// Report to HMI
+	MEMCPY(ADR(log_view[0,1]), ADR(log_view[0,0]), SIZEOF(log_view[0,0]) * 19);
+	MEMCPY(ADR(log_view[1,1]), ADR(log_view[1,0]), SIZEOF(log_view[0,0]) * 19);
+	MEMCPY(ADR(log_view[2,1]), ADR(log_view[2,0]), SIZEOF(log_view[0,0]) * 19);
+	MEMCPY(ADR(log_view[3,1]), ADR(log_view[3,0]), SIZEOF(log_view[0,0]) * 19);
+	log_view[0,0] := event.record_time;
+	log_view[1,0] := event.task_name;
+	IF old_state = E_FutureExecutionState.process THEN
+		log_view[2,0] := 'END';
+	ELSE
+		log_view[2,0] := 'START';
+	END_IF
+	log_view[3,0] := event.job_id;
+	
 END_IF
 
 report := TRUE;]]></ST>
@@ -112,8 +130,21 @@ report := TRUE;]]></ST>
       <LineId Id="75" Count="0" />
       <LineId Id="77" Count="1" />
       <LineId Id="49" Count="1" />
-      <LineId Id="53" Count="7" />
-      <LineId Id="51" Count="1" />
+      <LineId Id="112" Count="1" />
+      <LineId Id="53" Count="6" />
+      <LineId Id="111" Count="0" />
+      <LineId Id="110" Count="0" />
+      <LineId Id="94" Count="1" />
+      <LineId Id="60" Count="0" />
+      <LineId Id="104" Count="2" />
+      <LineId Id="93" Count="0" />
+      <LineId Id="108" Count="0" />
+      <LineId Id="98" Count="0" />
+      <LineId Id="101" Count="1" />
+      <LineId Id="99" Count="1" />
+      <LineId Id="109" Count="0" />
+      <LineId Id="92" Count="0" />
+      <LineId Id="52" Count="0" />
       <LineId Id="21" Count="0" />
       <LineId Id="16" Count="0" />
     </LineIds>
