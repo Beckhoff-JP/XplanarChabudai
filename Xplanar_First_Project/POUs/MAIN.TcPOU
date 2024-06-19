@@ -246,11 +246,11 @@ IF stMoverState = MC_PLANAR_STATE.Enabled THEN
 					ManualCommand.move_pos_r3:
 						fb_manu_job.add_future(fbMoveToPositionTasks[5]);						
 					ManualCommand.move_roll_w:
-						fb_manu_job.add_future(fbMoveCTasks[5]);
+						fb_manu_job.add_future(fbMoveCTasks[3]);
 					ManualCommand.move_roll_n:
 						fb_manu_job.add_future(fbMoveCTasks[1]);
 					ManualCommand.move_roll_e:
-						fb_manu_job.add_future(fbMoveCTasks[3]);
+						fb_manu_job.add_future(fbMoveCTasks[5]);
 					ManualCommand.move_roll_s:
 						fb_manu_job.add_future(fbMoveCTasks[4]);
 					ManualCommand.move_tilt_up_front:

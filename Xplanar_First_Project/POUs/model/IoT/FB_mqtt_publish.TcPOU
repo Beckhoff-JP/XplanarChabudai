@@ -17,13 +17,13 @@ VAR
 	fbSerializer :FB_Serializer;
 	
 	sTopicPub : STRING(255) := 'devices/unit230/messages/events/';
-	sPayloadPub : STRING(255);
 	
 	// for making publish event
 	publish_cycle_timer :TON;
 	datetime_string: STRING(39);
 	
 	publish_command: BOOL;
+	_error_id :UDINT;
 	
 END_VAR
 ]]></Declaration>
@@ -33,11 +33,19 @@ END_VAR
 
 IF bSetParameter THEN
 	bSetParameter := FALSE;
+	fbMqttClient.sHostName := 'IndustrialOPNFair2024-IoTHub.azure-devices.net';
+	fbMqttClient.nHostPort := 8883;
+	fbMqttClient.stTLS.sCA := 'c:\TwinCAT\3.1\Config\Certificates\BaltimoreCyberTrust.cer'; // CA certificate 
+	fbMqttClient.sClientId := 'unit230';
+	fbMqttClient.stTLS.sAzureSas := 'HostName=IndustrialOPNFair2024-IoTHub.azure-devices.net;DeviceId=unit230;SharedAccessSignature=SharedAccessSignature sr=IndustrialOPNFair2024-IoTHub.azure-devices.net%2Fdevices%2Funit230&sig=aZHGqBLbPbZ0nCj3%2BrwgAJAAhzI2BvVoTXPMA%2BaobPA%3D&se=1734308970'; // Device SAS Token
+	fbMqttClient.stTLS.bNoServerCertCheck:=TRUE;
+	(*
 	//fbMqttClient.stTLS.sCA := 'c:\TwinCAT\3.1\Config\Certificates\BaltimoreCyberTrust.crt'; // CA certificate 
 	//fbMqttClient.stTLS.sAzureSas := 'HostName=IndustrialOPNFair2024-IoTHub.azure-devices.net;DeviceId=unit230;SharedAccessSignature=SharedAccessSignature sr=IndustrialOPNFair2024-IoTHub.azure-devices.net%2Fdevices%2Funit230&sig=GxT9x70t1Q1per9XXu4Az%2FJhK1jBZt14KJ%2B7LG4NB%2Fw%3D&se=1712921181'; // Device SAS Token
 	fbMqttClient.sClientId := 'unit230';
 	fbMqttClient.sHostName := '192.168.1.20';
 	fbMqttClient.nHostPort := 1883;
+	*)
 	fbMqttClient.ipMessageQueue := fbMessageQueue;
 END_IF
 
@@ -48,10 +56,26 @@ IF fbMqttClient.bError THEN
 END_IF
 
 
-publish_cycle_timer(IN := NOT publish_command, PT := T#10S);
+publish_cycle_timer(IN := NOT publish_command, PT := T#5S);
 
+IF publish_cycle_timer.Q THEN
+	publish_command := TRUE;
+END_IF
 ]]></ST>
     </Implementation>
+    <Property Name="nErrID" Id="{23e231bd-c44f-4e02-8a8b-e9645fc01229}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY nErrID : UDINT
+]]></Declaration>
+      <Get Name="Get" Id="{91a8df65-1b9a-4afb-bfdf-be827636d678}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[nErrID := _error_id;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="sdo_data_received" Id="{598e3abe-0bfd-47c5-95e4-1fd355927e50}">
       <Declaration><![CDATA[{warning 'add method implementation '}
 METHOD sdo_data_received : BOOL
@@ -60,11 +84,16 @@ VAR_INPUT
 END_VAR
 VAR
 	diag_data_body: POINTER TO sdo_xplanar_aps_diag;
-	tile_number : UINT;
+	temp: UDINT;
+	i: UINT;
+END_VAR
+VAR_INST
+		tile_number : UINT;
+		sPayloadPub : STRING(255);
+		pub_complete : ARRAY [1..2] OF BOOL;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
-diag_data_body := command.pDstBuf;
+        <ST><![CDATA[diag_data_body := command.pDstBuf;
 CASE command.nSlaveAddr OF
 	1001:
 		tile_number := 1;
@@ -79,43 +108,83 @@ IF publish_command AND fbMqttClient.bConnected THEN
 		bUTC := TRUE,
 		nPrecision := 3
 	);
-	
+	CASE tile_number OF
+		1:
+			temp := diag_data_body^.temperature_west;
+		2:
+			temp := diag_data_body^.temperature_east;
+	END_CASE
 	sPayloadPub := fbSerializer.serialize(
 	  datetime := datetime_string,
 	  device_name := CONCAT('xplanar_tile_', UINT_TO_STRING(tile_number)),
-	  diag_data_body := diag_data_body
+	  temp := temp,
+	  fan_rpm := diag_data_body^.fan_rpm,
+	  current := diag_data_body^.power_supply_current
 	);
-	fbMqttClient.Publish(	sTopic:= sTopicPub, 
+	IF fbMqttClient.Publish(	sTopic:= sTopicPub, 
 				pPayload:= ADR(sPayloadPub), nPayloadSize:= LEN2(ADR(sPayloadPub)), 
-				eQoS:= TcIotMqttQos.AtMostOnceDelivery, bRetain:= FALSE, bQueue:= FALSE );
+				eQoS:= TcIotMqttQos.AtMostOnceDelivery, bRetain:= FALSE, bQueue:= FALSE ) THEN
+		_error_id := 0;
+		sdo_data_received := TRUE;
+	END_IF
     IF fbMqttClient.bError THEN
       // add your error logging here
-      hrErrorOccurred := fbMqttClient.hrErrorCode;
+    	_error_id := TO_UDINT(fbMqttClient.hrErrorCode);
+	  	sdo_data_received := TRUE;
+	ELSE
+		pub_complete[tile_number] := TRUE;
     END_IF
 	publish_command := FALSE;
+	FOR i := 1 TO 2 DO
+		IF NOT pub_complete[i] THEN
+			publish_command := TRUE;
+		END_IF
+	END_FOR
+ELSE
+	FOR i := 1 TO 2 DO
+		pub_complete[i] := FALSE;
+	END_FOR
 END_IF
 
 ]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="FB_mqtt_publish">
-      <LineId Id="33" Count="6" />
+      <LineId Id="33" Count="4" />
+      <LineId Id="108" Count="4" />
+      <LineId Id="105" Count="1" />
+      <LineId Id="38" Count="1" />
       <LineId Id="77" Count="2" />
-      <LineId Id="40" Count="11" />
+      <LineId Id="107" Count="0" />
+      <LineId Id="40" Count="10" />
+      <LineId Id="139" Count="0" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="140" Count="1" />
       <LineId Id="9" Count="0" />
     </LineIds>
+    <LineIds Name="FB_mqtt_publish.nErrID.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
     <LineIds Name="FB_mqtt_publish.sdo_data_received">
-      <LineId Id="8" Count="0" />
-      <LineId Id="59" Count="0" />
-      <LineId Id="58" Count="0" />
-      <LineId Id="60" Count="0" />
-      <LineId Id="62" Count="2" />
-      <LineId Id="61" Count="0" />
-      <LineId Id="27" Count="1" />
-      <LineId Id="31" Count="14" />
-      <LineId Id="47" Count="3" />
-      <LineId Id="73" Count="0" />
-      <LineId Id="52" Count="1" />
+      <LineId Id="143" Count="15" />
+      <LineId Id="191" Count="0" />
+      <LineId Id="193" Count="2" />
+      <LineId Id="192" Count="0" />
+      <LineId Id="159" Count="4" />
+      <LineId Id="202" Count="0" />
+      <LineId Id="164" Count="3" />
+      <LineId Id="199" Count="0" />
+      <LineId Id="198" Count="0" />
+      <LineId Id="197" Count="0" />
+      <LineId Id="168" Count="2" />
+      <LineId Id="201" Count="0" />
+      <LineId Id="188" Count="1" />
+      <LineId Id="171" Count="1" />
+      <LineId Id="183" Count="1" />
+      <LineId Id="186" Count="1" />
+      <LineId Id="185" Count="0" />
+      <LineId Id="177" Count="3" />
+      <LineId Id="173" Count="1" />
       <LineId Id="7" Count="0" />
     </LineIds>
   </POU>

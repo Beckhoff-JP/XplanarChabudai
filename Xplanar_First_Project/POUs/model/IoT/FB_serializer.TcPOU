@@ -18,7 +18,9 @@ END_VAR
 VAR_INPUT
   datetime: STRING;
   device_name: STRING;
-  diag_data_body: POINTER TO sdo_xplanar_aps_diag;
+  temp: UDINT;
+  fan_rpm: UDINT;
+  current: DINT;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[fbJson.StartObject();       // ‘{‘ の出力
@@ -27,9 +29,11 @@ fbJson.AddString(datetime);
 fbJson.AddKey('device_name');
 fbJson.AddString(device_name);
 fbJson.AddKey('temperature');		//キー temperature: の出力
-fbJson.AddUdint(diag_data_body^.temperature_center); // 温度出力
+fbJson.AddUdint(temp); // 温度出力
 fbJson.AddKey('fan_rpm');		//キー temperature: の出力
-fbJson.AddUdint(diag_data_body^.fan_rpm); // FAN回転数出力
+fbJson.AddUdint(fan_rpm); // FAN回転数出力
+fbJson.AddKey('current');		//キー temperature: の出力
+fbJson.AddDint(current); // 電流値
 fbJson.EndObject();			// ‘}’ の出力
 serialize := fbJson.GetDocument();	// 文字列へ出力
 fbJson.ResetDocument();		// SAXバッファクリア]]></ST>
@@ -39,7 +43,11 @@ fbJson.ResetDocument();		// SAXバッファクリア]]></ST>
       <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="FB_serializer.serialize">
-      <LineId Id="11" Count="10" />
+      <LineId Id="11" Count="5" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="18" Count="1" />
+      <LineId Id="31" Count="1" />
+      <LineId Id="20" Count="1" />
       <LineId Id="5" Count="0" />
     </LineIds>
   </POU>

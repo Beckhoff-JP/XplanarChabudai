@@ -10744,7 +10744,7 @@
 		</Motion>
 		<Plc>
 			<Project GUID="{6733759D-5D54-40D4-ADD5-4AFC48FD82DA}" Name="Xplanar_First_Project" PrjFilePath="Xplanar_First_Project\Xplanar_First_Project.plcproj" TmcFilePath="Xplanar_First_Project\Xplanar_First_Project.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="Xplanar_First_Project\Xplanar_First_Project.tmc" TmcHash="{A1204451-AC88-B539-6550-574F27A0DBD5}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="Xplanar_First_Project\Xplanar_First_Project.tmc" TmcHash="{E057D78B-D87A-7BF2-7E1E-C60D5B6EE621}">
 					<Name>Xplanar_First_Project Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
@@ -11735,7 +11735,7 @@
 				<Latitude></Latitude>
 			</AddiStreamDescription>
 			<SystemAlias></SystemAlias>
-			<DataLogger GUID="{32F12C27-3162-F55B-3741-554B280C1992}">
+			<DataLogger GUID="{B91F0052-7519-EA3B-0408-F4EF6DE277DA}">
 				<Name>Data Logger 1</Name>
 				<Name>Data Logger 1</Name>
 				<ParameterValues>

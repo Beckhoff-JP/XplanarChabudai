@@ -6,8 +6,8 @@
 TYPE sdo_xplanar_aps_diag :
 STRUCT
   identity: USINT;
-  dc_link_voltage: UDINT;
-  power_supply_current: UDINT;
+  dc_link_voltage: DINT;
+  power_supply_current: DINT;
   temperature_north: UINT;
   temperature_east: UINT;
   temperature_south: UINT;
