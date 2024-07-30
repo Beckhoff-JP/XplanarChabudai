@@ -25,6 +25,8 @@ VAR
 	publish_command: BOOL;
 	_error_id :UDINT;
 	
+	_fbDatabaseRecorder : REFERENCE TO BufferedRecord;
+	
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -63,6 +65,17 @@ IF publish_cycle_timer.Q THEN
 END_IF
 ]]></ST>
     </Implementation>
+    <Property Name="fbDatabaseRecorder" Id="{e364b29c-f96b-47c5-812d-d9de088c6ae6}">
+      <Declaration><![CDATA[PROPERTY fbDatabaseRecorder : REFERENCE TO BufferedRecord]]></Declaration>
+      <Set Name="Set" Id="{91702df8-44ce-4302-9d58-fb3c3b778913}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_fbDatabaseRecorder REF= fbDatabaseRecorder;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Property Name="nErrID" Id="{23e231bd-c44f-4e02-8a8b-e9645fc01229}">
       <Declaration><![CDATA[{warning 'add property implementation'}
 PROPERTY nErrID : UDINT
@@ -88,10 +101,13 @@ VAR
 	i: UINT;
 END_VAR
 VAR_INST
-		tile_number : UINT;
-		sPayloadPub : STRING(255);
-		pub_complete : ARRAY [1..2] OF BOOL;
-END_VAR]]></Declaration>
+	tile_number : UINT;
+	sPayloadPub : STRING(255);
+	pub_complete : ARRAY [1..2] OF BOOL;
+	// Record data buffer
+    fb_database_aps_diag    :ST_database_aps_diag;    // 書込みデータ設定用
+END_VAR
+]]></Declaration>
       <Implementation>
         <ST><![CDATA[diag_data_body := command.pDstBuf;
 CASE command.nSlaveAddr OF
@@ -101,6 +117,31 @@ CASE command.nSlaveAddr OF
 		tile_number := 2;
 END_CASE
 
+//For TF6420 Database
+IF __ISVALIDREF(_fbDatabaseRecorder) THEN
+	fb_database_aps_diag.tile_number := TO_STRING(tile_number);
+	fb_database_aps_diag.acceleration_y := diag_data_body^.acceleration_y;
+	fb_database_aps_diag.acceleration_y := diag_data_body^.acceleration_y;
+	fb_database_aps_diag.acceleration_z := diag_data_body^.acceleration_z;
+	fb_database_aps_diag.auxiliary_voltage := diag_data_body^.auxiliary_voltage;
+	fb_database_aps_diag.dc_link_voltage := diag_data_body^.dc_link_voltage;
+	fb_database_aps_diag.fan_duty_cycle := diag_data_body^.fan_duty_cycle;
+	fb_database_aps_diag.fan_rpm := diag_data_body^.fan_rpm;
+	fb_database_aps_diag.fb_fw_rev := diag_data_body^.fb_fw_rev;
+	fb_database_aps_diag.power_supply_current := diag_data_body^.power_supply_current;
+	fb_database_aps_diag.supply_voltage_us := diag_data_body^.supply_voltage_us;
+	fb_database_aps_diag.temperature_center := diag_data_body^.temperature_center;
+	fb_database_aps_diag.temperature_east := diag_data_body^.temperature_east;
+	fb_database_aps_diag.temperature_north := diag_data_body^.temperature_north;
+	fb_database_aps_diag.temperature_power := diag_data_body^.temperature_power;
+	fb_database_aps_diag.temperature_south := diag_data_body^.temperature_south;
+	fb_database_aps_diag.temperature_west := diag_data_body^.temperature_west;
+	fb_database_aps_diag.time_to_shutdown := diag_data_body^.time_to_shutdown;
+	_fbDatabaseRecorder.write(ADR(fb_database_aps_diag));	
+END_IF
+
+
+// For TF6701 MQTT
 IF publish_command AND fbMqttClient.bConnected THEN
 	datetime_string := SYSTEMTIME_TO_ISO8601(
 		systemTime := command.datetime,
@@ -144,6 +185,7 @@ ELSE
 	FOR i := 1 TO 2 DO
 		pub_complete[i] := FALSE;
 	END_FOR
+	sdo_data_received := TRUE;
 END_IF
 
 ]]></ST>
@@ -162,29 +204,19 @@ END_IF
       <LineId Id="140" Count="1" />
       <LineId Id="9" Count="0" />
     </LineIds>
+    <LineIds Name="FB_mqtt_publish.fbDatabaseRecorder.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
     <LineIds Name="FB_mqtt_publish.nErrID.Get">
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_mqtt_publish.sdo_data_received">
-      <LineId Id="143" Count="15" />
-      <LineId Id="191" Count="0" />
-      <LineId Id="193" Count="2" />
-      <LineId Id="192" Count="0" />
-      <LineId Id="159" Count="4" />
-      <LineId Id="202" Count="0" />
-      <LineId Id="164" Count="3" />
-      <LineId Id="199" Count="0" />
-      <LineId Id="198" Count="0" />
-      <LineId Id="197" Count="0" />
-      <LineId Id="168" Count="2" />
-      <LineId Id="201" Count="0" />
-      <LineId Id="188" Count="1" />
-      <LineId Id="171" Count="1" />
-      <LineId Id="183" Count="1" />
-      <LineId Id="186" Count="1" />
-      <LineId Id="185" Count="0" />
-      <LineId Id="177" Count="3" />
-      <LineId Id="173" Count="1" />
+      <LineId Id="303" Count="8" />
+      <LineId Id="382" Count="0" />
+      <LineId Id="385" Count="17" />
+      <LineId Id="404" Count="0" />
+      <LineId Id="384" Count="0" />
+      <LineId Id="333" Count="48" />
       <LineId Id="7" Count="0" />
     </LineIds>
   </POU>

@@ -5,13 +5,17 @@
 VAR_GLOBAL CONSTANT
 	NUM_OF_MOVERS :UINT := 5;
 	NUM_OF_TRACKS : UINT := 3;
-	DB_MAX_COLUMNS : UDINT := 10;
+	DB_MAX_COLUMNS : UDINT := 6;
+	BUFFER_SIZE_DBWRITE : UINT := 500;
 END_VAR
 VAR_GLOBAL
 	planar_movers	: ARRAY [1..NUM_OF_MOVERS] OF MC_PlanarMover;
 	planar_environment : MC_PlanarEnvironment;
 	planar_group	: MC_PlanarGroup;
 	planar_tracks	: ARRAY [1..NUM_OF_TRACKS] OF MC_PlanarTrack;	
+	// Database record driver
+    //fbSQLRecorder 		:RecordSQL(DBID := 1);
+    fbInfluxDBRecorder 		:RecordInfluxDB(DBID := 1);
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

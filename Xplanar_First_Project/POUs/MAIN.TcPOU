@@ -11,32 +11,27 @@ VAR
 	nCase 						: UINT;
 	nDemoSequenceState			: UINT;
 	
-	fbMover						: MC_PlanarMover;
 	cmdFB						: MC_PlanarFeedback;
 	stMoverState				: MC_PLANAR_STATE;
-	stMoverPosition				: ARRAY[1..5] OF PositionXYC;
-	fbDnyMove					: DynamicConstraint_PathXY;
-	fbDnyRotate					: DynamicConstraint_Coordinates;
-	stMoveCOptions				: ST_MoveCOptions;
 	
 	// Homing
-	fbHomeATasks				: FB_TaskMoveA_tilt(fbMover := fbMover);
-	fbHomeBTasks				: FB_TaskMoveB_tilt(fbMover := fbMover);
-	fbHomeZTasks				: FB_TaskMoveZ(fbMover := fbMover);
-	fbHomeCTasks				: FB_TaskMoveC(fbMover := fbMover);
-	fbHomeToPositionTasks		: FB_TaskMoveToPosition(fbMover := fbMover);
+	fbHomeATasks				: FB_TaskMoveA_tilt(fbMover := GVL.planar_movers[1]);
+	fbHomeBTasks				: FB_TaskMoveB_tilt(fbMover := GVL.planar_movers[1]);
+	fbHomeZTasks				: FB_TaskMoveZ(fbMover := GVL.planar_movers[1]);
+	fbHomeCTasks				: FB_TaskMoveC(fbMover := GVL.planar_movers[1]);
+	fbHomeToPositionTasks		: FB_TaskMoveToPosition(fbMover := GVL.planar_movers[1]);
 	fb_home_sequence			: bajp_jobmgmt.FB_QueueJobContainer;
 	fb_home_job					: bajp_jobmgmt.FB_Executor;
 	
 	// Demo Pattern
-	fbMoveToPositionTasks		: ARRAY [1..9] OF FB_TaskMoveToPosition(fbMover := fbMover);
-	fbMoveCTasks				: ARRAY [1..5] OF FB_TaskMoveC(fbMover := fbMover);
-	fbMoveZTasks				: ARRAY [1..2] OF FB_TaskMoveZ(fbMover := fbMover);
-	fbMoveATasks				: ARRAY [1..3] OF FB_TaskMoveA_tilt(fbMover := fbMover);
-	fbMoveBTasks				: ARRAY [1..3] OF FB_TaskMoveB_tilt(fbMover := fbMover);
-	fbMoveAB_ATasks				: ARRAY [1..3] OF FB_TaskMoveA_tilt(fbMover := fbMover);
-	fbMoveAB_BTasks				: ARRAY [1..3] OF FB_TaskMoveB_tilt(fbMover := fbMover);
-	fbMoveZTask_init			: FB_TaskMoveZ(fbMover := fbMover);
+	fbMoveToPositionTasks		: ARRAY [1..9] OF FB_TaskMoveToPosition(fbMover := GVL.planar_movers[1]);
+	fbMoveCTasks				: ARRAY [1..5] OF FB_TaskMoveC(fbMover := GVL.planar_movers[1]);
+	fbMoveZTasks				: ARRAY [1..2] OF FB_TaskMoveZ(fbMover := GVL.planar_movers[1]);
+	fbMoveATasks				: ARRAY [1..3] OF FB_TaskMoveA_tilt(fbMover := GVL.planar_movers[1]);
+	fbMoveBTasks				: ARRAY [1..3] OF FB_TaskMoveB_tilt(fbMover := GVL.planar_movers[1]);
+	fbMoveAB_ATasks				: ARRAY [1..3] OF FB_TaskMoveA_tilt(fbMover := GVL.planar_movers[1]);
+	fbMoveAB_BTasks				: ARRAY [1..3] OF FB_TaskMoveB_tilt(fbMover := GVL.planar_movers[1]);
+	fbMoveZTask_init			: FB_TaskMoveZ(fbMover := GVL.planar_movers[1]);
 	
 	fb_positioning_job			: bajp_jobmgmt.FB_BatchJobContainer;
 	fb_rotation_job				: bajp_jobmgmt.FB_BatchJobContainer;
@@ -105,6 +100,7 @@ VAR
 	                			
 	nStateInitXpu				: INT;
 	bInit						: BOOL := FALSE;
+	bInit_database				: BOOL := FALSE;
 
 	LampTimer					: TON;
 	ServoON						: BOOL;
@@ -124,8 +120,20 @@ VAR
 	head : BOOL; tail: BOOL; order_num: UINT;
 	Recipe_Display				: ARRAY [1..bajp_jobmgmt.ParamFuturesLib.MAX_TASK_NUM] OF T_MaxString;
 	manual_start : BOOL;
-
 	machine_mode: UINT;
+
+	(* TF6420 Database server *)
+    fbDtUtil : FB_DatetimeUtilities;
+
+    // Record data buffer
+    fb_database_job_event    :ST_database_job_event;    // 書込みデータ設定用
+    database_job_event_buffer  :ARRAY [0..DbLibParam.DATA_BUFFER_SIZE - 1] OF ST_database_job_event; // バッファ配列の定義
+
+    fb_job_event_db_recorder  :BufferedRecord(
+        GVL.fbInfluxDBRecorder, 
+        ADR(database_job_event_buffer)
+    );		// record controller
+
 	
 END_VAR
 
@@ -157,23 +165,76 @@ IF NOT bInit THEN
 	RETURN;
 END_IF
 
+IF NOT bInit_database THEN
+	fb_job_event_db_recorder.min_chunk_size := 1;
+	fb_job_event_db_recorder.max_chunk_size := 1;
+	ads_reporter.fbDatabaseRecorder REF= fb_job_event_db_recorder;
 
-fbMover.Update();
+	// Database column parameter initialization
+	// 構造体名称の設定
+	fb_job_event_db_recorder.set_buffer_info(
+			struct_size := SIZEOF(database_job_event_buffer[0]), 
+			buffer_size := SIZEOF(database_job_event_buffer), 
+			structure_name := 'ST_database_job_event'); // Measurement name
+
+	// SQLデータベースのテーブル名
+	fb_job_event_db_recorder.SQL_parameters.table_name := 'job_event';
+
+(*	
+	// 列パラメータの登録
+	fb_job_event_db_recorder.SQL_parameters.add_column(
+		'datetime', 
+		tf6420.E_ExpParameterType.Int64, 
+		SIZEOF(fb_database_job_event.datetime)
+	); // 列1
+	fb_job_event_db_recorder.SQL_parameters.add_column(
+		'old_state', 
+		tf6420.E_ExpParameterType.STRING_,
+		SIZEOF(fb_database_job_event.old_state)
+	); // 列2
+	fb_job_event_db_recorder.SQL_parameters.add_column(
+		'new_status', 
+		tf6420.E_ExpParameterType.STRING_,
+		SIZEOF(fb_database_job_event.new_state)
+	); // 列3
+	fb_job_event_db_recorder.SQL_parameters.add_column(
+		'task_name', 
+		tf6420.E_ExpParameterType.STRING_, 
+		SIZEOF(fb_database_job_event.task_name)
+	); // 列4
+	fb_job_event_db_recorder.SQL_parameters.add_column(
+		'job_id', 
+		tf6420.E_ExpParameterType.Int64, 
+		SIZEOF(fb_database_job_event.job_id)
+	); // 列5
+	fb_job_event_db_recorder.SQL_parameters.add_column(
+		'error_id', 
+		tf6420.E_ExpParameterType.Int64, 
+		SIZEOF(fb_database_job_event.erro_id)
+	); // 列6
+*)
+	
+	bInit_database := TRUE;
+END_IF
+
+GVL.planar_movers[1].Update();
 cmdFB.Update();
 ACT_Lamp_Ctrl();
-stMoverState 					:= fbMover.MCTOPLC.STD.State;
+stMoverState 					:= GVL.planar_movers[1].MCTOPLC.STD.State;
+
+// SQL database
 fb_home_job.job_event_reporter := ads_reporter;
 fbjob.job_event_reporter := ads_reporter;
 
 //サーボオン
 IF bEnable THEN
-	fbMover.Enable(cmdFB);
+	GVL.planar_movers[1].Enable(cmdFB);
 	bEnable := FALSE;
 END_IF
 
 //サーボオフ
 IF bDisable THEN
-	fbMover.Disable(cmdFB);
+	GVL.planar_movers[1].Disable(cmdFB);
 	nDemoSequenceState := 0;
 	nManupilationState := 0;
 	nCase := 0;
@@ -458,7 +519,7 @@ END_IF
 
 //動作とエラーリセット
 IF bReset THEN
-	fbMover.Reset(cmdFB);
+	GVL.planar_movers[1].Reset(cmdFB);
 	bReset		:= FALSE;
 END_IF
 
@@ -706,121 +767,13 @@ fbMoveZTask_init.future_name := 'Height initial position.';
       </Implementation>
     </Method>
     <LineIds Name="MAIN">
-      <LineId Id="7038" Count="25" />
-      <LineId Id="7526" Count="1" />
-      <LineId Id="7064" Count="19" />
-      <LineId Id="7085" Count="0" />
-      <LineId Id="7387" Count="0" />
-      <LineId Id="7086" Count="8" />
-      <LineId Id="7388" Count="0" />
-      <LineId Id="7327" Count="0" />
-      <LineId Id="7095" Count="0" />
-      <LineId Id="7375" Count="1" />
-      <LineId Id="7096" Count="3" />
-      <LineId Id="7315" Count="0" />
-      <LineId Id="7325" Count="1" />
-      <LineId Id="7324" Count="0" />
-      <LineId Id="7103" Count="0" />
-      <LineId Id="7316" Count="1" />
-      <LineId Id="7319" Count="0" />
-      <LineId Id="7105" Count="1" />
-      <LineId Id="7356" Count="0" />
-      <LineId Id="7349" Count="0" />
-      <LineId Id="7389" Count="0" />
-      <LineId Id="7352" Count="0" />
-      <LineId Id="7357" Count="1" />
-      <LineId Id="7355" Count="0" />
-      <LineId Id="7353" Count="0" />
-      <LineId Id="7360" Count="0" />
-      <LineId Id="7270" Count="0" />
-      <LineId Id="7390" Count="0" />
-      <LineId Id="7275" Count="0" />
-      <LineId Id="7391" Count="0" />
-      <LineId Id="7276" Count="8" />
-      <LineId Id="7340" Count="0" />
-      <LineId Id="7286" Count="8" />
-      <LineId Id="7344" Count="0" />
-      <LineId Id="7297" Count="0" />
-      <LineId Id="7345" Count="0" />
-      <LineId Id="7342" Count="0" />
-      <LineId Id="7346" Count="0" />
-      <LineId Id="7343" Count="0" />
-      <LineId Id="7347" Count="0" />
-      <LineId Id="7298" Count="0" />
-      <LineId Id="7662" Count="0" />
-      <LineId Id="7337" Count="0" />
-      <LineId Id="8131" Count="5" />
-      <LineId Id="7300" Count="0" />
-      <LineId Id="7660" Count="0" />
-      <LineId Id="7338" Count="0" />
-      <LineId Id="7333" Count="0" />
-      <LineId Id="7335" Count="1" />
-      <LineId Id="7654" Count="0" />
-      <LineId Id="7306" Count="4" />
-      <LineId Id="7272" Count="0" />
-      <LineId Id="7663" Count="0" />
-      <LineId Id="7666" Count="1" />
-      <LineId Id="7664" Count="1" />
-      <LineId Id="7362" Count="0" />
-      <LineId Id="7797" Count="0" />
-      <LineId Id="7956" Count="0" />
-      <LineId Id="7973" Count="1" />
-      <LineId Id="7951" Count="0" />
-      <LineId Id="7953" Count="0" />
-      <LineId Id="7968" Count="0" />
-      <LineId Id="7971" Count="1" />
-      <LineId Id="7970" Count="0" />
-      <LineId Id="7954" Count="0" />
-      <LineId Id="7962" Count="0" />
-      <LineId Id="7965" Count="0" />
-      <LineId Id="7967" Count="0" />
-      <LineId Id="7964" Count="0" />
-      <LineId Id="7966" Count="0" />
-      <LineId Id="7940" Count="2" />
-      <LineId Id="7799" Count="0" />
-      <LineId Id="7146" Count="15" />
-      <LineId Id="7943" Count="1" />
-      <LineId Id="7948" Count="0" />
-      <LineId Id="7947" Count="0" />
-      <LineId Id="7945" Count="0" />
-      <LineId Id="7321" Count="2" />
-      <LineId Id="7162" Count="0" />
-      <LineId Id="7164" Count="8" />
-      <LineId Id="7332" Count="0" />
-      <LineId Id="7394" Count="0" />
-      <LineId Id="7377" Count="0" />
-      <LineId Id="7380" Count="0" />
-      <LineId Id="7382" Count="1" />
-      <LineId Id="7379" Count="0" />
-      <LineId Id="7177" Count="7" />
-      <LineId Id="7385" Count="0" />
-      <LineId Id="7185" Count="0" />
-      <LineId Id="7386" Count="0" />
-      <LineId Id="7186" Count="16" />
-      <LineId Id="7392" Count="0" />
-      <LineId Id="7205" Count="6" />
-      <LineId Id="7363" Count="0" />
-      <LineId Id="7393" Count="0" />
-      <LineId Id="7398" Count="0" />
-      <LineId Id="7396" Count="0" />
-      <LineId Id="7400" Count="0" />
-      <LineId Id="7364" Count="0" />
-      <LineId Id="7373" Count="0" />
-      <LineId Id="7367" Count="5" />
-      <LineId Id="7366" Count="0" />
-      <LineId Id="7374" Count="0" />
-      <LineId Id="7365" Count="0" />
-      <LineId Id="7213" Count="5" />
-      <LineId Id="8109" Count="0" />
-      <LineId Id="7220" Count="15" />
-      <LineId Id="7328" Count="0" />
-      <LineId Id="7236" Count="21" />
-      <LineId Id="8117" Count="2" />
-      <LineId Id="8126" Count="1" />
-      <LineId Id="8129" Count="0" />
-      <LineId Id="8121" Count="2" />
-      <LineId Id="8116" Count="0" />
-      <LineId Id="7258" Count="11" />
+      <LineId Id="9044" Count="28" />
+      <LineId Id="9568" Count="2" />
+      <LineId Id="9073" Count="2" />
+      <LineId Id="9418" Count="0" />
+      <LineId Id="9076" Count="31" />
+      <LineId Id="9420" Count="1" />
+      <LineId Id="9108" Count="308" />
       <LineId Id="3507" Count="0" />
     </LineIds>
     <LineIds Name="MAIN.ACT_Lamp_Ctrl">

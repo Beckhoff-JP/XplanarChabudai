@@ -11,6 +11,7 @@ STRUCT
 	job_id		: STRING;
 	{attribute 'TcEncoding':='UTF-8'}
 	task_name	: STRING;
+	erro_id		: UDINT;
 END_STRUCT
 END_TYPE
 ]]></Declaration>

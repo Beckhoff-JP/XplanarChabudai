@@ -4156,7 +4156,7 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"IoT.planar_tiles_diag_data[2].power_supply_current"</v>
+                      <v n="Value">"IoT.planar_tiles_diag_data[2].power_supply_current  / 10.0"</v>
                     </o>
                     <o>
                       <v n="Id">2597686782L</v>
@@ -4660,7 +4660,7 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"IoT.planar_tiles_diag_data[1].power_supply_current"</v>
+                      <v n="Value">"IoT.planar_tiles_diag_data[1].power_supply_current  / 10.0"</v>
                     </o>
                     <o>
                       <v n="Id">2597686782L</v>

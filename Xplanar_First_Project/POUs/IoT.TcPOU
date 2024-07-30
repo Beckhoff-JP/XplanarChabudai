@@ -17,10 +17,35 @@ VAR
 	
 	slave_state : FB_EcGetSlaveState;
 	state : ST_EcSlaveStateBits;
+	
+	// Diag data dabase recorder
+	database_aps_diag_buffer  :ARRAY [0..1999] OF ST_database_aps_diag; // バッファ配列の定義
+    fb_aps_diag_db_recorder  :BufferedRecord(
+        GVL.fbInfluxDBRecorder, 
+        ADR(database_aps_diag_buffer)
+    );		// record controller
+
+	// XPlanar dynamics data recorder
+	database_mover_dynamics_buffer  :ARRAY [0..9999] OF ST_mover_dynamics; // バッファ配列の定義
+    fb_mover_dynamics_recorder  :BufferedRecord(
+        GVL.fbInfluxDBRecorder, 
+        ADR(database_mover_dynamics_buffer)
+    );		// record controller
+
+	record_data_set_positions : ST_mover_dynamics := (index := 'Mover 1 Setting position');
+	record_data_act_positions : ST_mover_dynamics := (index := 'Mover 1 Actual position');
+	
+	db_initialize :BOOL;
+	structure_size: INT;
+	SetDynamics : CDT_MCTOPLC_PLANAR_MOVER_SET;
+	ActDynamics : CDT_MCTOPLC_PLANAR_MOVER_ACT;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[//Xplanar各タイルの温度情報の取得
+      <ST><![CDATA[// Database Writing actions
+GVL.fbInfluxDBRecorder();
+
+//Xplanar各タイルの温度情報の取得
 //FB_ECCoeSdoReadを使ったライブラリTwinCATDiagnosisToolsにてCoEアクセスするので、こちらはコメントアウト
 (*
 IF fbENviroment.XpuTcIo(1).TileCoE(1,1).DiagData.Update() THEN
@@ -43,6 +68,8 @@ IF fbENviroment.XpuTcIo(1).TileCoE(1,2).DiagData.Update() THEN
 	
 END_IF;
 *)
+
+(* SDO XPlanar APS diannosys data*)
 
 slave_state(
 	sNetId:='192.168.80.1.4.1',
@@ -81,10 +108,51 @@ IF read_cycle_timer.Q THEN
 					event_handler := fbMqttPublish
 					);
 END_IF
+
+// Database 
+IF NOT db_initialize THEN
+	fb_aps_diag_db_recorder.set_buffer_info(struct_size := SIZEOF(database_aps_diag_buffer[0]),
+											buffer_size := SIZEOF(database_aps_diag_buffer),
+											structure_name := 'ST_database_aps_diag');
+	fb_aps_diag_db_recorder.SQL_parameters.table_name := 'xplanar_aps_diag';
+
+	fb_mover_dynamics_recorder.set_buffer_info(struct_size := SIZEOF(database_mover_dynamics_buffer[0]),
+											buffer_size := SIZEOF(database_mover_dynamics_buffer),
+											structure_name := 'ST_mover_dynamics');
+	fb_mover_dynamics_recorder.SQL_parameters.table_name := 'mover_dynamics';
+
+	db_initialize := TRUE;
+	fbMqttPublish.fbDatabaseRecorder REF= fb_aps_diag_db_recorder;
+END_IF
+
+SetDynamics := GVL.planar_movers[1].MCTOPLC.SET;
+ActDynamics := GVL.planar_movers[1].MCTOPLC.ACT;
+
+record_data_set_positions.a := SetDynamics.SetPos.a;
+record_data_set_positions.b := SetDynamics.SetPos.b;
+record_data_set_positions.c := SetDynamics.SetPos.c;
+record_data_set_positions.x := SetDynamics.SetPos.x;
+record_data_set_positions.y := SetDynamics.SetPos.y;
+record_data_set_positions.z := SetDynamics.SetPos.z;
+
+fb_mover_dynamics_recorder.write(ADR(record_data_set_positions));
+
+record_data_act_positions.a := ActDynamics.ActPos.a;
+record_data_act_positions.b := ActDynamics.ActPos.b;
+record_data_act_positions.c := ActDynamics.ActPos.c;
+record_data_act_positions.x := ActDynamics.ActPos.x;
+record_data_act_positions.y := ActDynamics.ActPos.y;
+record_data_act_positions.z := ActDynamics.ActPos.z;
+
+fb_mover_dynamics_recorder.write(ADR(record_data_act_positions));
 ]]></ST>
     </Implementation>
     <LineIds Name="IoT">
+      <LineId Id="487" Count="0" />
+      <LineId Id="486" Count="0" />
+      <LineId Id="485" Count="0" />
       <LineId Id="415" Count="22" />
+      <LineId Id="559" Count="1" />
       <LineId Id="455" Count="0" />
       <LineId Id="454" Count="0" />
       <LineId Id="456" Count="0" />
@@ -106,7 +174,30 @@ END_IF
       <LineId Id="365" Count="0" />
       <LineId Id="364" Count="0" />
       <LineId Id="237" Count="0" />
+      <LineId Id="515" Count="0" />
       <LineId Id="28" Count="0" />
+      <LineId Id="517" Count="0" />
+      <LineId Id="519" Count="0" />
+      <LineId Id="529" Count="1" />
+      <LineId Id="522" Count="0" />
+      <LineId Id="576" Count="2" />
+      <LineId Id="573" Count="0" />
+      <LineId Id="580" Count="0" />
+      <LineId Id="584" Count="0" />
+      <LineId Id="521" Count="0" />
+      <LineId Id="532" Count="0" />
+      <LineId Id="520" Count="0" />
+      <LineId Id="586" Count="0" />
+      <LineId Id="588" Count="0" />
+      <LineId Id="592" Count="0" />
+      <LineId Id="591" Count="0" />
+      <LineId Id="516" Count="0" />
+      <LineId Id="594" Count="4" />
+      <LineId Id="612" Count="1" />
+      <LineId Id="599" Count="1" />
+      <LineId Id="606" Count="5" />
+      <LineId Id="614" Count="0" />
+      <LineId Id="593" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

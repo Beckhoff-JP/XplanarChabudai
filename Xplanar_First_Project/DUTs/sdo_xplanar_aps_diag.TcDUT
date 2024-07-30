@@ -6,22 +6,39 @@
 TYPE sdo_xplanar_aps_diag :
 STRUCT
   identity: USINT;
+  {attribute 'FieldName' := 'dc_link_voltage'}
   dc_link_voltage: DINT;
+  {attribute 'FieldName' := 'power_supply_current'}
   power_supply_current: DINT;
+  {attribute 'FieldName' := 'temperature_north'}
   temperature_north: UINT;
+  {attribute 'FieldName' := 'temperature_east'}
   temperature_east: UINT;
+  {attribute 'FieldName' := 'temperature_south'}
   temperature_south: UINT;
+  {attribute 'FieldName' := 'temperature_west'}
   temperature_west: UINT;
+  {attribute 'FieldName' := 'temperature_center'}
   temperature_center: UINT;
+  {attribute 'FieldName' := 'temperature_power'}
   temperature_power: UINT;
+  {attribute 'FieldName' := 'fan_rpm'}
   fan_rpm: UINT;
+  {attribute 'FieldName' := 'fan_duty_cycle'}
   fan_duty_cycle: USINT;
+  {attribute 'FieldName' := 'supply_voltage_us'}
   supply_voltage_us: UDINT;
+  {attribute 'FieldName' := 'auxiliary_voltage'}
   auxiliary_voltage: UDINT;
+  {attribute 'FieldName' := 'acceleration_x'}
   acceleration_x: UDINT;
+  {attribute 'FieldName' := 'acceleration_y'}
   acceleration_y: UDINT;
+  {attribute 'FieldName' := 'acceleration_z'}
   acceleration_z: UDINT;
+  {attribute 'FieldName' := 'time_to_shutdown'}
   time_to_shutdown: UDINT;
+  {attribute 'FieldName' := 'fb_fw_rev'}
   fb_fw_rev: UDINT;
 END_STRUCT
 END_TYPE]]></Declaration>

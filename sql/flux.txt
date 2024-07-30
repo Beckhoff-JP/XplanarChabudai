@@ -1,0 +1,8 @@
+from(bucket: "machine_data")
+  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+  |> filter(fn: (r) => r["_measurement"] == "job_event")
+  |> pivot(rowKey: ["_time"], columnKey: ["_field"], valueColumn: "_value")
+  |> filter(fn: (r) => r["new_state"] == "process" or r["old_state"] == "process" ) 
+  |> map(fn: (r) => ({r with event: if r["new_state"] == "process" then "START" else "END"}))
+  |> map(fn: (r) => ({r with duration: int(v: r.END) - int(v:r.START)}))
+  |> drop(columns: ["datetime", "new_state", "old_state", "error_id", "END"])

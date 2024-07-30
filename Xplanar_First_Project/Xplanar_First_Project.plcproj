@@ -18,6 +18,7 @@
     <Company>
     </Company>
     <Released>false</Released>
+    <CompilerDefines>VISU_USEWSTRING</CompilerDefines>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DUTs\E_DbLogState.TcDUT">
@@ -33,6 +34,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\sdo_xplanar_aps_diag.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\ST_database_aps_diag.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\ST_database_job_event.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\ST_mover_dynamics.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\ST_OperationPanel.TcDUT">
@@ -116,8 +126,8 @@
     <Folder Include="POUs" />
   </ItemGroup>
   <ItemGroup>
-    <PlaceholderReference Include="cyclic-database-recorder">
-      <DefaultResolution>cyclic-database-recorder, * (Beckhoff K.K. - Japan)</DefaultResolution>
+    <PlaceholderReference Include="cyclic_database_recorder">
+      <DefaultResolution>cyclic_database_recorder, * (Beckhoff K.K. - Japan)</DefaultResolution>
       <Namespace>tf6420</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="JobManagementFramework">

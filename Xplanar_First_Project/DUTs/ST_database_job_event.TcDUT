@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="ST_database_job_event" Id="{a94071e2-48d8-4771-a225-fa396a2cef3e}">
+    <Declaration><![CDATA[TYPE ST_database_job_event :
+STRUCT
+	datetime: ULINT;
+	{attribute 'FieldName' := 'old_state'}
+	old_state	: STRING;
+	{attribute 'FieldName' := 'new_state'}
+	new_state	: STRING;
+	{attribute 'FieldName' := 'job_id'}
+	{attribute 'TcEncoding':='UTF-8'}
+	job_id		: STRING;
+	{attribute 'TagName' := 'task_name'}
+	{attribute 'TcEncoding':='UTF-8'}
+	task_name	: STRING;
+	{attribute 'FieldName' := 'error_id'}
+	erro_id		: UDINT;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

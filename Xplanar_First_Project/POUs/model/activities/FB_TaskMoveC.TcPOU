@@ -140,7 +140,8 @@ END_VAR
 METHOD quit : BOOL
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[quit := TRUE;]]></ST>
+        <ST><![CDATA[init();
+quit := TRUE;]]></ST>
       </Implementation>
     </Method>
     <Method Name="set_dynamics" Id="{a1332d4c-1962-4f7b-a095-3e65b93a303f}">
@@ -228,6 +229,7 @@ set_target_position := TRUE;]]></ST>
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_TaskMoveC.quit">
+      <LineId Id="7" Count="0" />
       <LineId Id="4" Count="0" />
     </LineIds>
     <LineIds Name="FB_TaskMoveC.set_dynamics">

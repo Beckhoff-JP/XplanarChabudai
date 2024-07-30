@@ -7471,6 +7471,38 @@
                       <v n="Value">false</v>
                     </o>
                     <o>
+                      <v n="Id">1636615684L</v>
+                      <v n="Value">1</v>
+                    </o>
+                    <o>
+                      <v n="Id">3234392039L</v>
+                      <o n="Value" t="DataVariableInformation">
+                        <v n="DataArrayType">"ARRAY [1..bajp_jobmgmt.ParamFuturesLib.MAX_TASK_NUM] OF T_MaxString"</v>
+                        <v n="ColumnCount">1</v>
+                        <v n="RowCount">10</v>
+                        <v n="FirstColumnIndex">0</v>
+                        <v n="FirstRowIndex">1</v>
+                        <a n="ColumnTypes" cet="TypeClass">
+                          <v>String</v>
+                        </a>
+                        <a n="ColumnNames" cet="String">
+                          <v>MAIN.Recipe_Display[INDEX]</v>
+                        </a>
+                        <v n="BaseType">true</v>
+                        <a n="Bounds" cet="ArrayBound">
+                          <o>
+                            <v n="Identifier">"bajp_jobmgmt.ParamFuturesLib.MAX_TASK_NUM"</v>
+                            <v n="Value">10</v>
+                          </o>
+                        </a>
+                        <v n="ArrayType" t="EArrayType">OneDimensional</v>
+                      </o>
+                    </o>
+                    <o>
+                      <v n="Id">1128707560L</v>
+                      <v n="Value">"bajp_jobmgmt.ParamFuturesLib.MAX_TASK_NUM"</v>
+                    </o>
+                    <o>
                       <v n="Id">1636817830L</v>
                       <v n="Value">"%s"</v>
                     </o>
@@ -7503,48 +7535,16 @@
                       <v n="Value">0</v>
                     </o>
                     <o>
-                      <v n="Id">1636615684L</v>
-                      <v n="Value">1</v>
-                    </o>
-                    <o>
                       <v n="Id">1882453005L</v>
                       <v n="Value">true</v>
                     </o>
                     <o>
-                      <v n="Id">3234392039L</v>
-                      <o n="Value" t="DataVariableInformation">
-                        <v n="DataArrayType">"ARRAY [1..bajp_jobmgmt.ParamFuturesLib.MAX_TASK_NUM] OF T_MaxString"</v>
-                        <v n="ColumnCount">1</v>
-                        <v n="RowCount">10</v>
-                        <v n="FirstColumnIndex">0</v>
-                        <v n="FirstRowIndex">1</v>
-                        <a n="ColumnTypes" cet="TypeClass">
-                          <v>String</v>
-                        </a>
-                        <a n="ColumnNames" cet="String">
-                          <v>MAIN.Recipe_Display[INDEX]</v>
-                        </a>
-                        <v n="BaseType">true</v>
-                        <a n="Bounds" cet="ArrayBound">
-                          <o>
-                            <v n="Identifier">"bajp_jobmgmt.ParamFuturesLib.MAX_TASK_NUM"</v>
-                            <v n="Value">10</v>
-                          </o>
-                        </a>
-                        <v n="ArrayType" t="EArrayType">OneDimensional</v>
-                      </o>
-                    </o>
-                    <o>
                       <v n="Id">175837068L</v>
-                      <v n="Value">false</v>
+                      <v n="Value">true</v>
                     </o>
                     <o>
-                      <v n="Id">1128707560L</v>
-                      <v n="Value">"bajp_jobmgmt.ParamFuturesLib.MAX_TASK_NUM"</v>
-                    </o>
-                    <o>
-                      <v n="Id">3736079596L</v>
-                      <v n="Value">"755"</v>
+                      <v n="Id">3803700462L</v>
+                      <v n="Value">true</v>
                     </o>
                   </l>
                 </o>
@@ -7561,7 +7561,99 @@
                   <v>e5cf0ac4-80b5-4578-a7d8-03549351516a</v>
                   <v>c36e0ee7-79a5-4257-b7d4-612d28ff4726</v>
                 </a>
-                <d n="SubElements" t="Hashtable" />
+                <d n="SubElements" t="Hashtable" ckt="String" cvt="GenericVisualElem">
+                  <v>Columns.Column.[0].Template</v>
+                  <o>
+                    <a n="ConfiguredComplexInputs" et="ComplexInput" />
+                    <l n="Elements" t="ArrayList" />
+                    <n n="VisualElementDescription" />
+                    <o n="VisualElemMemberList" t="VisualElemMemberList">
+                      <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
+                        <o>
+                          <v n="Id">3851392753L</v>
+                          <v n="Value">"HCENTER"</v>
+                        </o>
+                        <o>
+                          <v n="Id">339296383L</v>
+                          <v n="Value">"VCENTER"</v>
+                        </o>
+                        <o>
+                          <v n="Id">1670709118L</v>
+                          <l n="Value" t="ArrayList" cet="UInt32">
+                            <v>4294901760</v>
+                          </l>
+                        </o>
+                        <o>
+                          <v n="Id">1636817830L</v>
+                          <v n="Value">"%s"</v>
+                        </o>
+                        <o>
+                          <v n="Id">1409698558L</v>
+                          <v n="Value">""</v>
+                        </o>
+                        <o>
+                          <v n="Id">3425622852L</v>
+                          <l n="Value" t="ArrayList" cet="UInt32">
+                            <v>4294967295</v>
+                          </l>
+                        </o>
+                        <o>
+                          <v n="Id">365730219L</v>
+                          <v n="Value">"VISU_ST_RECTANGLE"</v>
+                        </o>
+                        <o>
+                          <v n="Id">3728858389L</v>
+                          <l n="Value" t="ArrayList" cet="NamedStyleFont">
+                            <o>
+                              <v n="FontStyle">0</v>
+                              <v n="AdditionalFontStyle" t="UInt16">0</v>
+                              <v n="ExplicitColor">-16777216</v>
+                              <v n="CanonicalName">"Font-Standard"</v>
+                              <v n="FontName">"Arial"</v>
+                              <v n="FontSize">12</v>
+                              <v n="ScriptIdentification">0</v>
+                              <v n="DoubleFontSize" t="Double">0</v>
+                              <n n="NamedColor" />
+                            </o>
+                          </l>
+                        </o>
+                        <o>
+                          <v n="Id">885575555L</v>
+                          <l n="Value" t="ArrayList" cet="UInt32">
+                            <v>4278190080</v>
+                          </l>
+                        </o>
+                        <o>
+                          <v n="Id">2764776250L</v>
+                          <v n="Value">1U</v>
+                        </o>
+                        <o>
+                          <v n="Id">4171957040L</v>
+                          <l n="Value" t="ArrayList" cet="UInt32">
+                            <v>4294954959</v>
+                          </l>
+                        </o>
+                        <o>
+                          <v n="Id">2477733581L</v>
+                          <v n="Value">"MAIN.Recipe_Display[INDEX]"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <v n="VisualElementName">"Rectangle"</v>
+                    <v n="VisualElementTypeName">"VisuFbElemSimple"</v>
+                    <v n="VisualElementIsRectangle">true</v>
+                    <v n="VisualElementIdentifier">"Columns.Column.[0].Template"</v>
+                    <n n="VisualElementOfflinePaintCommands" />
+                    <n n="VisualElementFrameInformation" />
+                    <d n="VisualElementInputActions" t="Hashtable" />
+                    <v n="VisualElementIdentification">{648a0b41-4f20-4242-82c8-a45efa5a8935}</v>
+                    <v n="VisualElementOwningObjectGuid">{df7e6850-0022-4037-9766-3e9fa19b1acf}</v>
+                    <a n="LMGuids" et="Guid" />
+                    <d n="SubElements" t="Hashtable" />
+                    <v n="VisualElementId">2</v>
+                    <l n="UserManagementAccessRights" t="ArrayList" />
+                  </o>
+                </d>
                 <v n="VisualElementId">34</v>
                 <l n="UserManagementAccessRights" t="ArrayList" />
               </o>

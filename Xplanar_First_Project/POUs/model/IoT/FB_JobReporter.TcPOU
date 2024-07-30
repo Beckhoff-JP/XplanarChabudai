@@ -11,6 +11,7 @@ VAR_OUTPUT
 	log_view: ARRAY [0..3, 0..19] OF T_MaxString;
 END_VAR
 VAR
+	_fbDatabaseRecorder : REFERENCE TO BufferedRecord;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -44,6 +45,17 @@ END_VAR
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
+    <Property Name="fbDatabaseRecorder" Id="{eb855fb2-8524-4145-9f8d-bc1fcb6c8dc6}">
+      <Declaration><![CDATA[PROPERTY fbDatabaseRecorder : REFERENCE TO BufferedRecord]]></Declaration>
+      <Set Name="Set" Id="{813a8d4a-7af9-4fe6-8471-7080b0561eb4}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_fbDatabaseRecorder REF= fbDatabaseRecorder;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Method Name="report" Id="{d2542430-59b7-4888-a551-078a3a508271}">
       <Declaration><![CDATA[{warning 'add method implementation '}
 METHOD report : BOOL
@@ -55,19 +67,24 @@ VAR_INPUT
 END_VAR
 VAR_INST
 	fb_timezone_info : FB_GetTimeZoneInformation := (bExecute := TRUE);
+    // Datetime utilities
+    fbDtUtil : FB_DatetimeUtilities;
+	db_record_data : ST_database_job_event;
 END_VAR
 VAR
 	text : T_MaxString;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[event.old_state := TO_STRING(old_state);
+        <ST><![CDATA[//For log
+event.old_state := TO_STRING(old_state);
 event.new_state := TO_STRING(new_state);
 event.record_time := FILETIME64_TO_ISO8601(fileTime := record_time, nBias := DINT_TO_INT(fb_timezone_info.tzInfo.bias), bUTC := TRUE,nPrecision := 6);
 event.job_id := executor.id;
 event.task_name := executor.future.future_name;
+event.erro_id := executor.nErrorID;
 
 // _record_scope(event);
-_record_sqldb(event);
+//_record_sqldb(event);
 
 IF new_state = E_FutureExecutionState.process THEN
 	executing := event;
@@ -102,6 +119,24 @@ IF old_state = E_FutureExecutionState.process OR new_state = E_FutureExecutionSt
 	
 END_IF
 
+
+// For Database
+// Windowsの時刻ロケールデータとの同期等を行うため常時実行
+fbDtUtil();
+
+IF __ISVALIDREF(_fbDatabaseRecorder) THEN
+	// 記録用の構造体へのデータ登録
+	// fbDtUtil.Filetime_To_UnixT()でマイクロ秒精度のUNIX時間を取得する
+	db_record_data.datetime := fbDtUtil.Filetime_To_UnixT(F_GetSystemTime());
+	db_record_data.old_state := event.old_state;
+	db_record_data.new_state := event.new_state;
+	db_record_data.task_name := event.task_name;
+	db_record_data.job_id := event.job_id;
+	db_record_data.erro_id := executor.nErrorID;
+	
+	_fbDatabaseRecorder.write(ADR(db_record_data));	
+END_IF
+
 report := TRUE;]]></ST>
       </Implementation>
     </Method>
@@ -119,12 +154,18 @@ report := TRUE;]]></ST>
     <LineIds Name="FB_JobReporter._record_sqldb">
       <LineId Id="5" Count="0" />
     </LineIds>
+    <LineIds Name="FB_JobReporter.fbDatabaseRecorder.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
     <LineIds Name="FB_JobReporter.report">
+      <LineId Id="130" Count="0" />
       <LineId Id="10" Count="1" />
       <LineId Id="15" Count="0" />
       <LineId Id="17" Count="0" />
       <LineId Id="12" Count="0" />
-      <LineId Id="47" Count="1" />
+      <LineId Id="127" Count="0" />
+      <LineId Id="141" Count="0" />
+      <LineId Id="48" Count="0" />
       <LineId Id="61" Count="0" />
       <LineId Id="76" Count="0" />
       <LineId Id="75" Count="0" />
@@ -145,6 +186,12 @@ report := TRUE;]]></ST>
       <LineId Id="109" Count="0" />
       <LineId Id="92" Count="0" />
       <LineId Id="52" Count="0" />
+      <LineId Id="142" Count="1" />
+      <LineId Id="146" Count="2" />
+      <LineId Id="179" Count="0" />
+      <LineId Id="149" Count="0" />
+      <LineId Id="182" Count="9" />
+      <LineId Id="181" Count="0" />
       <LineId Id="21" Count="0" />
       <LineId Id="16" Count="0" />
     </LineIds>

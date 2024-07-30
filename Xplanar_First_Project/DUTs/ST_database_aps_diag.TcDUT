@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="ST_database_aps_diag" Id="{e8415939-9c01-40db-822e-2897153f2900}">
+    <Declaration><![CDATA[TYPE ST_database_aps_diag:
+STRUCT
+	{attribute 'TagName' := 'tile_number'}
+	tile_number :STRING;
+	{attribute 'FieldName' := 'dc_link_voltage'}
+	dc_link_voltage: DINT;
+	{attribute 'FieldName' := 'power_supply_current'}
+	power_supply_current: DINT;
+	{attribute 'FieldName' := 'temperature_north'}
+	temperature_north: DINT;
+	{attribute 'FieldName' := 'temperature_east'}
+	temperature_east: DINT;
+	{attribute 'FieldName' := 'temperature_south'}
+	temperature_south: DINT;
+	{attribute 'FieldName' := 'temperature_west'}
+	temperature_west: DINT;
+	{attribute 'FieldName' := 'temperature_center'}
+	temperature_center: DINT;
+	{attribute 'FieldName' := 'temperature_power'}
+	temperature_power: DINT;
+	{attribute 'FieldName' := 'fan_rpm'}
+	fan_rpm: DINT;
+	{attribute 'FieldName' := 'fan_duty_cycle'}
+	fan_duty_cycle: INT;
+	{attribute 'FieldName' := 'supply_voltage_us'}
+	supply_voltage_us: LINT;
+	{attribute 'FieldName' := 'auxiliary_voltage'}
+	auxiliary_voltage: LINT;
+	{attribute 'FieldName' := 'acceleration_x'}
+	acceleration_x: LINT;
+	{attribute 'FieldName' := 'acceleration_y'}
+	acceleration_y: LINT;
+	{attribute 'FieldName' := 'acceleration_z'}
+	acceleration_z: LINT;
+	{attribute 'FieldName' := 'time_to_shutdown'}
+	time_to_shutdown: LINT;
+	{attribute 'FieldName' := 'fb_fw_rev'}
+	fb_fw_rev: LINT;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
