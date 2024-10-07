@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="FB_TaskMoveZ" Id="{12a459c4-2269-493f-a10a-5eeb49730032}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_TaskMoveZ EXTENDS FB_AbstructFuture
+    <Declaration><![CDATA[{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK FB_TaskMoveZ EXTENDS FB_AbstructFuture
 VAR_OUTPUT
 END_VAR
 VAR
@@ -12,7 +13,7 @@ VAR
 	_dynamics		: DynamicConstraint_PathXY;
 	_position 		: LREAL;
 	_error_id		: UDINT;
-	_fbMover		: POINTER TO MC_PlanarMover;
+	_mover			: REFERENCE TO MC_PlanarMover;
 	_cmdFB			: MC_PlanarFeedback;
 	_prohibit 		: BOOL;
 	_abort_executor : FB_Executor;
@@ -40,7 +41,7 @@ CASE _abort_state OF
 		END_IF
 	1:
 		//停止
-		_fbMover^.Halt(_cmdFB,_dynamics);
+		_mover.Halt(_cmdFB,_dynamics);
 		_abort_state := 2;
 	2:
 		//停止完了フラグ待ち
@@ -67,7 +68,7 @@ CASE _state_num OF
 	0:
 		//直線運動
 		IF NOT _cmdFB.Active AND NOT _cmdFB.Busy THEN
-			_fbMover^.MoveZ(_cmdFB,_position,_dynamics);
+			_mover.MoveZ(_cmdFB,_position,_dynamics);
 			_state_num := 1;
 		END_IF
 	1:
@@ -81,18 +82,6 @@ CASE _state_num OF
 			_error_id := _cmdFB.ErrorId;
 		END_IF
 END_CASE]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="FB_init" Id="{ae64eebf-67ba-4907-a56d-a2aaf5ed20d8}">
-      <Declaration><![CDATA[METHOD FB_init : BOOL
-VAR_INPUT
-	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
-	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	fbMover : REFERENCE TO MC_PlanarMover;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[_fbMover := ADR(fbMover);]]></ST>
       </Implementation>
     </Method>
     <Method Name="init" Id="{24dd061e-2fea-44b1-aea3-558e14376613}">
@@ -117,6 +106,17 @@ END_IF
 ]]></ST>
       </Implementation>
     </Method>
+    <Property Name="mover" Id="{c8ab674a-b42c-45f6-93c1-7d0697eb4078}">
+      <Declaration><![CDATA[PROPERTY mover : REFERENCE TO MC_PlanarMover]]></Declaration>
+      <Set Name="Set" Id="{398ca2ea-4327-414b-83d2-12879ed08847}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_mover REF= mover;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Property Name="nErrorID" Id="{707247e6-3bf8-4890-a7bd-3a94a8e3e541}">
       <Declaration><![CDATA[{warning 'add property implementation'}
 PROPERTY nErrorID : UDINT
@@ -192,9 +192,6 @@ set_target_position := TRUE;]]></ST>
       <LineId Id="44" Count="11" />
       <LineId Id="36" Count="0" />
     </LineIds>
-    <LineIds Name="FB_TaskMoveZ.FB_init">
-      <LineId Id="7" Count="0" />
-    </LineIds>
     <LineIds Name="FB_TaskMoveZ.init">
       <LineId Id="18" Count="0" />
       <LineId Id="20" Count="1" />
@@ -206,6 +203,9 @@ set_target_position := TRUE;]]></ST>
       <LineId Id="30" Count="1" />
       <LineId Id="10" Count="1" />
       <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TaskMoveZ.mover.Set">
+      <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_TaskMoveZ.nErrorID.Get">
       <LineId Id="2" Count="0" />

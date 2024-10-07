@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="FB_JobReporter" Id="{6ddb0b70-fc20-473e-9f2a-690319fd5c5a}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_JobReporter IMPLEMENTS InterfaceJobEventReporter
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_JobReporter IMPLEMENTS InterfaceObserver
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
@@ -9,6 +9,7 @@ VAR_OUTPUT
 	executing : JobEventReport;
 	scope_task_triggers: ARRAY [0..10] OF BOOL;
 	log_view: ARRAY [0..3, 0..19] OF T_MaxString;
+	db_record_data : ST_database_job_event;
 END_VAR
 VAR
 	_fbDatabaseRecorder : REFERENCE TO BufferedRecord;
@@ -56,23 +57,51 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
-    <Method Name="report" Id="{d2542430-59b7-4888-a551-078a3a508271}">
+    <Method Name="subscribe_job_directory" Id="{9c7a14ea-ab69-4679-91ef-f4588350f518}">
       <Declaration><![CDATA[{warning 'add method implementation '}
-METHOD report : BOOL
+METHOD subscribe_job_directory : BOOL
 VAR_INPUT
-	old_state	: bajp_jobmgmt.E_FutureExecutionState;
-	new_state	: bajp_jobmgmt.E_FutureExecutionState;
-	record_time	: bajp_jobmgmt.T_FILETIME64;
-	executor	: REFERENCE TO bajp_jobmgmt.FB_Executor;
+	executor	: REFERENCE TO jobmgmt.FB_Executor;
+END_VAR
+
+VAR
+	job_log: T_MaxString;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+job_log := CONCAT(job_log, 'JOB STRUCTURE');
+IF executor.future <> 0 THEN
+	job_log := CONCAT(job_log, '/ FUTURE_NAME : ');
+	job_log := CONCAT(job_log, executor.future.future_name);
+	job_log := CONCAT(job_log, ', ');	
+END_IF
+job_log := CONCAT(job_log, 'JOB_ID : ');
+job_log := CONCAT(job_log, executor.id);
+
+ADSLOGSTR(msgCtrlMask := ADSLOG_MSGTYPE_LOG, msgFmtStr := job_log, strArg := '');]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="subscribe_job_event" Id="{a3a5ce65-164e-4a8f-bc09-08938fad42da}">
+      <Declaration><![CDATA[METHOD subscribe_job_event : BOOL
+VAR_INPUT
+	(* Subject text of event*)
+	subject	: jobmgmt.T_MaxString;
+	(* Job state before transition.*)
+	old_state	: jobmgmt.E_FutureExecutionState;
+	(* Job state after transition.*)
+	new_state	: jobmgmt.E_FutureExecutionState;
+	(* File-time at the time of transition.*)
+	record_time	: jobmgmt.T_FILETIME64;
+	(* Reference to job instance of which transition occurs.*)
+	executor	: REFERENCE TO jobmgmt.FB_Executor;
+END_VAR
+VAR
+	text : T_MaxString;
 END_VAR
 VAR_INST
 	fb_timezone_info : FB_GetTimeZoneInformation := (bExecute := TRUE);
     // Datetime utilities
     fbDtUtil : FB_DatetimeUtilities;
-	db_record_data : ST_database_job_event;
-END_VAR
-VAR
-	text : T_MaxString;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[//For log
@@ -128,16 +157,19 @@ IF __ISVALIDREF(_fbDatabaseRecorder) THEN
 	// 記録用の構造体へのデータ登録
 	// fbDtUtil.Filetime_To_UnixT()でマイクロ秒精度のUNIX時間を取得する
 	db_record_data.datetime := fbDtUtil.Filetime_To_UnixT(F_GetSystemTime());
+	db_record_data.event_id := subject;
 	db_record_data.old_state := event.old_state;
 	db_record_data.new_state := event.new_state;
 	db_record_data.task_name := event.task_name;
 	db_record_data.job_id := event.job_id;
 	db_record_data.erro_id := executor.nErrorID;
 	
-	_fbDatabaseRecorder.write(ADR(db_record_data));	
+	IF GVL.tf6420_enable THEN
+		_fbDatabaseRecorder.write(ADR(db_record_data));			
+	END_IF
 END_IF
 
-report := TRUE;]]></ST>
+subscribe_job_event := TRUE;]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="FB_JobReporter">
@@ -157,42 +189,15 @@ report := TRUE;]]></ST>
     <LineIds Name="FB_JobReporter.fbDatabaseRecorder.Set">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_JobReporter.report">
-      <LineId Id="130" Count="0" />
-      <LineId Id="10" Count="1" />
-      <LineId Id="15" Count="0" />
-      <LineId Id="17" Count="0" />
-      <LineId Id="12" Count="0" />
-      <LineId Id="127" Count="0" />
-      <LineId Id="141" Count="0" />
-      <LineId Id="48" Count="0" />
-      <LineId Id="61" Count="0" />
-      <LineId Id="76" Count="0" />
-      <LineId Id="75" Count="0" />
-      <LineId Id="77" Count="1" />
-      <LineId Id="49" Count="1" />
-      <LineId Id="112" Count="1" />
-      <LineId Id="53" Count="6" />
-      <LineId Id="111" Count="0" />
-      <LineId Id="110" Count="0" />
-      <LineId Id="94" Count="1" />
-      <LineId Id="60" Count="0" />
-      <LineId Id="104" Count="2" />
-      <LineId Id="93" Count="0" />
-      <LineId Id="108" Count="0" />
-      <LineId Id="98" Count="0" />
-      <LineId Id="101" Count="1" />
-      <LineId Id="99" Count="1" />
-      <LineId Id="109" Count="0" />
-      <LineId Id="92" Count="0" />
-      <LineId Id="52" Count="0" />
-      <LineId Id="142" Count="1" />
-      <LineId Id="146" Count="2" />
-      <LineId Id="179" Count="0" />
-      <LineId Id="149" Count="0" />
-      <LineId Id="182" Count="9" />
-      <LineId Id="181" Count="0" />
-      <LineId Id="21" Count="0" />
+    <LineIds Name="FB_JobReporter.subscribe_job_directory">
+      <LineId Id="8" Count="9" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_JobReporter.subscribe_job_event">
+      <LineId Id="17" Count="52" />
+      <LineId Id="91" Count="0" />
+      <LineId Id="89" Count="0" />
+      <LineId Id="71" Count="9" />
       <LineId Id="16" Count="0" />
     </LineIds>
   </POU>

@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_TaskMoveC_creator" Id="{9a806080-c719-4b74-96c4-0764f203d13b}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_TaskMoveC_creator IMPLEMENTS InterfaceTaskCreator
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	_coordinate		: CoordinateType;
+	_p				: MC_LREAL;
+	_v				: MC_LREAL;
+	_a				: MC_LREAL;
+	_d				: MC_LREAL;
+	_j				: MC_LREAL;
+	_dynamics		: DynamicConstraint_Coordinates;
+	_coptions		: ST_MoveCOptions;
+	_additional_turns: UDINT;
+	_direction: MC_DIRECTION;
+	_mover			: REFERENCE TO MC_PlanarMover;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="create_future" Id="{faaa0450-73b2-490e-979e-d29b7cdc2f4e}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD create_future : jobmgmt.InterfaceFuture
+VAR_INPUT
+	future_name	: STRING;
+END_VAR
+VAR
+	_p_future : POINTER TO FB_TaskMoveC;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_p_future := __NEW(FB_TaskMoveC);
+_p_future^.mover REF= _mover;
+_p_future^.future_name := future_name;
+_p_future^.set_options(_additional_turns,_direction);
+_p_future^.set_dynamics(_coordinate,_v,_a,_d,_j);
+_p_future^.set_target_position(_p);
+create_future := _p_future^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="destroy_future" Id="{6ce5a809-bba1-4176-b206-18e85f2ba388}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD destroy_future : InterfaceFuture
+VAR_INPUT
+	future	: jobmgmt.InterfaceFuture;
+END_VAR
+VAR
+	_p_future : POINTER TO FB_TaskMoveC;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF __QUERYPOINTER(future, _p_future) THEN
+	__DELETE(_p_future);
+	IF _p_future = 0  THEN
+		destroy_future := 0;
+	END_IF
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{ebbd6f04-c6ec-4605-a9db-9b07667d0fd0}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	mover : REFERENCE TO MC_PlanarMover;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_mover REF= mover;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="set_dynamics" Id="{76d92d17-b498-47d2-8e12-42b9585c3b56}">
+      <Declaration><![CDATA[METHOD set_dynamics : BOOL
+VAR_INPUT
+	coordinate: CoordinateType;
+	v: MC_LREAL;
+	a: MC_LREAL;
+	d: MC_LREAL;
+	j: MC_LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_coordinate := coordinate;
+_v := v;
+_a := a;
+_d := d;
+_j := j;
+set_dynamics := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="set_options" Id="{55d2f0fb-7dd1-4088-9e49-3d93687fae54}">
+      <Declaration><![CDATA[METHOD set_options : BOOL
+VAR_INPUT
+	(* Addition turns to move in modulo movement (positive or negative). *)
+	additional_turns : UDINT := 0;
+	(* Direction in which the target is approached. *)
+	 {attribute 'GUID' := 'FA9CA56B-5BDF-42DB-BC74-B14868EB8B42'}
+	direction : MC_DIRECTION := MC_DIRECTION.mcDirectionNonModulo;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_coptions.additionalTurns := additional_turns;
+_coptions.direction := direction;
+set_options := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="set_target_position" Id="{aed856d0-79a9-467f-a1df-e9affbd68dc4}">
+      <Declaration><![CDATA[METHOD set_target_position : BOOL
+VAR_INPUT
+	c: LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_p := c;
+set_target_position := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_TaskMoveC_creator">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TaskMoveC_creator.create_future">
+      <LineId Id="10" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="11" Count="2" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TaskMoveC_creator.destroy_future">
+      <LineId Id="18" Count="5" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TaskMoveC_creator.FB_init">
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TaskMoveC_creator.set_dynamics">
+      <LineId Id="17" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="13" Count="2" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TaskMoveC_creator.set_options">
+      <LineId Id="7" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TaskMoveC_creator.set_target_position">
+      <LineId Id="11" Count="0" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

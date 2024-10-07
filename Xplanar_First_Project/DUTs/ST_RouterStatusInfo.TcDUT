@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="ST_RouterStatusInfo" Id="{1d52d486-4387-4569-82bf-0593c14c5678}">
+    <Declaration><![CDATA[{attribute 'pack_mode' := '1'}
+TYPE ST_RouterStatusInfo :
+STRUCT
+	{attribute 'FieldName' := 'maxMem'}
+	maxMem      : DWORD;(* Max. router memory byte size *)
+	{attribute 'FieldName' := 'maxMemAvail'}
+    maxMemAvail : DWORD;(* Available router memory byte size *)
+	{attribute 'FieldName' := 'regPorts'}
+    regPorts    : DWORD;(* Number of registered ports *)
+	{attribute 'FieldName' := 'regDrivers'}
+    regDrivers  : DWORD;(* Number of registered TwinCAT server ports *)
+	{attribute 'FieldName' := 'amsDebugLog'}
+    amsDebugLog : BOOL;(* TRUE = Ams logging/debugging enabled, FALSE = Ams logging/debugging disabled *)
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

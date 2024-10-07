@@ -32,6 +32,13 @@ VAR
         ADR(database_mover_dynamics_buffer)
     );		// record controller
 
+	// ADS Router information tracing
+	database_ads_router_info_buffer : ARRAY [0..499] OF ST_RouterStatusInfo;
+	fb_ads_router_status_recorder : BufferedRecord(
+		GVL.fbInfluxDBRecorder, 
+		ADR(database_ads_router_info_buffer)
+	);
+	
 	record_data_set_positions : ST_mover_dynamics := (index := 'Mover 1 Setting position');
 	record_data_act_positions : ST_mover_dynamics := (index := 'Mover 1 Actual position');
 	
@@ -39,6 +46,13 @@ VAR
 	structure_size: INT;
 	SetDynamics : CDT_MCTOPLC_PLANAR_MOVER_SET;
 	ActDynamics : CDT_MCTOPLC_PLANAR_MOVER_ACT;
+	
+	ads_router_status_record_interval_timer : TON := (PT:=T#1S);
+
+	fb_get_router_status : FB_GetRouterStatusInfo;
+	fb_get_router_status_report : BOOL;
+	router_status_record_data : ST_RouterStatusInfo;
+	
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -121,8 +135,28 @@ IF NOT db_initialize THEN
 											structure_name := 'ST_mover_dynamics');
 	fb_mover_dynamics_recorder.SQL_parameters.table_name := 'mover_dynamics';
 
+	fb_ads_router_status_recorder.set_buffer_info(struct_size := SIZEOF(database_ads_router_info_buffer[0]),
+											buffer_size := SIZEOF(database_ads_router_info_buffer),
+											structure_name := 'ST_RouterStatusInfo');
+	fb_ads_router_status_recorder.SQL_parameters.table_name := 'ADS_router_status';	
+	fb_ads_router_status_recorder.max_chunk_size := 1;
+	
 	db_initialize := TRUE;
 	fbMqttPublish.fbDatabaseRecorder REF= fb_aps_diag_db_recorder;
+END_IF
+
+
+ads_router_status_record_interval_timer(IN := NOT ads_router_status_record_interval_timer.Q);
+fb_get_router_status_report := fb_get_router_status.bBusy;
+fb_get_router_status(
+	bExecute := ads_router_status_record_interval_timer.Q
+);
+
+IF fb_get_router_status_report AND NOT fb_get_router_status.bBusy THEN
+	MEMCPY(ADR(router_status_record_data), ADR(fb_get_router_status.info), SIZEOF(fb_get_router_status.info));
+	IF GVL.tf6420_enable THEN
+		fb_ads_router_status_recorder.write(ADR(router_status_record_data));
+	END_IF
 END_IF
 
 SetDynamics := GVL.planar_movers[1].MCTOPLC.SET;
@@ -135,7 +169,9 @@ record_data_set_positions.x := SetDynamics.SetPos.x;
 record_data_set_positions.y := SetDynamics.SetPos.y;
 record_data_set_positions.z := SetDynamics.SetPos.z;
 
-fb_mover_dynamics_recorder.write(ADR(record_data_set_positions));
+IF GVL.tf6420_enable THEN
+	fb_mover_dynamics_recorder.write(ADR(record_data_set_positions));
+END_IF
 
 record_data_act_positions.a := ActDynamics.ActPos.a;
 record_data_act_positions.b := ActDynamics.ActPos.b;
@@ -144,8 +180,9 @@ record_data_act_positions.x := ActDynamics.ActPos.x;
 record_data_act_positions.y := ActDynamics.ActPos.y;
 record_data_act_positions.z := ActDynamics.ActPos.z;
 
-fb_mover_dynamics_recorder.write(ADR(record_data_act_positions));
-]]></ST>
+IF GVL.tf6420_enable THEN
+	fb_mover_dynamics_recorder.write(ADR(record_data_act_positions));
+END_IF]]></ST>
     </Implementation>
     <LineIds Name="IoT">
       <LineId Id="487" Count="0" />
@@ -183,19 +220,41 @@ fb_mover_dynamics_recorder.write(ADR(record_data_act_positions));
       <LineId Id="576" Count="2" />
       <LineId Id="573" Count="0" />
       <LineId Id="580" Count="0" />
-      <LineId Id="584" Count="0" />
+      <LineId Id="662" Count="0" />
+      <LineId Id="668" Count="1" />
+      <LineId Id="666" Count="0" />
+      <LineId Id="665" Count="0" />
+      <LineId Id="701" Count="1" />
       <LineId Id="521" Count="0" />
       <LineId Id="532" Count="0" />
       <LineId Id="520" Count="0" />
+      <LineId Id="695" Count="0" />
+      <LineId Id="671" Count="1" />
+      <LineId Id="691" Count="0" />
+      <LineId Id="677" Count="0" />
+      <LineId Id="679" Count="0" />
+      <LineId Id="681" Count="0" />
+      <LineId Id="683" Count="0" />
+      <LineId Id="682" Count="0" />
+      <LineId Id="696" Count="0" />
+      <LineId Id="756" Count="0" />
+      <LineId Id="699" Count="0" />
+      <LineId Id="757" Count="0" />
+      <LineId Id="670" Count="0" />
       <LineId Id="586" Count="0" />
       <LineId Id="588" Count="0" />
       <LineId Id="592" Count="0" />
       <LineId Id="591" Count="0" />
       <LineId Id="516" Count="0" />
       <LineId Id="594" Count="4" />
+      <LineId Id="758" Count="0" />
       <LineId Id="612" Count="1" />
-      <LineId Id="599" Count="1" />
-      <LineId Id="606" Count="5" />
+      <LineId Id="599" Count="0" />
+      <LineId Id="759" Count="0" />
+      <LineId Id="600" Count="0" />
+      <LineId Id="606" Count="4" />
+      <LineId Id="760" Count="0" />
+      <LineId Id="611" Count="0" />
       <LineId Id="614" Count="0" />
       <LineId Id="593" Count="0" />
     </LineIds>

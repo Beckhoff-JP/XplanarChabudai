@@ -5,6 +5,7 @@
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
+	fb_database_aps_diag    :ST_database_aps_diag;    // 書込みデータ設定用
 END_VAR
 VAR
 	// published message
@@ -105,7 +106,6 @@ VAR_INST
 	sPayloadPub : STRING(255);
 	pub_complete : ARRAY [1..2] OF BOOL;
 	// Record data buffer
-    fb_database_aps_diag    :ST_database_aps_diag;    // 書込みデータ設定用
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -137,7 +137,9 @@ IF __ISVALIDREF(_fbDatabaseRecorder) THEN
 	fb_database_aps_diag.temperature_south := diag_data_body^.temperature_south;
 	fb_database_aps_diag.temperature_west := diag_data_body^.temperature_west;
 	fb_database_aps_diag.time_to_shutdown := diag_data_body^.time_to_shutdown;
-	_fbDatabaseRecorder.write(ADR(fb_database_aps_diag));	
+	IF GVL.tf6420_enable THEN
+		_fbDatabaseRecorder.write(ADR(fb_database_aps_diag));
+	END_IF
 END_IF
 
 
@@ -214,7 +216,9 @@ END_IF
       <LineId Id="303" Count="8" />
       <LineId Id="382" Count="0" />
       <LineId Id="385" Count="17" />
-      <LineId Id="404" Count="0" />
+      <LineId Id="422" Count="0" />
+      <LineId Id="425" Count="0" />
+      <LineId Id="424" Count="0" />
       <LineId Id="384" Count="0" />
       <LineId Id="333" Count="48" />
       <LineId Id="7" Count="0" />

@@ -48,6 +48,9 @@
     <Compile Include="DUTs\ST_OperationPanel.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\ST_RouterStatusInfo.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\TileInfoType.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -67,7 +70,16 @@
     <Compile Include="POUs\MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\model\activities\FB_TaskMoveA_tilt_Creator.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\model\activities\FB_TaskMoveB_tilt.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\model\activities\FB_TaskMoveB_tilt_creator.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\model\activities\FB_TaskMoveC_creator.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\model\activities\FB_TaskMoveToPosition.TcPOU">
@@ -76,10 +88,16 @@
     <Compile Include="POUs\model\activities\FB_TaskMoveC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\model\activities\FB_TaskMoveToPosition_creator.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\model\activities\FB_TaskMoveZ.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\model\activities\FB_TaskMoveA_tilt.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\model\activities\FB_TaskMoveZ_creator.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\model\IoT\FB_JobReporter.TcPOU">
@@ -122,6 +140,7 @@
     <Folder Include="POUs\model" />
     <Folder Include="POUs\model\activities" />
     <Folder Include="POUs\model\IoT" />
+    <Folder Include="POUs\jobs" />
     <Folder Include="VISUs" />
     <Folder Include="POUs" />
   </ItemGroup>
@@ -132,13 +151,7 @@
     </PlaceholderReference>
     <PlaceholderReference Include="JobManagementFramework">
       <DefaultResolution>JobManagementFramework, * (Bekchoff Automation K.K.)</DefaultResolution>
-      <Namespace>bajp_jobmgmt</Namespace>
-      <Parameters>
-        <Parameter ListName="PARAMFUTURESLIB" xmlns="">
-          <Key>MAX_TASK_NUM</Key>
-          <Value>20</Value>
-        </Parameter>
-      </Parameters>
+      <Namespace>jobmgmt</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="RecipeManagement">
       <DefaultResolution>Recipe Management, 3.3.1.0 (System)</DefaultResolution>

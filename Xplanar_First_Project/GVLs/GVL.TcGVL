@@ -16,6 +16,7 @@ VAR_GLOBAL
 	// Database record driver
     //fbSQLRecorder 		:RecordSQL(DBID := 1);
     fbInfluxDBRecorder 		:RecordInfluxDB(DBID := 1);
+	tf6420_enable	: BOOL;
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

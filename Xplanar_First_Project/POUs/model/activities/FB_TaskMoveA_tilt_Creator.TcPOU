@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_TaskMoveA_tilt_Creator" Id="{fc828707-7d77-4510-a7f7-ea18f0c59afc}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_TaskMoveA_tilt_Creator IMPLEMENTS InterfaceTaskCreator
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	_p				: MC_LREAL;
+	_v				: MC_LREAL;
+	_a				: MC_LREAL;
+	_d				: MC_LREAL;
+	_j				: MC_LREAL;
+	_mover			: REFERENCE TO MC_PlanarMover;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="create_future" Id="{41b7ee1c-4a4b-47bd-827b-1e3814393274}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD create_future : jobmgmt.InterfaceFuture
+VAR_INPUT
+	future_name	: STRING;
+END_VAR
+VAR
+	_p_future : POINTER TO FB_TaskMoveA_tilt;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_p_future := __NEW(FB_TaskMoveA_tilt);
+_p_future^.mover REF= _mover;
+_p_future^.future_name := future_name;
+_p_future^.set_dynamics(_v,_a,_d,_j);
+_p_future^.set_target_position(_p);
+create_future := _p_future^;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="destroy_future" Id="{38844d89-2fb2-4da9-9efe-7d4163588e00}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD destroy_future : InterfaceFuture
+VAR_INPUT
+	future	: jobmgmt.InterfaceFuture;
+END_VAR
+VAR
+	_p_future : POINTER TO FB_TaskMoveA_tilt;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF __QUERYPOINTER(future, _p_future) THEN
+	__DELETE(_p_future);
+	IF _p_future = 0  THEN
+		destroy_future := 0;
+	END_IF
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{7109b9ca-07a3-4aa9-9c0f-b375de68b362}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	mover : REFERENCE TO MC_PlanarMover;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_mover REF= mover;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="set_dynamics" Id="{c617c2d7-6abb-4a7e-811f-97d576351982}">
+      <Declaration><![CDATA[METHOD set_dynamics : BOOL
+VAR_INPUT
+	v: MC_LREAL;
+	a: MC_LREAL;
+	d: MC_LREAL;
+	j: MC_LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_v := v;
+_a := a;
+_d := d;
+_j := j;
+set_dynamics := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="set_target_position" Id="{02e4d557-1471-4d39-85dd-b723e5a5714d}">
+      <Declaration><![CDATA[METHOD set_target_position : BOOL
+VAR_INPUT
+	position: LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_p := position;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_TaskMoveA_tilt_Creator">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TaskMoveA_tilt_Creator.create_future">
+      <LineId Id="10" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="11" Count="2" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TaskMoveA_tilt_Creator.destroy_future">
+      <LineId Id="20" Count="5" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TaskMoveA_tilt_Creator.FB_init">
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TaskMoveA_tilt_Creator.set_dynamics">
+      <LineId Id="11" Count="0" />
+      <LineId Id="13" Count="2" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TaskMoveA_tilt_Creator.set_target_position">
+      <LineId Id="11" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

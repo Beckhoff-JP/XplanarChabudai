@@ -7477,9 +7477,9 @@
                     <o>
                       <v n="Id">3234392039L</v>
                       <o n="Value" t="DataVariableInformation">
-                        <v n="DataArrayType">"ARRAY [1..bajp_jobmgmt.ParamFuturesLib.MAX_TASK_NUM] OF T_MaxString"</v>
+                        <v n="DataArrayType">"ARRAY [1..jobmgmt.ParamFuturesLib.MAX_TASK_NUM] OF T_MaxString"</v>
                         <v n="ColumnCount">1</v>
-                        <v n="RowCount">10</v>
+                        <v n="RowCount">1000</v>
                         <v n="FirstColumnIndex">0</v>
                         <v n="FirstRowIndex">1</v>
                         <a n="ColumnTypes" cet="TypeClass">
@@ -7491,8 +7491,8 @@
                         <v n="BaseType">true</v>
                         <a n="Bounds" cet="ArrayBound">
                           <o>
-                            <v n="Identifier">"bajp_jobmgmt.ParamFuturesLib.MAX_TASK_NUM"</v>
-                            <v n="Value">10</v>
+                            <v n="Identifier">"jobmgmt.ParamFuturesLib.MAX_TASK_NUM"</v>
+                            <v n="Value">1000</v>
                           </o>
                         </a>
                         <v n="ArrayType" t="EArrayType">OneDimensional</v>
@@ -7500,7 +7500,7 @@
                     </o>
                     <o>
                       <v n="Id">1128707560L</v>
-                      <v n="Value">"bajp_jobmgmt.ParamFuturesLib.MAX_TASK_NUM"</v>
+                      <v n="Value">"jobmgmt.ParamFuturesLib.MAX_TASK_NUM"</v>
                     </o>
                     <o>
                       <v n="Id">1636817830L</v>
@@ -7511,24 +7511,8 @@
                       <v n="Value">"MAIN.Recipe_Display[INDEX]"</v>
                     </o>
                     <o>
-                      <v n="Id">2232123230L</v>
-                      <v n="Value">"登録処理内容"</v>
-                    </o>
-                    <o>
-                      <v n="Id">2685023577L</v>
-                      <v n="Value">"MAIN.Recipe_Display[INDEX]"</v>
-                    </o>
-                    <o>
-                      <v n="Id">4036189354L</v>
-                      <v n="Value">203</v>
-                    </o>
-                    <o>
-                      <v n="Id">3669839856L</v>
-                      <v n="Value">"HCENTER"</v>
-                    </o>
-                    <o>
                       <v n="Id">2318311169L</v>
-                      <v n="Value">10</v>
+                      <v n="Value">1000</v>
                     </o>
                     <o>
                       <v n="Id">3146216842L</v>
@@ -7539,12 +7523,28 @@
                       <v n="Value">true</v>
                     </o>
                     <o>
-                      <v n="Id">175837068L</v>
-                      <v n="Value">true</v>
+                      <v n="Id">2232123230L</v>
+                      <v n="Value">"登録処理内容"</v>
                     </o>
                     <o>
                       <v n="Id">3803700462L</v>
                       <v n="Value">true</v>
+                    </o>
+                    <o>
+                      <v n="Id">2685023577L</v>
+                      <v n="Value">"MAIN.Recipe_Display[INDEX]"</v>
+                    </o>
+                    <o>
+                      <v n="Id">175837068L</v>
+                      <v n="Value">true</v>
+                    </o>
+                    <o>
+                      <v n="Id">4036189354L</v>
+                      <v n="Value">203</v>
+                    </o>
+                    <o>
+                      <v n="Id">3669839856L</v>
+                      <v n="Value">"HCENTER"</v>
                     </o>
                   </l>
                 </o>
@@ -7570,18 +7570,22 @@
                     <o n="VisualElemMemberList" t="VisualElemMemberList">
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
-                          <v n="Id">3851392753L</v>
-                          <v n="Value">"HCENTER"</v>
+                          <v n="Id">3425622852L</v>
+                          <l n="Value" t="ArrayList" cet="UInt32">
+                            <v>4294967295</v>
+                          </l>
+                        </o>
+                        <o>
+                          <v n="Id">2764776250L</v>
+                          <v n="Value">1U</v>
                         </o>
                         <o>
                           <v n="Id">339296383L</v>
                           <v n="Value">"VCENTER"</v>
                         </o>
                         <o>
-                          <v n="Id">1670709118L</v>
-                          <l n="Value" t="ArrayList" cet="UInt32">
-                            <v>4294901760</v>
-                          </l>
+                          <v n="Id">3851392753L</v>
+                          <v n="Value">"HCENTER"</v>
                         </o>
                         <o>
                           <v n="Id">1636817830L</v>
@@ -7592,14 +7596,16 @@
                           <v n="Value">""</v>
                         </o>
                         <o>
-                          <v n="Id">3425622852L</v>
+                          <v n="Id">885575555L</v>
                           <l n="Value" t="ArrayList" cet="UInt32">
-                            <v>4294967295</v>
+                            <v>4278190080</v>
                           </l>
                         </o>
                         <o>
-                          <v n="Id">365730219L</v>
-                          <v n="Value">"VISU_ST_RECTANGLE"</v>
+                          <v n="Id">1670709118L</v>
+                          <l n="Value" t="ArrayList" cet="UInt32">
+                            <v>4294901760</v>
+                          </l>
                         </o>
                         <o>
                           <v n="Id">3728858389L</v>
@@ -7618,20 +7624,14 @@
                           </l>
                         </o>
                         <o>
-                          <v n="Id">885575555L</v>
-                          <l n="Value" t="ArrayList" cet="UInt32">
-                            <v>4278190080</v>
-                          </l>
-                        </o>
-                        <o>
-                          <v n="Id">2764776250L</v>
-                          <v n="Value">1U</v>
-                        </o>
-                        <o>
                           <v n="Id">4171957040L</v>
                           <l n="Value" t="ArrayList" cet="UInt32">
                             <v>4294954959</v>
                           </l>
+                        </o>
+                        <o>
+                          <v n="Id">365730219L</v>
+                          <v n="Value">"VISU_ST_RECTANGLE"</v>
                         </o>
                         <o>
                           <v n="Id">2477733581L</v>

@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <DUT Name="ST_mover_dynamics" Id="{4721899b-5431-42e3-a8f0-d9e01c00cae7}">
-    <Declaration><![CDATA[TYPE ST_mover_dynamics :
+    <Declaration><![CDATA[{attribute 'pack_mode' := '1'}
+TYPE ST_mover_dynamics :
 STRUCT
 	{attribute 'TagName' := 'title'}
 	index: STRING;
