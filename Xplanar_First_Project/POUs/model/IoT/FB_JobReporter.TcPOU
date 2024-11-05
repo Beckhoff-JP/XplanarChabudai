@@ -76,7 +76,7 @@ IF executor.future <> 0 THEN
 	job_log := CONCAT(job_log, ', ');	
 END_IF
 job_log := CONCAT(job_log, 'JOB_ID : ');
-job_log := CONCAT(job_log, executor.id);
+job_log := CONCAT(job_log, executor.uid);
 
 ADSLOGSTR(msgCtrlMask := ADSLOG_MSGTYPE_LOG, msgFmtStr := job_log, strArg := '');]]></ST>
       </Implementation>
@@ -108,7 +108,7 @@ END_VAR]]></Declaration>
 event.old_state := TO_STRING(old_state);
 event.new_state := TO_STRING(new_state);
 event.record_time := FILETIME64_TO_ISO8601(fileTime := record_time, nBias := DINT_TO_INT(fb_timezone_info.tzInfo.bias), bUTC := TRUE,nPrecision := 6);
-event.job_id := executor.id;
+event.job_id := executor.uid;
 event.task_name := executor.future.future_name;
 event.erro_id := executor.nErrorID;
 

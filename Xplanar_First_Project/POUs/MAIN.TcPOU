@@ -22,7 +22,8 @@ VAR
 	fbMoveBTaskCreator				: FB_TaskMoveB_tilt_creator(GVL.planar_movers[1]);
 	//batch_job_container_creator		: FB_BatchJobContainerCreator;
 	fbJob							: jobmgmt.FB_Executor;
-	
+	home_job						: jobmgmt.FB_Executor;
+	demo_job						: jobmgmt.FB_Executor;
 	random_gen : DRAND;
 	random		:REAL;
 	
@@ -148,8 +149,11 @@ IF NOT bInit THEN
 				END_IF
 				
 			2://Job生成
-				fbJob.continuous_mode := FALSE;
-				fbJob.create_container(ContainerType.QUEUE, 'MAIN JOB');
+				fbJob.create_container(ContainerType.QUEUE, '<000 MAIN JOB>');
+				fbJob.continuous_mode := TRUE;
+				fbJob.id := 'M101';
+				CreateDemoJob_1(demo_job);
+				CreateHomeJob(home_job);
 				bInit := TRUE;
 		END_CASE
 	RETURN;
@@ -169,40 +173,6 @@ IF NOT bInit_database THEN
 
 	// SQLデータベースのテーブル名
 	fb_job_event_db_recorder.SQL_parameters.table_name := 'job_event';
-
-(*	
-	// 列パラメータの登録
-	fb_job_event_db_recorder.SQL_parameters.add_column(
-		'datetime', 
-		tf6420.E_ExpParameterType.Int64, 
-		SIZEOF(fb_database_job_event.datetime)
-	); // 列1
-	fb_job_event_db_recorder.SQL_parameters.add_column(
-		'old_state', 
-		tf6420.E_ExpParameterType.STRING_,
-		SIZEOF(fb_database_job_event.old_state)
-	); // 列2
-	fb_job_event_db_recorder.SQL_parameters.add_column(
-		'new_status', 
-		tf6420.E_ExpParameterType.STRING_,
-		SIZEOF(fb_database_job_event.new_state)
-	); // 列3
-	fb_job_event_db_recorder.SQL_parameters.add_column(
-		'task_name', 
-		tf6420.E_ExpParameterType.STRING_, 
-		SIZEOF(fb_database_job_event.task_name)
-	); // 列4
-	fb_job_event_db_recorder.SQL_parameters.add_column(
-		'job_id', 
-		tf6420.E_ExpParameterType.Int64, 
-		SIZEOF(fb_database_job_event.job_id)
-	); // 列5
-	fb_job_event_db_recorder.SQL_parameters.add_column(
-		'error_id', 
-		tf6420.E_ExpParameterType.Int64, 
-		SIZEOF(fb_database_job_event.erro_id)
-	); // 列6
-*)
 	
 	bInit_database := TRUE;
 END_IF
@@ -227,7 +197,7 @@ IF bDisable THEN
 	nDemoSequenceState := 0;
 	nManupilationState := 0;
 	nCase := 0;
-	IF fbjob.reset() THEN
+	IF fbJob.reset(FALSE) THEN
 		bDisable	:= FALSE;
 	END_IF
 END_IF
@@ -251,114 +221,10 @@ IF stMoverState = MC_PLANAR_STATE.Enabled THEN
 				manu_mode := FALSE;
 			END_IF
 			// avoid
-		1: // Initialize jobs
-			fbjob.create_container(ContainerType.QUEUE, 'MANUAL JOB');
-			fbMoveToPositionTaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
-			fbMoveCTaskCreator.set_dynamics(Coord_Mcs_C1,Ang_Vel,Ang_Acc,Ang_Dcc,Ang_Jerk);
-			fbMoveZTaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
-			fbMoveATaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
-			fbMoveBTaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
-			nManupilationState := 2;
-		2:// 非同期タスク発行
-			manual_command_event := FALSE;
-			FOR i := 0 TO 49 DO
-				// HMIボタン入力
-				IF manupilator_buttons[i] THEN
-					manual_command_event := TRUE; // イベントフラグ
-					manual_command.i_com := i; // コマンド番号をMenualCommand型のenumへ変換（UNION）
-				END_IF
-			END_FOR
-		
-			IF manual_command_event AND NOT manual_command_event_mem THEN
-				// イベントフラグ立ち上がり条件の作成
-				CASE manual_command.com OF
-					// コマンド番号毎にタスクをキューに登録
-					ManualCommand.move_pos_c1:
-						fbMoveToPositionTaskCreator.set_target_position(x := 240, y :=80, c :=0);
-						fbjob.children.create_future(fbMoveToPositionTaskCreator,'MOVE C1');
-					ManualCommand.move_pos_c2:
-						fbMoveToPositionTaskCreator.set_target_position(x := 240, y :=120, c :=0);
-						fbjob.children.create_future(fbMoveToPositionTaskCreator,'MOVE C2');
-					ManualCommand.move_pos_c3:
-						fbMoveToPositionTaskCreator.set_target_position(x := 240, y :=160, c :=0);
-						fbjob.children.create_future(fbMoveToPositionTaskCreator,'MOVE C3');
-					ManualCommand.move_pos_L1:
-						fbMoveToPositionTaskCreator.set_target_position(x := 80, y :=80, c :=0);
-						fbjob.children.create_future(fbMoveToPositionTaskCreator,'MOVE L1');
-					ManualCommand.move_pos_L2:
-						fbMoveToPositionTaskCreator.set_target_position(x := 80, y :=120, c :=0);
-						fbjob.children.create_future(fbMoveToPositionTaskCreator,'MOVE L2');
-					ManualCommand.move_pos_L3:
-						fbMoveToPositionTaskCreator.set_target_position(x := 80, y :=160, c :=0);
-						fbjob.children.create_future(fbMoveToPositionTaskCreator,'MOVE L3');
-					ManualCommand.move_pos_r1:
-						fbMoveToPositionTaskCreator.set_target_position(x := 400, y :=160, c :=0);
-						fbjob.children.create_future(fbMoveToPositionTaskCreator,'MOVE R1');
-					ManualCommand.move_pos_r2:
-						fbMoveToPositionTaskCreator.set_target_position(x := 400, y :=120, c :=0);
-						fbjob.children.create_future(fbMoveToPositionTaskCreator,'MOVE R2');
-					ManualCommand.move_pos_r3:
-						fbMoveToPositionTaskCreator.set_target_position(x := 400, y :=80, c :=0);
-						fbjob.children.create_future(fbMoveToPositionTaskCreator,'MOVE R3');
-					ManualCommand.move_roll_w:
-						fbMoveCTaskCreator.set_target_position(270.0);
-						fbjob.children.create_future(fbMoveCTaskCreator,'ROLL WEST');
-					ManualCommand.move_roll_n:
-						fbMoveCTaskCreator.set_target_position(0.0);
-						fbjob.children.create_future(fbMoveCTaskCreator,'ROLL NORTH');
-					ManualCommand.move_roll_e:
-						fbMoveCTaskCreator.set_target_position(90.0);
-						fbjob.children.create_future(fbMoveCTaskCreator,'ROLL EAST');
-					ManualCommand.move_roll_s:
-						fbMoveCTaskCreator.set_target_position(180.0);
-						fbjob.children.create_future(fbMoveCTaskCreator,'ROLL SOUTH');
-					ManualCommand.move_tilt_up_front:
-						//fb_manu_job.add_future(fbMoveZTasks[1]);
-						//fb_manu_job.add_future(fbMoveATasks[1]);					
-					ManualCommand.move_tilt_up_rear:
-						//fb_manu_job.add_future(fbMoveZTasks[1]);
-						//fb_manu_job.add_future(fbMoveATasks[2]);					
-					ManualCommand.move_tilt_up_right:
-						//fb_manu_job.add_future(fbMoveZTasks[1]);
-						//fb_manu_job.add_future(fbMoveBTasks[1]);
-					ManualCommand.move_tilt_up_left:
-						//fb_manu_job.add_future(fbMoveZTasks[1]);
-						//fb_manu_job.add_future(fbMoveBTasks[2]);					
-					ManualCommand.move_tilt_horizontal:
-						//fb_manu_job.add_future(fbMoveATasks[3]);
-						//fb_manu_job.add_future(fbMoveBTasks[3]);
-						//fb_manu_job.add_future(fbMoveZTasks[2]);
-					ManualCommand.move_up:
-						//fb_manu_job.add_future(fbMoveZTasks[1]);
-					ManualCommand.move_down:					
-						//fb_manu_job.add_future(fbMoveZTasks[2]);
-				END_CASE
-			END_IF
-			manual_command_event_mem := manual_command_event;
-
-			//実行
-			IF fbJob.ready THEN
-				fbJob.start();
-			END_IF
-			IF fbJob.execute() AND fbJob.nErrorID = 0 THEN
-				fbJob.init();
-			END_IF
-			//停止動作
-			IF bStop THEN
-				fbJob.abort();
-			END_IF
-			
-			IF bReset THEN
-				fbJob.start();
-			END_IF
-			//current_action := fbJob.active_future_id;
-			
-			IF fbJob.current_state = jobmgmt.E_FutureExecutionState.finish THEN
-				nManupilationState := 2;				
-			END_IF
-			
+		1:// 非同期タスク発行
+			ExecuteManualCommand();
 			IF NOT manu_mode THEN
-				nManupilationState := 1;
+				nManupilationState := 0;
 			END_IF
 	END_CASE
 END_IF
@@ -370,31 +236,20 @@ CASE nCase OF
 		// avoid step
 		
 	1: // job create
-		CreateHomeJob(fbJob);
+		fbJob.children.append_job(home_job);
 		IF fbJob.init() THEN
 			nCase := 2;			
 		END_IF
 	2: // execute initialization
-		IF fbJob.done AND fbJob.nErrorID = 0 THEN
-			IF fbJob.init() THEN
-				nCase := 5;			
-			END_IF
+		IF home_job.done AND fbJob.nErrorID = 0 THEN
+			nCase := 5;			
 		END_IF
 	5: // Ready to start
-		IF stMoverState = MC_PLANAR_STATE.Disabled THEN
-			nCase := 0;
-			nDemoSequenceState := 0;
+		IF Demo_Start THEN // Button input
+			nDemoSequenceState 		:= 1;
+			nCase := 6;
 		END_IF
 END_CASE
-
-
-//デモ動作開始
-IF Demo_Start THEN
-	IF nCase = 5 AND nDemoSequenceState = 0 THEN
-		nDemoSequenceState 		:= 1;
-	END_IF
-END_IF
-
 
 // デモ動作
 CASE nDemoSequenceState OF
@@ -408,36 +263,34 @@ CASE nDemoSequenceState OF
 		END_IF
 		
 		
-		CreateDemoJob_1(fbJob);
+		fbJob.children.append_job(demo_job);
 		nDemoSequenceState := 2;
 	2:
-		
-		
-		IF fbJob.done THEN
-			IF fbJob.init() THEN
-				IF Demo_Start THEN
-					nDemoSequenceState := 1;
-				ELSE
-					nDemoSequenceState := 0;
-				END_IF
+		IF fbJob.init() THEN
+			nDemoSequenceState := 3;
+		END_IF
+	3:
+		IF demo_job.done THEN
+			IF Demo_Start THEN
+				nDemoSequenceState := 1;
+			ELSE
+				nDemoSequenceState := 0;
 			END_IF
 		END_IF
 		
 END_CASE
 
-IF nCase > 1 THEN
-	//デモモード実行
-	IF fbJob.ready THEN
-		fbJob.start();
-	END_IF
-	//停止動作
-	IF bStop THEN
-		fbJob.abort();	
-	END_IF
-	IF fbJob.execute() THEN
-		nCase := 0;
-		nDemoSequenceState := 0;
-	END_IF
+//デモモード実行
+IF fbJob.ready THEN
+	fbJob.start();
+END_IF
+//停止動作
+IF bStop THEN
+	fbJob.abort();	
+END_IF
+IF fbJob.execute() THEN
+	nCase := 0;
+	nDemoSequenceState := 0;
 END_IF
 
 
@@ -497,12 +350,11 @@ END_VAR
 VAR
 	demo_job_container : InterfaceContainer;
 	executor_item : REFERENCE TO FB_Executor;
-	child_container : InterfaceContainer;
 	i :UDINT;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[demo_job_container := executor.children.create_container(ContainerType.BATCH, 'Demo Job').children;
+        <ST><![CDATA[demo_job_container := executor.create_container(ContainerType.BATCH, '<002-00 Demo Job>');
 
 fbMoveToPositionTaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
 fbMoveCTaskCreator.set_dynamics(Coord_Mcs_C1,Ang_Vel,Ang_Acc,Ang_Dcc,Ang_Jerk);
@@ -510,358 +362,94 @@ fbMoveZTaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
 fbMoveATaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
 fbMoveBTaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
 
-executor_item REF= demo_job_container.create_container(ContainerType.BATCH, '<POSITIONING>');
-executor_item.init();
-child_container := executor_item.children;
+executor_item REF= demo_job_container.create_container(ContainerType.BATCH, '<002-01 POSITIONING>');
+executor_item.id := 'POS';
 
 fbMoveToPositionTaskCreator.set_target_position(x := 240, y :=120, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move B2');
+executor_item.children.create_job(fbMoveToPositionTaskCreator, 'Move B2');
 fbMoveToPositionTaskCreator.set_target_position(x := 80, y :=80, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move A3');
+executor_item.children.create_job(fbMoveToPositionTaskCreator, 'Move A3');
 fbMoveToPositionTaskCreator.set_target_position(x := 80, y :=160, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move A1');
+executor_item.children.create_job(fbMoveToPositionTaskCreator, 'Move A1');
 fbMoveToPositionTaskCreator.set_target_position(x := 400, y :=160, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move C1');
+executor_item.children.create_job(fbMoveToPositionTaskCreator, 'Move C1');
 fbMoveToPositionTaskCreator.set_target_position(x := 400, y :=80, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move C3');
+executor_item.children.create_job(fbMoveToPositionTaskCreator, 'Move C3');
 fbMoveToPositionTaskCreator.set_target_position(x := 240, y :=120, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move B2');
+executor_item.children.create_job(fbMoveToPositionTaskCreator, 'Move B2');
 
-executor_item REF= demo_job_container.create_container(ContainerType.BATCH,  '<ROTATING>');
-executor_item.init();
-child_container := executor_item.children;
+executor_item REF= demo_job_container.create_container(ContainerType.BATCH,  '<002-02 ROTATING>');
+executor_item.id := 'ROT';
 
 fbMoveCTaskCreator.set_target_position(360.0);
-child_container.create_future(fbMoveCTaskCreator, 'ROLL 360.0 deg');
+executor_item.children.create_job(fbMoveCTaskCreator, 'ROLL 360.0 deg');
 fbMoveCTaskCreator.set_target_position(0.0);
-child_container.create_future(fbMoveCTaskCreator, 'ROLL 0.0 deg');
+executor_item.children.create_job(fbMoveCTaskCreator, 'ROLL 0.0 deg');
 
-executor_item REF= demo_job_container.create_container(ContainerType.BATCH,  '<ELEVATION>');
-executor_item.init();
-child_container := executor_item.children;
-
-FOR i := 1 TO 9 DO
-	fbMoveZTaskCreator.set_target_position(Z_High);
-	child_container.create_future(fbMoveZTaskCreator, 'ELEV. UP');
-	fbMoveZTaskCreator.set_target_position(Z_Low);
-	child_container.create_future(fbMoveZTaskCreator, 'ELEV. DOWN');
-END_FOR
-
-
-executor_item REF= demo_job_container.create_container(ContainerType.BATCH,  '<TILT F/B>');
-executor_item.init();
-child_container := executor_item.children;
-
-fbMoveZTaskCreator.set_target_position(Z_High);
-child_container.create_future(fbMoveZTaskCreator, 'ELEV. UP');
-
-FOR i := 1 TO 10 DO
-	fbMoveATaskCreator.set_target_position(Tilt);
-	child_container.create_future(fbMoveATaskCreator, 'Tilt forwards');
-	fbMoveATaskCreator.set_target_position(-Tilt);
-	child_container.create_future(fbMoveATaskCreator, 'Tilt backwards');
-END_FOR
-fbMoveATaskCreator.set_target_position(0);
-child_container.create_future(fbMoveATaskCreator, 'F/B tilt holizontal');
-
-executor_item REF= demo_job_container.create_container(ContainerType.BATCH, '<TILT L/R>');
-executor_item.init();
-child_container := executor_item.children;
-
-fbMoveZTaskCreator.set_target_position(Z_High);
-child_container.create_future(fbMoveZTaskCreator, 'ELEV. UP');
-
-FOR i := 1 TO 10 DO
-	fbMoveBTaskCreator.set_target_position(Tilt);
-	child_container.create_future(fbMoveBTaskCreator, 'Tilt forwards');
-	fbMoveBTaskCreator.set_target_position(-Tilt);
-	child_container.create_future(fbMoveBTaskCreator, 'Tilt backwards');
-END_FOR
-fbMoveBTaskCreator.set_target_position(0);
-child_container.create_future(fbMoveBTaskCreator, 'L/R tilt holizontal');
-
-
-
-executor_item REF= demo_job_container.create_container(ContainerType.BATCH, '<TILT L/R>');
-executor_item.init();
-child_container := executor_item.children;
-
-fbMoveZTaskCreator.set_target_position(Z_High);
-child_container.create_future(fbMoveZTaskCreator, 'ELEV. UP');
-
-FOR i := 1 TO 4 DO
-	fbMoveATaskCreator.set_target_position(Rotaion_Ang);
-	child_container.create_future(fbMoveATaskCreator, 'Tilt forwards');
-	fbMoveBTaskCreator.set_target_position(Rotaion_Ang);
-	child_container.create_future(fbMoveBTaskCreator, 'Tilt forwards');
-	fbMoveATaskCreator.set_target_position(-Rotaion_Ang);
-	child_container.create_future(fbMoveATaskCreator, 'Tilt backwards');
-	fbMoveBTaskCreator.set_target_position(-Rotaion_Ang);
-	child_container.create_future(fbMoveBTaskCreator, 'Tilt backwards');
-END_FOR
-fbMoveATaskCreator.set_target_position(0);
-child_container.create_future(fbMoveATaskCreator, 'F/B tilt holizontal');
-fbMoveBTaskCreator.set_target_position(0);
-child_container.create_future(fbMoveBTaskCreator, 'L/R tilt holizontal');
-fbMoveZTaskCreator.set_target_position(INIT_HEIGHT);
-child_container.create_future(fbMoveZTaskCreator, 'Height initial position.');
-
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="CreateDemoJob_2" Id="{3019e9ae-0e15-4bcc-ac4f-c89e05daa2f1}">
-      <Declaration><![CDATA[METHOD CreateDemoJob_2 : BOOL
-VAR_INPUT
-	container : InterfaceContainer;
-END_VAR
-VAR
-	demo_job_container: jobmgmt.InterfaceContainer;
-	executor_item : REFERENCE TO FB_Executor;
-	child_container : InterfaceContainer;
-	i :UDINT;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[executor_item REF= container.create_container(ContainerType.BATCH, 'Demo Job');
-demo_job_container := executor_item.children;
-
-fbMoveToPositionTaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
-fbMoveCTaskCreator.set_dynamics(Coord_Mcs_C1,Ang_Vel,Ang_Acc,Ang_Dcc,Ang_Jerk);
-fbMoveZTaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
-fbMoveATaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
-fbMoveBTaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
-
-executor_item REF= demo_job_container.create_future(jobmgmt.GVL.batch_job_container_creator, '<POSITIONING>');
-executor_item.init();
-child_container := executor_item.children;
-
-fbMoveToPositionTaskCreator.set_target_position(x := 240, y :=120, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move B2');
-fbMoveToPositionTaskCreator.set_target_position(x := 80, y :=80, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move A3');
-fbMoveToPositionTaskCreator.set_target_position(x := 80, y :=160, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move A1');
-fbMoveToPositionTaskCreator.set_target_position(x := 400, y :=160, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move C1');
-fbMoveToPositionTaskCreator.set_target_position(x := 400, y :=80, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move C3');
-fbMoveToPositionTaskCreator.set_target_position(x := 240, y :=120, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move B2');
-fbMoveToPositionTaskCreator.set_target_position(x := 240, y :=120, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move B2');
-fbMoveToPositionTaskCreator.set_target_position(x := 80, y :=80, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move A3');
-fbMoveToPositionTaskCreator.set_target_position(x := 80, y :=160, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move A1');
-fbMoveToPositionTaskCreator.set_target_position(x := 400, y :=160, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move C1');
-fbMoveToPositionTaskCreator.set_target_position(x := 400, y :=80, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move C3');
-fbMoveToPositionTaskCreator.set_target_position(x := 240, y :=120, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move B2');
-
-executor_item REF= demo_job_container.create_future(jobmgmt.GVL.batch_job_container_creator, '<ROTATING>');
-executor_item.init();
-child_container := executor_item.children;
-
-FOR i := 5 TO 360 BY 5 DO
-	fbMoveCTaskCreator.set_target_position(UDINT_TO_LREAL(i));
-	child_container.create_future(fbMoveCTaskCreator, CONCAT('ROLL' , TO_STRING(i)));	
-END_FOR
-fbMoveCTaskCreator.set_target_position(0);
-child_container.create_future(fbMoveCTaskCreator, 'ROLL 0 deg');
-
-executor_item REF= demo_job_container.create_future(jobmgmt.GVL.batch_job_container_creator, '<ELEVATION>');
-executor_item.init();
-child_container := executor_item.children;
+executor_item REF= demo_job_container.create_container(ContainerType.BATCH,  '<002-03 ELEVATION>');
+executor_item.id := 'ELV';
 
 FOR i := 1 TO 9 DO
 	fbMoveZTaskCreator.set_target_position(Z_High);
-	child_container.create_future(fbMoveZTaskCreator, 'ELEV. UP');
+	executor_item.children.create_job(fbMoveZTaskCreator, 'ELEV. UP');
 	fbMoveZTaskCreator.set_target_position(Z_Low);
-	child_container.create_future(fbMoveZTaskCreator, 'ELEV. DOWN');
+	executor_item.children.create_job(fbMoveZTaskCreator, 'ELEV. DOWN');
 END_FOR
 
 
-executor_item REF= demo_job_container.create_future(jobmgmt.GVL.batch_job_container_creator, '<TILT F/B>');
-executor_item.init();
-child_container := executor_item.children;
+executor_item REF= demo_job_container.create_container(ContainerType.BATCH,  '<002-04 TILT F/B>');
+executor_item.id := 'TIL_FB';
 
 fbMoveZTaskCreator.set_target_position(Z_High);
-child_container.create_future(fbMoveZTaskCreator, 'ELEV. UP');
+executor_item.children.create_job(fbMoveZTaskCreator, 'ELEV. UP');
 
 FOR i := 1 TO 10 DO
 	fbMoveATaskCreator.set_target_position(Tilt);
-	child_container.create_future(fbMoveATaskCreator, 'Tilt forwards');
+	executor_item.children.create_job(fbMoveATaskCreator, 'Tilt forwards');
 	fbMoveATaskCreator.set_target_position(-Tilt);
-	child_container.create_future(fbMoveATaskCreator, 'Tilt backwards');
+	executor_item.children.create_job(fbMoveATaskCreator, 'Tilt backwards');
 END_FOR
 fbMoveATaskCreator.set_target_position(0);
-child_container.create_future(fbMoveATaskCreator, 'F/B tilt holizontal');
+executor_item.children.create_job(fbMoveATaskCreator, 'F/B tilt holizontal');
 
-executor_item REF= demo_job_container.create_future(jobmgmt.GVL.batch_job_container_creator, '<TILT L/R>');
-executor_item.init();
-child_container := executor_item.children;
+executor_item REF= demo_job_container.create_container(ContainerType.BATCH, '<002-05 TILT L/R>');
+executor_item.id := 'TIL_LR';
 
 fbMoveZTaskCreator.set_target_position(Z_High);
-child_container.create_future(fbMoveZTaskCreator, 'ELEV. UP');
+executor_item.children.create_job(fbMoveZTaskCreator, 'ELEV. UP');
 
 FOR i := 1 TO 10 DO
 	fbMoveBTaskCreator.set_target_position(Tilt);
-	child_container.create_future(fbMoveBTaskCreator, 'Tilt forwards');
+	executor_item.children.create_job(fbMoveBTaskCreator, 'Tilt left');
 	fbMoveBTaskCreator.set_target_position(-Tilt);
-	child_container.create_future(fbMoveBTaskCreator, 'Tilt backwards');
+	executor_item.children.create_job(fbMoveBTaskCreator, 'Tilt right');
 END_FOR
 fbMoveBTaskCreator.set_target_position(0);
-child_container.create_future(fbMoveBTaskCreator, 'L/R tilt holizontal');
+executor_item.children.create_job(fbMoveBTaskCreator, 'F/B tilt holizontal');
 
+executor_item REF= demo_job_container.create_container(ContainerType.BATCH, '<002-06 TILT CIRCLE>');
+executor_item.id := 'TIL_C';
 
-
-executor_item REF= demo_job_container.create_future(jobmgmt.GVL.batch_job_container_creator, '<TILT L/R>');
-executor_item.init();
-child_container := executor_item.children;
 
 fbMoveZTaskCreator.set_target_position(Z_High);
-child_container.create_future(fbMoveZTaskCreator, 'ELEV. UP');
+executor_item.children.create_job(fbMoveZTaskCreator, 'ELEV. UP');
 
 FOR i := 1 TO 4 DO
 	fbMoveATaskCreator.set_target_position(Rotaion_Ang);
-	child_container.create_future(fbMoveATaskCreator, 'Tilt forwards');
+	executor_item.children.create_job(fbMoveATaskCreator, 'Tilt forwards');
 	fbMoveBTaskCreator.set_target_position(Rotaion_Ang);
-	child_container.create_future(fbMoveBTaskCreator, 'Tilt forwards');
+	executor_item.children.create_job(fbMoveBTaskCreator, 'Tilt forwards');
 	fbMoveATaskCreator.set_target_position(-Rotaion_Ang);
-	child_container.create_future(fbMoveATaskCreator, 'Tilt backwards');
+	executor_item.children.create_job(fbMoveATaskCreator, 'Tilt backwards');
 	fbMoveBTaskCreator.set_target_position(-Rotaion_Ang);
-	child_container.create_future(fbMoveBTaskCreator, 'Tilt backwards');
+	executor_item.children.create_job(fbMoveBTaskCreator, 'Tilt backwards');
 END_FOR
 fbMoveATaskCreator.set_target_position(0);
-child_container.create_future(fbMoveATaskCreator, 'F/B tilt holizontal');
+executor_item.children.create_job(fbMoveATaskCreator, 'F/B tilt holizontal');
 fbMoveBTaskCreator.set_target_position(0);
-child_container.create_future(fbMoveBTaskCreator, 'L/R tilt holizontal');
+executor_item.children.create_job(fbMoveBTaskCreator, 'L/R tilt holizontal');
 fbMoveZTaskCreator.set_target_position(INIT_HEIGHT);
-child_container.create_future(fbMoveZTaskCreator, 'Height initial position.');
-
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="CreateDemoJob_3" Id="{4d5d9215-07ef-4778-88fc-3d47e0309ed6}">
-      <Declaration><![CDATA[METHOD CreateDemoJob_3 : BOOL
-VAR_INPUT
-	container : InterfaceContainer;
-END_VAR
-VAR
-	demo_job_container: jobmgmt.InterfaceContainer;
-	executor_item : REFERENCE TO FB_Executor;
-	child_container : InterfaceContainer;
-	i :UDINT;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[executor_item REF= container.create_container(ContainerType.BATCH, 'Demo Job');
-demo_job_container := executor_item.children;
-
-fbMoveToPositionTaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
-fbMoveCTaskCreator.set_dynamics(Coord_Mcs_C1,Ang_Vel,Ang_Acc,Ang_Dcc,Ang_Jerk);
-fbMoveZTaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
-fbMoveATaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
-fbMoveBTaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
-
-executor_item REF= demo_job_container.create_future(jobmgmt.GVL.batch_job_container_creator, '<POSITIONING>');
-executor_item.init();
-child_container := executor_item.children;
-
-fbMoveToPositionTaskCreator.set_target_position(x := 240, y :=120, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move B2');
-fbMoveToPositionTaskCreator.set_target_position(x := 80, y :=80, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move A3');
-fbMoveToPositionTaskCreator.set_target_position(x := 80, y :=160, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move A1');
-fbMoveToPositionTaskCreator.set_target_position(x := 400, y :=160, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move C1');
-fbMoveToPositionTaskCreator.set_target_position(x := 400, y :=80, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move C3');
-fbMoveToPositionTaskCreator.set_target_position(x := 240, y :=120, c :=0);
-child_container.create_future(fbMoveToPositionTaskCreator, 'Move B2');
-
-executor_item REF= demo_job_container.create_future(jobmgmt.GVL.batch_job_container_creator, '<ROTATING>');
-executor_item.init();
-child_container := executor_item.children;
-
-fbMoveCTaskCreator.set_target_position(360.0);
-child_container.create_future(fbMoveCTaskCreator, 'ROLL 360.0 deg');
-fbMoveCTaskCreator.set_target_position(0.0);
-child_container.create_future(fbMoveCTaskCreator, 'ROLL 0.0 deg');
-
-executor_item REF= demo_job_container.create_future(jobmgmt.GVL.batch_job_container_creator, '<ELEVATION>');
-executor_item.init();
-child_container := executor_item.children;
-
-FOR i := 1 TO 9 DO
-	fbMoveZTaskCreator.set_target_position(Z_High);
-	child_container.create_future(fbMoveZTaskCreator, 'ELEV. UP');
-	fbMoveZTaskCreator.set_target_position(Z_Low);
-	child_container.create_future(fbMoveZTaskCreator, 'ELEV. DOWN');
-END_FOR
-
-
-executor_item REF= demo_job_container.create_future(jobmgmt.GVL.batch_job_container_creator, '<TILT F/B>');
-executor_item.init();
-child_container := executor_item.children;
-
-fbMoveZTaskCreator.set_target_position(Z_High);
-child_container.create_future(fbMoveZTaskCreator, 'ELEV. UP');
-
-FOR i := 1 TO 10 DO
-	fbMoveATaskCreator.set_target_position(Tilt);
-	child_container.create_future(fbMoveATaskCreator, 'Tilt forwards');
-	fbMoveATaskCreator.set_target_position(-Tilt);
-	child_container.create_future(fbMoveATaskCreator, 'Tilt backwards');
-END_FOR
-fbMoveATaskCreator.set_target_position(0);
-child_container.create_future(fbMoveATaskCreator, 'F/B tilt holizontal');
-
-executor_item REF= demo_job_container.create_future(jobmgmt.GVL.batch_job_container_creator, '<TILT L/R>');
-executor_item.init();
-child_container := executor_item.children;
-
-fbMoveZTaskCreator.set_target_position(Z_High);
-child_container.create_future(fbMoveZTaskCreator, 'ELEV. UP');
-
-FOR i := 1 TO 10 DO
-	fbMoveBTaskCreator.set_target_position(Tilt);
-	child_container.create_future(fbMoveBTaskCreator, 'Tilt forwards');
-	fbMoveBTaskCreator.set_target_position(-Tilt);
-	child_container.create_future(fbMoveBTaskCreator, 'Tilt backwards');
-END_FOR
-fbMoveBTaskCreator.set_target_position(0);
-child_container.create_future(fbMoveBTaskCreator, 'L/R tilt holizontal');
-
-
-
-executor_item REF= demo_job_container.create_future(jobmgmt.GVL.batch_job_container_creator, '<TILT L/R>');
-executor_item.init();
-child_container := executor_item.children;
-
-fbMoveZTaskCreator.set_target_position(Z_High);
-child_container.create_future(fbMoveZTaskCreator, 'ELEV. UP');
-
-FOR i := 1 TO 4 DO
-	fbMoveATaskCreator.set_target_position(Rotaion_Ang);
-	child_container.create_future(fbMoveATaskCreator, 'Tilt forwards');
-	fbMoveBTaskCreator.set_target_position(Rotaion_Ang);
-	child_container.create_future(fbMoveBTaskCreator, 'Tilt forwards');
-	fbMoveATaskCreator.set_target_position(-Rotaion_Ang);
-	child_container.create_future(fbMoveATaskCreator, 'Tilt backwards');
-	fbMoveBTaskCreator.set_target_position(-Rotaion_Ang);
-	child_container.create_future(fbMoveBTaskCreator, 'Tilt backwards');
-END_FOR
-fbMoveATaskCreator.set_target_position(0);
-child_container.create_future(fbMoveATaskCreator, 'F/B tilt holizontal');
-fbMoveBTaskCreator.set_target_position(0);
-child_container.create_future(fbMoveBTaskCreator, 'L/R tilt holizontal');
-fbMoveZTaskCreator.set_target_position(INIT_HEIGHT);
-child_container.create_future(fbMoveZTaskCreator, 'Height initial position.');
-
+executor_item.children.create_job(fbMoveZTaskCreator, 'Height initial position.');
 ]]></ST>
       </Implementation>
     </Method>
@@ -878,7 +466,7 @@ VAR
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[home_job_container := executor.children.create_container(ContainerType.BATCH, 'Home Job').children;
+        <ST><![CDATA[home_job_container := executor.create_container(ContainerType.BATCH, '<001 Home Job>');
 
 fbMoveToPositionTaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
 fbMoveCTaskCreator.set_dynamics(Coord_Mcs_C1,Ang_Vel,Ang_Acc,Ang_Dcc,Ang_Jerk);
@@ -887,156 +475,146 @@ fbMoveATaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
 fbMoveBTaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
 
 fbMoveBTaskCreator.set_target_position(0);
-home_job_container.create_future(fbMoveBTaskCreator, 'L/R tilt holizontal');
+home_job_container.create_job(fbMoveBTaskCreator, 'L/R tilt holizontal');
 
 fbMoveATaskCreator.set_target_position(0);
-home_job_container.create_future(fbMoveATaskCreator, 'F/B tilt holizontal');
+home_job_container.create_job(fbMoveATaskCreator, 'F/B tilt holizontal');
 
 fbMoveZTaskCreator.set_target_position(INIT_HEIGHT);
-home_job_container.create_future(fbMoveZTaskCreator, 'Height initial position.');
+home_job_container.create_job(fbMoveZTaskCreator, 'Height initial position.');
 
 fbMoveCTaskCreator.set_target_position(0.0);
-home_job_container.create_future(fbMoveCTaskCreator, 'ROLL 0.0 deg');
+home_job_container.create_job(fbMoveCTaskCreator, 'ROLL 0.0 deg');
 
 fbMoveToPositionTaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
 fbMoveToPositionTaskCreator.set_target_position(x := 240, y :=120, c :=0);
-home_job_container.create_future(fbMoveToPositionTaskCreator, 'Move center position');	]]></ST>
+home_job_container.create_job(fbMoveToPositionTaskCreator, 'Move center position');	]]></ST>
       </Implementation>
     </Method>
+    <Action Name="ExecuteManualCommand" Id="{d0dc780d-7011-45f4-a4d4-93fe88914c5a}">
+      <Implementation>
+        <ST><![CDATA[fbMoveToPositionTaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
+fbMoveCTaskCreator.set_dynamics(Coord_Mcs_C1,Ang_Vel,Ang_Acc,Ang_Dcc,Ang_Jerk);
+fbMoveZTaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
+fbMoveATaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
+fbMoveBTaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
+
+manual_command_event := FALSE;
+FOR i := 0 TO 49 DO
+	// HMIボタン入力
+	IF manupilator_buttons[i] THEN
+		manual_command_event := TRUE; // イベントフラグ
+		manual_command.i_com := i; // コマンド番号をMenualCommand型のenumへ変換（UNION）
+	END_IF
+END_FOR
+
+IF manual_command_event AND NOT manual_command_event_mem THEN
+	// イベントフラグ立ち上がり条件の作成
+	CASE manual_command.com OF
+		// コマンド番号毎にタスクをキューに登録
+		ManualCommand.move_pos_c1:
+			fbMoveToPositionTaskCreator.set_target_position(x := 240, y :=80, c :=0);
+			fbjob.children.create_job(fbMoveToPositionTaskCreator,'MOVE C1');
+		ManualCommand.move_pos_c2:
+			fbMoveToPositionTaskCreator.set_target_position(x := 240, y :=120, c :=0);
+			fbjob.children.create_job(fbMoveToPositionTaskCreator,'MOVE C2');
+		ManualCommand.move_pos_c3:
+			fbMoveToPositionTaskCreator.set_target_position(x := 240, y :=160, c :=0);
+			fbjob.children.create_job(fbMoveToPositionTaskCreator,'MOVE C3');
+		ManualCommand.move_pos_L1:
+			fbMoveToPositionTaskCreator.set_target_position(x := 80, y :=80, c :=0);
+			fbjob.children.create_job(fbMoveToPositionTaskCreator,'MOVE L1');
+		ManualCommand.move_pos_L2:
+			fbMoveToPositionTaskCreator.set_target_position(x := 80, y :=120, c :=0);
+			fbjob.children.create_job(fbMoveToPositionTaskCreator,'MOVE L2');
+		ManualCommand.move_pos_L3:
+			fbMoveToPositionTaskCreator.set_target_position(x := 80, y :=160, c :=0);
+			fbjob.children.create_job(fbMoveToPositionTaskCreator,'MOVE L3');
+		ManualCommand.move_pos_r1:
+			fbMoveToPositionTaskCreator.set_target_position(x := 400, y :=160, c :=0);
+			fbjob.children.create_job(fbMoveToPositionTaskCreator,'MOVE R1');
+		ManualCommand.move_pos_r2:
+			fbMoveToPositionTaskCreator.set_target_position(x := 400, y :=120, c :=0);
+			fbjob.children.create_job(fbMoveToPositionTaskCreator,'MOVE R2');
+		ManualCommand.move_pos_r3:
+			fbMoveToPositionTaskCreator.set_target_position(x := 400, y :=80, c :=0);
+			fbjob.children.create_job(fbMoveToPositionTaskCreator,'MOVE R3');
+		ManualCommand.move_roll_w:
+			fbMoveCTaskCreator.set_target_position(270.0);
+			fbjob.children.create_job(fbMoveCTaskCreator,'ROLL WEST');
+		ManualCommand.move_roll_n:
+			fbMoveCTaskCreator.set_target_position(0.0);
+			fbjob.children.create_job(fbMoveCTaskCreator,'ROLL NORTH');
+		ManualCommand.move_roll_e:
+			fbMoveCTaskCreator.set_target_position(90.0);
+			fbjob.children.create_job(fbMoveCTaskCreator,'ROLL EAST');
+		ManualCommand.move_roll_s:
+			fbMoveCTaskCreator.set_target_position(180.0);
+			fbjob.children.create_job(fbMoveCTaskCreator,'ROLL SOUTH');
+		ManualCommand.move_tilt_up_front:
+			//fb_manu_job.add_future(fbMoveZTasks[1]);
+			//fb_manu_job.add_future(fbMoveATasks[1]);					
+		ManualCommand.move_tilt_up_rear:
+			//fb_manu_job.add_future(fbMoveZTasks[1]);
+			//fb_manu_job.add_future(fbMoveATasks[2]);					
+		ManualCommand.move_tilt_up_right:
+			//fb_manu_job.add_future(fbMoveZTasks[1]);
+			//fb_manu_job.add_future(fbMoveBTasks[1]);
+		ManualCommand.move_tilt_up_left:
+			//fb_manu_job.add_future(fbMoveZTasks[1]);
+			//fb_manu_job.add_future(fbMoveBTasks[2]);					
+		ManualCommand.move_tilt_horizontal:
+			//fb_manu_job.add_future(fbMoveATasks[3]);
+			//fb_manu_job.add_future(fbMoveBTasks[3]);
+			//fb_manu_job.add_future(fbMoveZTasks[2]);
+		ManualCommand.move_up:
+			//fb_manu_job.add_future(fbMoveZTasks[1]);
+		ManualCommand.move_down:					
+			//fb_manu_job.add_future(fbMoveZTasks[2]);
+	END_CASE
+END_IF
+manual_command_event_mem := manual_command_event;
+]]></ST>
+      </Implementation>
+    </Action>
     <Method Name="MakeTasks" Id="{c18f96ce-3a73-48c3-89c6-3367fd26b018}">
-      <Declaration><![CDATA[METHOD MakeTasks : InterfaceFuture
+      <Declaration><![CDATA[METHOD MakeTasks : BOOL
 VAR_INPUT
+	executor : REFERENCE TO FB_Executor;
+	job_command	: T_MaxString;
 END_VAR
 VAR
-		demo_job_container: InterfaceContainer;
+		job_container: InterfaceContainer;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[(*
-IF fbJob.reset() THEN
-	fbJob.future := fbJob.create_future(FB_BatchJobContainerCreator, 'Demo Job');
-	fbJob.init();
-	demo_job_container := fbJob.children;
-END_IF
-fbMoveToPositionTaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
-fbMoveToPositionTaskCreator.set_target_position(x := 240, y :=120, c :=0);
-demo_job_container.create_future(fbMoveToPositionTaskCreator, 'Move B2');
-fbMoveToPositionTaskCreator.set_target_position(x := 80, y :=80, c :=0);
-demo_job_container.create_future(fbMoveToPositionTaskCreator, 'Move A3');
-fbMoveToPositionTaskCreator.set_target_position(x := 80, y :=160, c :=0);
-demo_job_container.create_future(fbMoveToPositionTaskCreator, 'Move A1');
-fbMoveToPositionTaskCreator.set_target_position(x := 400, y :=160, c :=0);
-demo_job_container.create_future(fbMoveToPositionTaskCreator, 'Move C1');
-fbMoveToPositionTaskCreator.set_target_position(x := 400, y :=80, c :=0);
-demo_job_container.create_future(fbMoveToPositionTaskCreator, 'Move C3');
-fbMoveToPositionTaskCreator.set_target_position(x := 80, y :=120, c :=0);
-demo_job_container.create_future(fbMoveToPositionTaskCreator, 'Move A2');
-fbMoveToPositionTaskCreator.set_target_position(x := 240, y :=80, c :=0);
-demo_job_container.create_future(fbMoveToPositionTaskCreator, 'Move B3');
-fbMoveToPositionTaskCreator.set_target_position(x := 240, y :=160, c :=0);
-demo_job_container.create_future(fbMoveToPositionTaskCreator, 'Move B1');
-fbMoveToPositionTaskCreator.set_target_position(x := 240, y :=160, c :=0);
-demo_job_container.create_future(fbMoveToPositionTaskCreator, 'Move B1');
-fbMoveToPositionTaskCreator.set_target_position(x := 400, y :=120, c :=0);
-demo_job_container.create_future(fbMoveToPositionTaskCreator, 'Move C2');
-
-
-// 回転動作タスク追加
-fbMoveCTaskCreator.set_dynamics(Coord_Mcs_C1,Ang_Vel,Ang_Acc,Ang_Dcc,Ang_Jerk);
-fbMoveCTaskCreator.set_target_position(0.0);
-demo_job_container.create_future(fbMoveCTaskCreator, 'ROLL 0.0 deg');
-fbMoveCTaskCreator.set_target_position(360.0);
-demo_job_container.create_future(fbMoveCTaskCreator, 'ROLL 360.0 deg');
-fbMoveCTaskCreator.set_target_position(90.0);
-demo_job_container.create_future(fbMoveCTaskCreator, 'ROLL 90.0 deg');
-fbMoveCTaskCreator.set_target_position(180.0);
-demo_job_container.create_future(fbMoveCTaskCreator, 'ROLL 180.0 deg');
-fbMoveCTaskCreator.set_target_position(270.0);
-demo_job_container.create_future(fbMoveCTaskCreator, 'ROLL 27.0 deg');
-
-
-
-// 上下動作タスク追加
-fbMoveZTaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
-fbMoveZTaskCreator.set_target_position(Z_High);
-demo_job_container.create_future(fbMoveZTaskCreator, 'ELEV. UP');
-fbMoveZTaskCreator.set_target_position(Z_Low);
-demo_job_container.create_future(fbMoveZTaskCreator, 'ELEV. DOWN');
-fbMoveZTaskCreator.set_target_position(INIT_HEIGHT);
-demo_job_container.create_future(fbMoveZTaskCreator, 'Height initial position.');
-
-// 傾きA動作タスク追加
-fbMoveATaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
-fbMoveATaskCreator.set_target_position(Tilt);
-demo_job_container.create_future(fbMoveATaskCreator, 'Tilt forwards');
-fbMoveATaskCreator.set_target_position(-Tilt);
-demo_job_container.create_future(fbMoveATaskCreator, 'Tilt backwards');
-fbMoveATaskCreator.set_target_position(0);
-demo_job_container.create_future(fbMoveATaskCreator, 'F/B tilt holizontal');
-
-
-// 傾きB動作タスク追加
-fbMoveBTaskCreator.set_dynamics(Vel, Acc, Dcc, Jerk);
-fbMoveBTaskCreator.set_target_position(Tilt);
-demo_job_container.create_future(fbMoveBTaskCreator, 'Tilt right');
-fbMoveBTaskCreator.set_target_position(-Tilt);
-demo_job_container.create_future(fbMoveBTaskCreator, 'Tilt left');
-fbMoveBTaskCreator.set_target_position(0);
-demo_job_container.create_future(fbMoveBTaskCreator, 'L/R tilt horizontal');
-*)
-]]></ST>
+        <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="MAIN">
-      <LineId Id="10064" Count="15" />
-      <LineId Id="10760" Count="1" />
-      <LineId Id="10080" Count="63" />
-      <LineId Id="10146" Count="7" />
-      <LineId Id="10748" Count="0" />
-      <LineId Id="10758" Count="0" />
-      <LineId Id="10762" Count="2" />
-      <LineId Id="10159" Count="10" />
-      <LineId Id="10416" Count="0" />
-      <LineId Id="10170" Count="0" />
-      <LineId Id="10172" Count="130" />
-      <LineId Id="10765" Count="1" />
-      <LineId Id="10415" Count="0" />
-      <LineId Id="10304" Count="0" />
-      <LineId Id="10308" Count="0" />
-      <LineId Id="10732" Count="0" />
-      <LineId Id="10735" Count="0" />
-      <LineId Id="10734" Count="0" />
-      <LineId Id="10310" Count="0" />
-      <LineId Id="10325" Count="12" />
-      <LineId Id="10339" Count="12" />
-      <LineId Id="10406" Count="0" />
-      <LineId Id="10403" Count="0" />
-      <LineId Id="10352" Count="0" />
-      <LineId Id="10356" Count="0" />
-      <LineId Id="10358" Count="0" />
-      <LineId Id="10362" Count="2" />
-      <LineId Id="10730" Count="0" />
-      <LineId Id="10694" Count="0" />
-      <LineId Id="10690" Count="0" />
-      <LineId Id="10695" Count="2" />
-      <LineId Id="10731" Count="0" />
-      <LineId Id="10366" Count="1" />
-      <LineId Id="10380" Count="0" />
-      <LineId Id="10701" Count="1" />
-      <LineId Id="10706" Count="2" />
-      <LineId Id="10705" Count="0" />
-      <LineId Id="10712" Count="2" />
-      <LineId Id="10711" Count="0" />
-      <LineId Id="10703" Count="0" />
-      <LineId Id="10715" Count="0" />
-      <LineId Id="10724" Count="0" />
-      <LineId Id="10716" Count="0" />
-      <LineId Id="10704" Count="0" />
-      <LineId Id="10381" Count="15" />
-      <LineId Id="10739" Count="0" />
-      <LineId Id="10745" Count="0" />
-      <LineId Id="10740" Count="4" />
-      <LineId Id="10737" Count="0" />
-      <LineId Id="10401" Count="0" />
+      <LineId Id="11105" Count="15" />
+      <LineId Id="11122" Count="0" />
+      <LineId Id="11433" Count="0" />
+      <LineId Id="11123" Count="45" />
+      <LineId Id="11567" Count="0" />
+      <LineId Id="11570" Count="0" />
+      <LineId Id="11569" Count="0" />
+      <LineId Id="11172" Count="20" />
+      <LineId Id="11201" Count="0" />
+      <LineId Id="11428" Count="0" />
+      <LineId Id="11424" Count="1" />
+      <LineId Id="11301" Count="16" />
+      <LineId Id="11319" Count="0" />
+      <LineId Id="11321" Count="2" />
+      <LineId Id="11432" Count="0" />
+      <LineId Id="11566" Count="0" />
+      <LineId Id="11326" Count="1" />
+      <LineId Id="11337" Count="16" />
+      <LineId Id="11564" Count="1" />
+      <LineId Id="11354" Count="1" />
+      <LineId Id="11357" Count="4" />
+      <LineId Id="11363" Count="3" />
+      <LineId Id="11368" Count="11" />
+      <LineId Id="11381" Count="24" />
       <LineId Id="3507" Count="0" />
     </LineIds>
     <LineIds Name="MAIN.ACT_Lamp_Ctrl">
@@ -1065,118 +643,39 @@ demo_job_container.create_future(fbMoveBTaskCreator, 'L/R tilt horizontal');
       <LineId Id="285" Count="0" />
       <LineId Id="281" Count="0" />
       <LineId Id="283" Count="1" />
-      <LineId Id="156" Count="4" />
-      <LineId Id="162" Count="16" />
-      <LineId Id="180" Count="2" />
-      <LineId Id="93" Count="0" />
-      <LineId Id="188" Count="0" />
-      <LineId Id="190" Count="1" />
-      <LineId Id="189" Count="0" />
-      <LineId Id="199" Count="0" />
-      <LineId Id="183" Count="0" />
-      <LineId Id="193" Count="3" />
-      <LineId Id="187" Count="0" />
-      <LineId Id="204" Count="0" />
-      <LineId Id="282" Count="0" />
-      <LineId Id="206" Count="3" />
-      <LineId Id="218" Count="3" />
-      <LineId Id="224" Count="3" />
-      <LineId Id="223" Count="0" />
-      <LineId Id="216" Count="1" />
-      <LineId Id="229" Count="0" />
-      <LineId Id="231" Count="6" />
-      <LineId Id="239" Count="17" />
-      <LineId Id="258" Count="0" />
-      <LineId Id="268" Count="1" />
-      <LineId Id="259" Count="1" />
-      <LineId Id="272" Count="0" />
-      <LineId Id="270" Count="0" />
-      <LineId Id="261" Count="2" />
-      <LineId Id="274" Count="0" />
-      <LineId Id="273" Count="0" />
-      <LineId Id="264" Count="1" />
-      <LineId Id="275" Count="1" />
-      <LineId Id="266" Count="0" />
-      <LineId Id="200" Count="0" />
-    </LineIds>
-    <LineIds Name="MAIN.CreateDemoJob_2">
-      <LineId Id="287" Count="0" />
-      <LineId Id="286" Count="0" />
-      <LineId Id="155" Count="0" />
-      <LineId Id="279" Count="0" />
-      <LineId Id="285" Count="0" />
-      <LineId Id="281" Count="0" />
-      <LineId Id="283" Count="1" />
-      <LineId Id="156" Count="4" />
-      <LineId Id="162" Count="11" />
-      <LineId Id="308" Count="10" />
-      <LineId Id="174" Count="0" />
-      <LineId Id="319" Count="0" />
-      <LineId Id="175" Count="2" />
-      <LineId Id="372" Count="0" />
+      <LineId Id="156" Count="1" />
+      <LineId Id="299" Count="0" />
+      <LineId Id="160" Count="0" />
+      <LineId Id="162" Count="13" />
+      <LineId Id="301" Count="0" />
       <LineId Id="178" Count="0" />
-      <LineId Id="375" Count="1" />
-      <LineId Id="374" Count="0" />
-      <LineId Id="370" Count="1" />
-      <LineId Id="188" Count="0" />
-      <LineId Id="190" Count="1" />
-      <LineId Id="189" Count="0" />
-      <LineId Id="199" Count="0" />
-      <LineId Id="183" Count="0" />
-      <LineId Id="193" Count="3" />
-      <LineId Id="187" Count="0" />
-      <LineId Id="204" Count="0" />
-      <LineId Id="282" Count="0" />
-      <LineId Id="206" Count="3" />
-      <LineId Id="218" Count="3" />
-      <LineId Id="224" Count="3" />
-      <LineId Id="223" Count="0" />
-      <LineId Id="216" Count="1" />
-      <LineId Id="229" Count="0" />
-      <LineId Id="231" Count="6" />
-      <LineId Id="239" Count="17" />
-      <LineId Id="258" Count="0" />
-      <LineId Id="268" Count="1" />
-      <LineId Id="259" Count="1" />
-      <LineId Id="272" Count="0" />
-      <LineId Id="270" Count="0" />
-      <LineId Id="261" Count="2" />
-      <LineId Id="274" Count="0" />
-      <LineId Id="273" Count="0" />
-      <LineId Id="264" Count="1" />
-      <LineId Id="275" Count="1" />
-      <LineId Id="266" Count="0" />
-      <LineId Id="200" Count="0" />
-    </LineIds>
-    <LineIds Name="MAIN.CreateDemoJob_3">
-      <LineId Id="287" Count="0" />
-      <LineId Id="286" Count="0" />
-      <LineId Id="155" Count="0" />
-      <LineId Id="279" Count="0" />
-      <LineId Id="285" Count="0" />
-      <LineId Id="281" Count="0" />
-      <LineId Id="283" Count="1" />
-      <LineId Id="156" Count="4" />
-      <LineId Id="162" Count="16" />
       <LineId Id="180" Count="2" />
       <LineId Id="93" Count="0" />
       <LineId Id="188" Count="0" />
-      <LineId Id="190" Count="1" />
-      <LineId Id="189" Count="0" />
+      <LineId Id="190" Count="0" />
+      <LineId Id="302" Count="0" />
       <LineId Id="199" Count="0" />
       <LineId Id="183" Count="0" />
       <LineId Id="193" Count="3" />
       <LineId Id="187" Count="0" />
       <LineId Id="204" Count="0" />
       <LineId Id="282" Count="0" />
-      <LineId Id="206" Count="3" />
+      <LineId Id="206" Count="0" />
+      <LineId Id="303" Count="0" />
+      <LineId Id="209" Count="0" />
       <LineId Id="218" Count="3" />
       <LineId Id="224" Count="3" />
       <LineId Id="223" Count="0" />
       <LineId Id="216" Count="1" />
       <LineId Id="229" Count="0" />
-      <LineId Id="231" Count="6" />
-      <LineId Id="239" Count="17" />
+      <LineId Id="231" Count="0" />
+      <LineId Id="304" Count="0" />
+      <LineId Id="234" Count="3" />
+      <LineId Id="239" Count="8" />
+      <LineId Id="250" Count="0" />
+      <LineId Id="305" Count="0" />
+      <LineId Id="251" Count="0" />
+      <LineId Id="253" Count="3" />
       <LineId Id="258" Count="0" />
       <LineId Id="268" Count="1" />
       <LineId Id="259" Count="1" />
@@ -1187,44 +686,20 @@ demo_job_container.create_future(fbMoveBTaskCreator, 'L/R tilt horizontal');
       <LineId Id="273" Count="0" />
       <LineId Id="264" Count="1" />
       <LineId Id="275" Count="1" />
-      <LineId Id="266" Count="0" />
-      <LineId Id="200" Count="0" />
+      <LineId Id="298" Count="0" />
     </LineIds>
     <LineIds Name="MAIN.CreateHomeJob">
       <LineId Id="456" Count="21" />
       <LineId Id="200" Count="0" />
     </LineIds>
+    <LineIds Name="MAIN.ExecuteManualCommand">
+      <LineId Id="105" Count="3" />
+      <LineId Id="103" Count="0" />
+      <LineId Id="110" Count="0" />
+      <LineId Id="4" Count="74" />
+      <LineId Id="1" Count="0" />
+    </LineIds>
     <LineIds Name="MAIN.MakeTasks">
-      <LineId Id="381" Count="0" />
-      <LineId Id="299" Count="3" />
-      <LineId Id="297" Count="0" />
-      <LineId Id="335" Count="0" />
-      <LineId Id="305" Count="0" />
-      <LineId Id="174" Count="0" />
-      <LineId Id="313" Count="3" />
-      <LineId Id="319" Count="4" />
-      <LineId Id="311" Count="0" />
-      <LineId Id="325" Count="1" />
-      <LineId Id="329" Count="5" />
-      <LineId Id="183" Count="2" />
-      <LineId Id="356" Count="0" />
-      <LineId Id="346" Count="9" />
-      <LineId Id="344" Count="1" />
-      <LineId Id="191" Count="1" />
-      <LineId Id="378" Count="0" />
-      <LineId Id="193" Count="0" />
-      <LineId Id="358" Count="0" />
-      <LineId Id="195" Count="0" />
-      <LineId Id="359" Count="0" />
-      <LineId Id="379" Count="1" />
-      <LineId Id="197" Count="1" />
-      <LineId Id="200" Count="0" />
-      <LineId Id="360" Count="1" />
-      <LineId Id="363" Count="1" />
-      <LineId Id="366" Count="2" />
-      <LineId Id="205" Count="1" />
-      <LineId Id="370" Count="6" />
-      <LineId Id="286" Count="0" />
       <LineId Id="5" Count="0" />
     </LineIds>
   </POU>

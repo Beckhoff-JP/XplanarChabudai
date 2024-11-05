@@ -7,9 +7,9 @@ STRUCT
 	datetime: ULINT;
 	{attribute 'FieldName' := 'event_id'}
 	event_id	: STRING;
-	{attribute 'FieldName' := 'old_state'}
+	{attribute 'TagName' := 'old_state'}
 	old_state	: STRING;
-	{attribute 'FieldName' := 'new_state'}
+	{attribute 'TagName' := 'new_state'}
 	new_state	: STRING;
 	{attribute 'FieldName' := 'job_id'}
 	{attribute 'TcEncoding':='UTF-8'}
